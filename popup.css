@@ -4,6 +4,10 @@ body {
     background: #f1efef;
 }
 
+header {
+    position: relative;
+}
+
 .foreign-landing__footer-info-logo-text {
     position: absolute;
     bottom: 0;
@@ -12,10 +16,6 @@ body {
     color: #333;
     font-size: 12px;
     font-weight: 500;
-}
-
-header {
-    position: relative;
 }
 
 .dictionary-import__textarea {

@@ -22,10 +22,13 @@ function getAuthCookies() {
             '_dc_gtm_UA-816465-6'
         ];
 
-    return Promise.all(COOKIES_KEYS.map(KEY => getCookie(HOST, KEY)))
-        .then(COOKIES => {
-            return Promise.resolve(COOKIES.reduce((acc, cookie, index) => acc += `${COOKIES_KEYS[index]}=${cookie};`, ''));
-        })
+    return Promise
+        .all(COOKIES_KEYS.map(KEY => getCookie(HOST, KEY)))
+        .then(COOKIES =>
+            Promise.resolve(
+                COOKIES.reduce((acc, cookie, index) => acc += `${COOKIES_KEYS[index]}=${cookie};`, '')
+            )
+        )
 }
 
 function checkWords(cookies, words) {
@@ -37,7 +40,7 @@ function checkWords(cookies, words) {
         body: formData
     })
         .then(response => response.json())
-        .then(data => data.error || !data.status ? Promise.reject(data.error) : Promise.resolve(data));
+        .then(data => data.error ? Promise.reject(data.error) : Promise.resolve(data));
 }
 
 function addWords(cookies, words) {
@@ -50,10 +53,11 @@ function addWords(cookies, words) {
         body: formData
     })
         .then(response => response.json())
+        .then(data => data.error || !data.status ? Promise.reject(data.error) : Promise.resolve(data));
 }
 
 function getCookie(url, name) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         chrome.cookies.get({ url, name }, cookie => resolve(cookie ? cookie.value : ''));
     })
 }
