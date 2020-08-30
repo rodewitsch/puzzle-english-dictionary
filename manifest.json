@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Puzzle English Dictionary",
-    "description": "This extension will analyze a page using GTmetrix",
+    "description": "Неофициальное расширение для добавления слов в словарь Puzzle English",
     "version": "1.0",
     "browser_action": {
         "default_icon": "/assets/images/icon128.png",
