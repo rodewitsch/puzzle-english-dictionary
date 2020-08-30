@@ -37,7 +37,7 @@ function checkWords(cookies, words) {
         body: formData
     })
         .then(response => response.json())
-        .then(data => data.error ? Promise.reject(data.error) : Promise.resolve(data));
+        .then(data => data.error || !data.status ? Promise.reject(data.error) : Promise.resolve(data));
 }
 
 function addWords(cookies, words) {
