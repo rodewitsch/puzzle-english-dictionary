@@ -4,8 +4,19 @@
     "description": "This extension will analyze a page using GTmetrix",
     "version": "1.0",
     "browser_action": {
-        "default_icon": "/assets/images/icon.png",
+        "default_icon": "/assets/images/icon128.png",
         "default_popup": "popup.html"
+    },
+    "icons": {
+        "16": "/assets/images/icon16.png",
+        "48": "/assets/images/icon48.png",
+        "128": "/assets/images/icon128.png"
+    },
+    "background": {
+        "scripts": [
+            "core.js",
+            "context.js"
+        ]
     },
     "permissions": [
         "activeTab",
