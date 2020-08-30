@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+    "name": "Puzzle English Dictionary",
+    "description": "This extension will analyze a page using GTmetrix",
+    "version": "1.0",
+    "browser_action": {
+        "default_icon": "/assets/images/icon.png",
+        "default_popup": "popup.html"
+    },
+    "permissions": [
+        "activeTab",
+        "cookies",
+        "https://puzzle-english.com/",
+        "contextMenus"
+    ]
+}
