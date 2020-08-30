@@ -82,3 +82,13 @@ header {
     background-color: #bfced9!important;
     cursor: not-allowed!important;
 }
+
+.hide-area {
+    display: none;
+}
+
+.need-auth-area {
+    text-align: center;
+    font-size: 20px;
+    padding-top: 20%;
+}
