@@ -15,10 +15,23 @@
     "background": {
         "scripts": [
             "core.js",
-            "context.js"
+            "background.js"
         ]
     },
+    "content_scripts": [
+        {
+            "matches": [
+                "http://*/*",
+                "https://*/*"
+            ],
+            "js": [
+                "core.js",
+                "content.js"
+            ]
+        }
+    ],
     "permissions": [
+        "activeTab",
         "cookies",
         "https://puzzle-english.com/",
         "contextMenus"
