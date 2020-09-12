@@ -20,8 +20,10 @@ chrome.contextMenus.create({
   parentId: "MY_CONTEXT_MENU",
   contexts: ["all"],
   onclick: () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, "startTranslate", function (response) {
+    chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+      const id_user = await CorePuzzleEnglishDictionaryModule.getPECookie('https://puzzle-english.com', 'pe_user_id');
+      if (!id_user) return alert('Не получен идентификатор пользователя');
+      chrome.tabs.sendMessage(tabs[0].id, { message: "startTranslate", id_user }, function (response) {
         console.log("event has been casted", response);
       });
     });

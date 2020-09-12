@@ -20,21 +20,21 @@
         }
     }
 
-    async function initTranslation() {
+    async function initTranslation(id_user) {
         const script = document.createElement('script');
         script.type = 'text/javascript';
         script.innerHTML = `$(function () {
             PE_Balloon.init({
-                wrap_words: true, id_user: '1599902174491', our_helper: false});
+                wrap_words: true, id_user: '${id_user}', our_helper: false});
             });`
         document.head.appendChild(script);
     }
 
     chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-        if (request == 'startTranslate') {
+        if (request.message == 'startTranslate') {
             await injectDependencies();
             prepareDocument();
-            initTranslation();
+            initTranslation(request.id_user);
             sendResponse('ok');
         }
     });
