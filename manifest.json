@@ -20,10 +20,7 @@
     },
     "content_scripts": [
         {
-            "matches": [
-                "http://*/*",
-                "https://*/*"
-            ],
+            "matches": ["<all_urls>"],
             "js": [
                 "core.js",
                 "content.js"
