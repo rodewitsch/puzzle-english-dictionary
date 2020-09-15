@@ -5,7 +5,7 @@ const CorePuzzleEnglishDictionaryModule = (() => {
                 COOKIES_KEYS = ['PHPSESSID'];
 
             return Promise
-                .all(COOKIES_KEYS.map(KEY => getPECookie(HOST, KEY)))
+                .all(COOKIES_KEYS.map(KEY => this.getPECookie(HOST, KEY)))
                 .then(COOKIES =>
                     Promise.resolve(
                         COOKIES.reduce((acc, cookie, index) => acc += `${COOKIES_KEYS[index]}=${cookie};`, '')
