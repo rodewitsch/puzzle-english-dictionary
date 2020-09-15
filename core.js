@@ -1,18 +1,18 @@
 const CorePuzzleEnglishDictionaryModule = (() => {
     return {
-        getAuthCookies: () => {
+        getAuthCookies: function () {
             const HOST = 'https://puzzle-english.com',
                 COOKIES_KEYS = ['PHPSESSID'];
 
             return Promise
-                .all(COOKIES_KEYS.map(KEY => this.getPECookie(HOST, KEY)))
+                .all(COOKIES_KEYS.map(KEY => { console.log(this); return this.getPECookie(HOST, KEY) }))
                 .then(COOKIES =>
                     Promise.resolve(
                         COOKIES.reduce((acc, cookie, index) => acc += `${COOKIES_KEYS[index]}=${cookie};`, '')
                     )
                 )
         },
-        checkWords: (cookies, words) => {
+        checkWords: function (cookies, words) {
             const formData = new FormData();
             formData.append('words', words);
             return fetch('https://puzzle-english.com/api2/dictionary/checkWordsFromMassImport', {
@@ -23,7 +23,7 @@ const CorePuzzleEnglishDictionaryModule = (() => {
                 .then(response => response.json())
                 .then(data => data.error ? Promise.reject(data.error) : Promise.resolve(data));
         },
-        addWords: (cookies, words) => {
+        addWords: function (cookies, words) {
             const formData = new FormData();
             formData.append('words', JSON.stringify(words));
             formData.append('idSet', '0');
@@ -40,7 +40,7 @@ const CorePuzzleEnglishDictionaryModule = (() => {
                 chrome.cookies.get({ url, name }, cookie => resolve(cookie ? cookie.value : ''));
             })
         },
-        injectScript: (document, url) => {
+        injectScript: function (document, url)  {
             return new Promise((resolved, rejected) => {
                 var script = document.createElement('script');
                 script.type = 'text/javascript';
@@ -61,7 +61,7 @@ const CorePuzzleEnglishDictionaryModule = (() => {
                 document.head.appendChild(link);
             })
         },
-        wrapElem: (elem) => {
+        wrapElem: function (elem)  {
             let div = document.createElement('div');
             div.setAttribute('class', 'balloon-row');
             div.setAttribute('style', 'display: inline;');
@@ -69,13 +69,13 @@ const CorePuzzleEnglishDictionaryModule = (() => {
             elem.innerHTML = null;
             elem.appendChild(div);
         },
-        disableLink: (link) => {
+        disableLink: function (link)  {
             link.parentElement.classList.add('isDisabled');
             link.setAttribute('data-href', link.href);
             link.href = '';
             link.setAttribute('aria-disabled', 'true');
         },
-        enableLink: (link) => {
+        enableLink: function  (link)  {
             link.parentElement.classList.remove('isDisabled');
             link.href = link.getAttribute('data-href');
             link.removeAttribute('aria-disabled');
