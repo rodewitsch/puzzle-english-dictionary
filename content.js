@@ -12,20 +12,21 @@
     function prepareDocument() {
         for (const elem of document.querySelectorAll('div, yt-formatted-string')) {
             if (elem.children.length != 0) continue;
-            CorePuzzleEnglishDictionaryModule.wrapElem(elem);
+            CorePuzzleEnglishDictionaryModule.wrapElem(document, elem);
         }
         for (const elem of document.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6, span, em')) {
             if (elem.querySelector('svg')) continue;
-            CorePuzzleEnglishDictionaryModule.wrapElem(elem);
+            CorePuzzleEnglishDictionaryModule.wrapElem(document, elem);
         }
     }
 
-    async function initTranslation(id_user) {
+    async function initTranslation() {
         const script = document.createElement('script');
         script.type = 'text/javascript';
         script.innerHTML = `$(function () {
+            PuzzleEnglishBaloonInitted = true;
             PE_Balloon.init({
-                wrap_words: true, id_user: '${id_user}', our_helper: false});
+                wrap_words: true, id_user: 2676311, our_helper: false});
             });`
         document.head.appendChild(script);
     }
@@ -34,7 +35,7 @@
         if (request.message == 'startTranslate') {
             await injectDependencies();
             prepareDocument();
-            initTranslation(request.id_user);
+            initTranslation();
             sendResponse('ok');
         }
     });

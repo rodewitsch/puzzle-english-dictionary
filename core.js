@@ -1,17 +1,28 @@
 const CorePuzzleEnglishDictionaryModule = (() => {
     return {
+        url: 'https://puzzle-english.com',
+        domain: 'puzzle-english.com',
+        /**
+         * Getting the cookies needed to successfully complete requests
+         * @returns {Promise<string>}
+         */
         getAuthCookies: function () {
-            const HOST = 'https://puzzle-english.com',
-                COOKIES_KEYS = ['PHPSESSID'];
+            const COOKIES_KEYS = ['PHPSESSID'];
 
             return Promise
-                .all(COOKIES_KEYS.map(KEY => { console.log(this); return this.getPECookie(HOST, KEY) }))
+                .all(COOKIES_KEYS.map(KEY => this.getCookie(KEY)))
                 .then(COOKIES =>
                     Promise.resolve(
-                        COOKIES.reduce((acc, cookie, index) => acc += `${COOKIES_KEYS[index]}=${cookie};`, '')
+                        COOKIES.reduce((acc, cookie, index) => acc += `${COOKIES_KEYS[index]}=${cookie.value};`, '')
                     )
                 )
         },
+        /**
+         * Check words and return object for addWords function
+         * @param {string} cookies - auth cookies
+         * @param {string} words - string of words
+         * @returns {Promise<object>}
+         */
         checkWords: function (cookies, words) {
             const formData = new FormData();
             formData.append('words', words);
@@ -23,6 +34,12 @@ const CorePuzzleEnglishDictionaryModule = (() => {
                 .then(response => response.json())
                 .then(data => data.error ? Promise.reject(data.error) : Promise.resolve(data));
         },
+        /**
+         * Save words
+         * @param {string} cookies - auth cookies
+         * @param {object} words - object from checkWords function
+         * @returns {Promise<object>}
+         */
         addWords: function (cookies, words) {
             const formData = new FormData();
             formData.append('words', JSON.stringify(words));
@@ -35,12 +52,63 @@ const CorePuzzleEnglishDictionaryModule = (() => {
                 .then(response => response.json())
                 .then(data => data.error || !data.status ? Promise.reject(data.error) : Promise.resolve(data));
         },
-        getPECookie: (url, name) => {
-            return new Promise(resolve => {
-                chrome.cookies.get({ url, name }, cookie => resolve(cookie ? cookie.value : ''));
+        /**
+         * Return params of a cookie
+         * @param {string} name
+         * @param {string} [url = this.url] 
+         * @returns {Promise<object>}
+         */
+        getCookie: function (name, url = this.url) {
+            return new Promise((resolve, reject) => {
+                chrome.cookies.get({ url, name }, cookie => cookie ? resolve(cookie) : reject(cookie));
             })
         },
-        injectScript: function (document, url)  {
+        /**
+         * Sets a cookie with the given cookie data
+         * @param {object} params - the params of the cookie
+         * @param {string} [params.url = this.url] - the request-URI to associate with the setting of the cookie
+         * @param  {string} [params.domain = this.domain] - the domain of the cookie (e.g. "www.google.com", "example.com")
+         * @param {string} [params.sameSite = "no_restriction"] - the cookie's same-site status. Enum "no_restriction", "lax", "strict", or "unspecified"
+         * @param {string} [params.path = "/"] - the path of the cookie
+         * @param {boolean} [params.secure = true] - whether the cookie should be marked as Secure
+         * @param {boolean} [params.httpOnly = true] - whether the cookie should be marked as HttpOnly
+         * @param {string} [params.name] - the name of the cookie.
+         * @param {string} [params.value] - the value of the cookie.
+         * @param {number} [params.expirationDate] - the expiration date of the cookie.
+         * @returns {Promise<any>}
+         */
+        setCookie: function (params) {
+            params = {
+                url: this.url,
+                domain: this.domain,
+                sameSite: 'no_restriction',
+                path: "/",
+                secure: true,
+                httpOnly: true,
+                ...params
+            }
+            return new Promise((resolve, reject) => {
+                chrome.cookies.set(params, cookie => cookie ? resolve(cookie) : reject(cookie));
+            })
+        },
+        /**
+         * Remove a cookie
+         * @param {string} name
+         * @param {string} [url = this.url] 
+         * @returns {Promise<object>}
+         */
+        removeCookie: function (name, url = this.url) {
+            return new Promise((resolve, reject) => {
+                chrome.cookies.remove({ url, name }, result => result ? resolve(result) : reject(result));
+            })
+        },
+        /**
+         * Inject a script to a document
+         * @param {object} document - DOM
+         * @param {string} url - src of a script
+         * @return {Promise<void>}
+         */
+        injectScript: function (document, url) {
             return new Promise((resolved, rejected) => {
                 var script = document.createElement('script');
                 script.type = 'text/javascript';
@@ -51,7 +119,13 @@ const CorePuzzleEnglishDictionaryModule = (() => {
                 document.head.appendChild(script);
             })
         },
-        injectStyle: (document, url) => {
+        /**
+         * Inject a style to a document
+         * @param {object} document - DOM
+         * @param {string} url - href of a style
+         * @return {Promise<void>}
+         */
+        injectStyle: function (document, url) {
             return new Promise((resolved, rejected) => {
                 var link = document.createElement('link');
                 link.rel = 'stylesheet';
@@ -61,7 +135,13 @@ const CorePuzzleEnglishDictionaryModule = (() => {
                 document.head.appendChild(link);
             })
         },
-        wrapElem: function (elem)  {
+        /**
+         * Wrap an element in a 'ballon-row' div
+         * @param {object} document - DOM
+         * @param {string} url - href of a style
+         * @return {void}
+         */
+        wrapElem: function (document, elem) {
             let div = document.createElement('div');
             div.setAttribute('class', 'balloon-row');
             div.setAttribute('style', 'display: inline;');
@@ -69,13 +149,23 @@ const CorePuzzleEnglishDictionaryModule = (() => {
             elem.innerHTML = null;
             elem.appendChild(div);
         },
-        disableLink: function (link)  {
+        /**
+         * Disable link
+         * @param {object} link 
+         * @returns <void>
+         */
+        disableLink: function (link) {
             link.parentElement.classList.add('isDisabled');
             link.setAttribute('data-href', link.href);
             link.href = '';
             link.setAttribute('aria-disabled', 'true');
         },
-        enableLink: function  (link)  {
+        /**
+         * Enable link
+         * @param {object} link 
+         * @returns <void>
+         */
+        enableLink: function (link) {
             link.parentElement.classList.remove('isDisabled');
             link.href = link.getAttribute('data-href');
             link.removeAttribute('aria-disabled');
