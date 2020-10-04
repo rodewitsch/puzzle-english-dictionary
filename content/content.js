@@ -49,134 +49,112 @@ const CPEDM = CorePuzzleEnglishDictionaryModule;
 
 class Host {
     constructor(x, y) {
-        this.HOST = document.createElement('div');
-        this.HOST.classList.add('puzzle-english-dictionary-host')
-        this.HOST.attachShadow({ mode: 'open' })
-        this.HOST.setAttribute('style', `position: absolute; left: ${x}px; top: ${y}px;`)
-        this.HOST.addEventListener('mousedown', (event) => event.stopPropagation())
-        this.HOST.addEventListener('mouseup', (event) => event.stopPropagation())
-        CPEDM.injectStyle(this.HOST.shadowRoot, chrome.extension.getURL(`/content/content.css`))
+        this.Node = document.createElement('div');
+        this.Node.classList.add('puzzle-english-dictionary-host')
+        this.Node.attachShadow({ mode: 'open' })
+        this.Node.setAttribute('style', `position: absolute; left: ${x}px; top: ${y}px;`)
+        this.Node.addEventListener('mousedown', (event) => event.stopPropagation())
+        this.Node.addEventListener('mouseup', (event) => event.stopPropagation())
+        CPEDM.injectStyle(this.Node.shadowRoot, chrome.extension.getURL(`/content/content.css`))
     }
 
-    get() { return this.HOST };
+    get() { return this.Node };
 
-    add(elem) { this.HOST.shadowRoot.appendChild(elem); }
+    add(elem) { this.Node.shadowRoot.appendChild(elem); }
 }
 
-let currentSelection;
+class Popup {
+    constructor(selection) {
+        this.Node = document.createElement('div');
+        this.Node.classList.add('ped-bubble', 'initial');
+        this.currentSpeakerIndex = 0;
+        this.currentSelection = selection;
 
-document.addEventListener('mouseup', function (event) {
-    const selection = CPEDM.getSelected().toString();
-    if (selection && selection != currentSelection) {
-        currentSelection = selection;
-        setTimeout(() => insertPopup(event), 150);
-    } else {
-        currentSelection = null;
-        removePopup();
+        const ADD_WORD_BUTTON = this.addInitialButtons({ backgroundImage: 'buttons', backgroundPosition: 'left', });
+        ADD_WORD_BUTTON.addEventListener('click', () => { chrome.runtime.sendMessage({ type: "simpleAddWord", options: { word: this.currentSelection } }); this.destroy; })
+        this.add(ADD_WORD_BUTTON);
+
+        const SHOW_WORD_PREVIEW_BUTTON = this.addInitialButtons({ backgroundImage: 'buttons', backgroundPosition: 'center' });
+        SHOW_WORD_PREVIEW_BUTTON.addEventListener('click', () => {
+            chrome.runtime.sendMessage({ type: "checkWord", options: { word: this.currentSelection } }, async (response) => {
+                this.Node.classList.remove('initial');
+                this.Node.classList.add('check');
+                if (response.Word.id) {
+                    if (response.Word.id != response.Word.base_word_id) {
+                        const CURRENT_WORD_VALUE_PART = this.addCurrentWordValueSection({
+                            word: response.Word.word,
+                            partOfSpeech: response.Word.base_forms[response.Word.part_of_speech].description
+                        });
+                        this.add(CURRENT_WORD_VALUE_PART);
+                    }
+                    const BASE_WORD_VALUE_PART = await this.addBaseWordValueSection({
+                        article: response.Word.article,
+                        word: response.Word.base_word,
+                        speakers: response.word_speakers,
+                        translation: response.Word.translation
+                    });
+                    this.add(BASE_WORD_VALUE_PART);
+
+                    if (response.word_speakers && response.word_speakers.length > 1) {
+                        const AUDIO_PART = this.addAudioSection(response.word_speakers, response.Word.base_word);
+                        this.add(AUDIO_PART);
+                    }
+                    const WORD_ACTION_PART = this.addWordActionsSection({
+                        word: response.Word.base_word,
+                        translation: response.Word.translation,
+                        partOfSpeech: response.Word.part_of_speech
+                    });
+                    this.add(WORD_ACTION_PART);
+
+                    if (response.html) {
+                        const DICTIONARY_SIZE = (response.html.match(/<span>В вашем словаре.*?(\d+).*?<\/span>/) || [])[1];
+                        if (Number(DICTIONARY_SIZE)) {
+                            const DICTIONARY_INFO = this.addDictionaryInfo(DICTIONARY_SIZE);
+                            this.add(DICTIONARY_INFO);
+                        }
+                    }
+                } else {
+                    const CURRENT_WORD_VALUE_PART = this.addCurrentWordValueSection({
+                        word: 'Перевод не найден',
+                        partOfSpeech: ''
+                    });
+                    this.add(CURRENT_WORD_VALUE_PART);
+                }
+            });
+        })
+        this.add(SHOW_WORD_PREVIEW_BUTTON);
+
+        const CLOSE_PREVIEW_BUTTON = this.addInitialButtons({ backgroundImage: 'buttons', backgroundPosition: 'right' });
+        CLOSE_PREVIEW_BUTTON.addEventListener('click', () => this.destroy());
+        this.add(CLOSE_PREVIEW_BUTTON);
     }
-});
 
-function addInitialButtons(options) {
-    const BUTTON = document.createElement('div');
-    BUTTON.classList.add('ped-bubble-button');
-    if (options.backgroundImage) {
-        const ICON_URL = chrome.extension.getURL(`/assets/images/icons/${options.backgroundImage}.png`)
-        BUTTON.style.backgroundImage = `url(${ICON_URL})`;
-        if (options.backgroundPosition) BUTTON.style.backgroundPosition = options.backgroundPosition;
-    }
-    return BUTTON;
-}
+    get() { return this.Node; }
 
-function removePopup() {
-    document.querySelectorAll('div.puzzle-english-dictionary-host').forEach(popup => popup.remove())
-}
+    add(elem) { this.Node.appendChild(elem); }
 
-function insertPopup(event) {
-
-    let currentSpeakerIndex = 0;
-
-    function setCurrentSpeakerIndex(value) {
-        currentSpeakerIndex = value;
-        const AUDIO_ITEMS = POPUP.querySelectorAll('.audio-item');
-        const ACTIVE_ITEM = POPUP.querySelector('.audio-item.active');
+    setCurrentSpeakerIndex(value) {
+        this.currentSpeakerIndex = value;
+        const AUDIO_ITEMS = this.Node.querySelectorAll('.audio-item');
+        const ACTIVE_ITEM = this.Node.querySelector('.audio-item.active');
         if (ACTIVE_ITEM) ACTIVE_ITEM.classList.remove('active');
         console.log(value);
-        AUDIO_ITEMS.item(currentSpeakerIndex).classList.add('active');
-        if (currentSpeakerIndex > 5) {
-            Array.from(AUDIO_ITEMS).splice(0, currentSpeakerIndex - 5).forEach(item => item.classList.add('hidden'));
+        AUDIO_ITEMS.item(this.currentSpeakerIndex).classList.add('active');
+        if (this.currentSpeakerIndex > 5) {
+            AUDIO_ITEMS.forEach((item, index) => index > this.currentSpeakerIndex - 5 || item.classList.add('hidden'));
         } else {
-            Array.from(AUDIO_ITEMS).forEach(item => item.classList.remove('hidden'));
+            AUDIO_ITEMS.forEach(item => item.classList.remove('hidden'));
         }
     }
 
-    // initial popup
-    const HOST = new Host(event.pageX, event.pageY);
-
-    const POPUP = document.createElement('div');
-    HOST.add(POPUP);
-
-    document.body.appendChild(HOST.get());
-
-    POPUP.classList.add('ped-bubble', 'initial');
-
-    const ADD_WORD_BUTTON = addInitialButtons({ backgroundImage: 'buttons', backgroundPosition: 'left', });
-    ADD_WORD_BUTTON.addEventListener('click', () => { simpleAddWord(currentSelection); removePopup(); })
-    POPUP.appendChild(ADD_WORD_BUTTON);
-
-    const SHOW_WORD_PREVIEW_BUTTON = addInitialButtons({ backgroundImage: 'buttons', backgroundPosition: 'center' });
-    SHOW_WORD_PREVIEW_BUTTON.addEventListener('click', () => {
-        chrome.runtime.sendMessage({ type: "checkWord", options: { word: currentSelection } }, async (response) => {
-            POPUP.classList.remove('initial');
-            POPUP.classList.add('check');
-            if (response.Word.id != response.Word.base_word_id) {
-                const CURRENT_WORD_VALUE_PART = addCurrentWordValueSection({
-                    word: response.Word.word,
-                    partOfSpeech: response.Word.base_forms[response.Word.part_of_speech].description
-                });
-                POPUP.appendChild(CURRENT_WORD_VALUE_PART);
-            }
-            const BASE_WORD_VALUE_PART = await addBaseWordValueSection({
-                article: response.Word.article,
-                word: response.Word.base_word,
-                speakers: response.word_speakers,
-                translation: response.Word.translation
-            });
-            POPUP.appendChild(BASE_WORD_VALUE_PART);
-
-            if (response.word_speakers && response.word_speakers.length > 1) {
-                const AUDIO_PART = addAudioSection(response.word_speakers, response.Word.base_word);
-                POPUP.appendChild(AUDIO_PART);
-            }
-            const WORD_ACTION_PART = addWordActionsSection({
-                word: response.Word.base_word,
-                translation: response.Word.translation,
-                partOfSpeech: response.Word.part_of_speech
-            });
-            POPUP.appendChild(WORD_ACTION_PART);
-
-            if (response.html) {
-                const DICTIONARY_SIZE = (response.html.match(/<span>В вашем словаре.*?(\d+).*?<\/span>/) || [])[1];
-                if (Number(DICTIONARY_SIZE)) {
-                    const DICTIONARY_INFO = addDictionaryInfo(DICTIONARY_SIZE);
-                    POPUP.appendChild(DICTIONARY_INFO);
-                }
-            }
-        });
-    })
-    POPUP.appendChild(SHOW_WORD_PREVIEW_BUTTON);
-
-    const CLOSE_PREVIEW_BUTTON = addInitialButtons({ backgroundImage: 'buttons', backgroundPosition: 'right' });
-    CLOSE_PREVIEW_BUTTON.addEventListener('click', () => { currentSelection = null; removePopup(); });
-    POPUP.appendChild(CLOSE_PREVIEW_BUTTON);
-
-    function addCurrentWordValueSection(info) {
+    addCurrentWordValueSection(info) {
         const CURRENT_WORD_VALUE_PART = document.createElement('div');
         CURRENT_WORD_VALUE_PART.classList.add('ped-current-word');
         CURRENT_WORD_VALUE_PART.innerHTML = `<span class="word">${info.word} </span><span>${info.partOfSpeech}</span>`;
         return CURRENT_WORD_VALUE_PART;
     }
 
-    async function addBaseWordValueSection(info) {
+    async addBaseWordValueSection(info) {
         const BASE_WORD_VALUE_PART = document.createElement('div');
         BASE_WORD_VALUE_PART.classList.add('ped-base-word');
 
@@ -191,15 +169,15 @@ function insertPopup(event) {
         AUDIO_BUTTON.innerHTML = await CPEDM.getTextAsset(`/assets/audio-button.svg`);
 
         AUDIO_BUTTON.addEventListener('click', event => {
-            const SPEAKER_INFO = CPEDM.getSpeakerInfo(info.speakers[currentSpeakerIndex]);
+            const SPEAKER_INFO = CPEDM.getSpeakerInfo(info.speakers[this.currentSpeakerIndex]);
             CPEDM.playAudio(SPEAKER_INFO.audio, info.word);
-            setCurrentSpeakerIndex(currentSpeakerIndex == info.speakers.length - 1 ? 0 : currentSpeakerIndex + 1);
+            this.setCurrentSpeakerIndex(this.currentSpeakerIndex == info.speakers.length - 1 ? 0 : this.currentSpeakerIndex + 1);
         })
         BASE_WORD_VALUE_PART.appendChild(AUDIO_BUTTON);
         return BASE_WORD_VALUE_PART;
     }
 
-    function addWordActionsSection(info) {
+    addWordActionsSection(info) {
         const WORD_ACTION_PART = document.createElement('div');
         WORD_ACTION_PART.classList.add('ped-word-actions');
 
@@ -215,14 +193,14 @@ function insertPopup(event) {
         return WORD_ACTION_PART;
     }
 
-    function addDictionaryInfo(dictionarySize) {
+    addDictionaryInfo(dictionarySize) {
         const DICTIONARY_INFO = document.createElement('div');
         DICTIONARY_INFO.classList.add('puzzle-english-dictionary-info');
         DICTIONARY_INFO.innerHTML = `<span>В вашем словаре слов: ${dictionarySize}</span>`;
         return DICTIONARY_INFO;
     }
 
-    function addAudioSection(speakers, word) {
+    addAudioSection(speakers, word) {
         const AUDIO_PART = document.createElement('div');
         AUDIO_PART.classList.add('ped-audio-part');
         speakers.forEach((speaker, index) => {
@@ -230,7 +208,7 @@ function insertPopup(event) {
             AUDIO_ITEM.classList.add('audio-item', speaker);
             const SPEAKER_INFO = CPEDM.getSpeakerInfo(speaker);
             AUDIO_ITEM.addEventListener('click', () => {
-                setCurrentSpeakerIndex(index);
+                this.setCurrentSpeakerIndex(index);
                 CPEDM.playAudio(SPEAKER_INFO.audio, word)
             });
             Promise
@@ -246,8 +224,39 @@ function insertPopup(event) {
         return AUDIO_PART;
     }
 
-    function simpleAddWord(word) {
-        chrome.runtime.sendMessage({ type: "simpleAddWord", options: { word } });
+    addInitialButtons(options) {
+        const BUTTON = document.createElement('div');
+        BUTTON.classList.add('ped-bubble-button');
+        if (options.backgroundImage) {
+            const ICON_URL = chrome.extension.getURL(`/assets/images/icons/${options.backgroundImage}.png`)
+            BUTTON.style.backgroundImage = `url(${ICON_URL})`;
+            if (options.backgroundPosition) BUTTON.style.backgroundPosition = options.backgroundPosition;
+        }
+        return BUTTON;
     }
 
+    destroy() {
+        this.currentSelection = null;
+        this.Node.remove();
+    }
 }
+
+let currentSelection = null;
+
+document.addEventListener('mouseup', (event) => {
+    const selection = CPEDM.getSelected().toString();
+    if (selection && selection.trim() && selection != currentSelection) {
+        console.log(selection);
+        currentSelection = selection;
+        setTimeout(() => {
+            // initial popup
+            const HOST = new Host(event.pageX, event.pageY);
+            const POPUP = new Popup(selection.trim());
+            HOST.add(POPUP.get());
+            document.body.appendChild(HOST.get());
+        }, 150);
+    } else {
+        currentSelection = null;
+        document.querySelectorAll('div.puzzle-english-dictionary-host').forEach(popup => popup.remove())
+    }
+});
