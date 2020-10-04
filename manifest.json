@@ -4,13 +4,13 @@
     "description": "Неофициальное расширение для добавления слов в словарь Puzzle English",
     "version": "2.6",
     "browser_action": {
-        "default_icon": "/assets/images/icon128.png",
+        "default_icon": "/assets/images/icons/icon128.png",
         "default_popup": "popup.html"
     },
     "icons": {
-        "16": "/assets/images/icon16.png",
-        "48": "/assets/images/icon48.png",
-        "128": "/assets/images/icon128.png"
+        "16": "/assets/images/icons/icon16.png",
+        "48": "/assets/images/icons/icon48.png",
+        "128": "/assets/images/icons/icon128.png"
     },
     "background": {
         "scripts": [
@@ -20,12 +20,18 @@
     },
     "content_scripts": [
         {
-            "matches": ["<all_urls>"],
+            "matches": [
+                "<all_urls>"
+            ],
             "js": [
                 "core.js",
-                "content.js"
+                "/content/content.js"
             ]
         }
+    ],
+    "web_accessible_resources": [
+        "/content/content.css",
+        "/assets/*"
     ],
     "permissions": [
         "activeTab",

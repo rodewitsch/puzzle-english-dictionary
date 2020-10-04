@@ -8,11 +8,7 @@ chrome.contextMenus.create({
   title: "Добавить '%s' в словарь",
   contexts: ["selection"],
   parentId: "MY_CONTEXT_MENU",
-  onclick: async (info) => {
-    const COOKIES = await CorePuzzleEnglishDictionaryModule.getAuthCookies();
-    const PREVIEW_OBJECT = await CorePuzzleEnglishDictionaryModule.checkWords(COOKIES, info.selectionText);
-    await CorePuzzleEnglishDictionaryModule.addWords(COOKIES, PREVIEW_OBJECT.previewWords);
-  }
+  onclick: async (info) => addWord(info.selectionText)
 });
 
 chrome.contextMenus.create({
@@ -44,3 +40,33 @@ chrome.contextMenus.create({
     ]);
   }
 });
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.type == 'simpleAddWord' && request.options && request.options.word) {
+    (async () => {
+      await addWord(request.options.word);
+      sendResponse({ message: 'ok' });
+    })();
+  }
+  if (request.type == 'checkWord' && request.options && request.options.word) {
+    console.log('checkWord');
+    (async () => {
+      const WORD_INFO = await CorePuzzleEnglishDictionaryModule.checkWordBaloon(request.options.word);
+      sendResponse(WORD_INFO);
+    })();
+  }
+  if (request.type == 'addWord' && request.options) {
+    console.log('addWord');
+    (async () => {
+      const RESPONSE = await CorePuzzleEnglishDictionaryModule.addWordBaloon(request.options);
+      sendResponse(RESPONSE);
+    })();
+  }
+  return true;
+});
+
+async function addWord(word) {
+  const COOKIES = await CorePuzzleEnglishDictionaryModule.getAuthCookies();
+  const PREVIEW_OBJECT = await CorePuzzleEnglishDictionaryModule.checkWords(COOKIES, word);
+  await CorePuzzleEnglishDictionaryModule.addWords(COOKIES, PREVIEW_OBJECT.previewWords);
+}

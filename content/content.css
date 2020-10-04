@@ -1,0 +1,145 @@
+/* ------------------------------------ Defaults -------------------------------------*/
+.ped-bubble {
+    z-index: 2147483647;
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* ------------------------------ Initial Bubble styles ------------------------------*/
+.ped-bubble.initial {
+    height: 40px;
+    width: 86px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 4px;
+    padding-top: 2px;
+    justify-content: center;
+}
+
+.ped-bubble.initial .ped-bubble-button {
+    height: 35px;
+    width: 35px;
+    background-size: 85px;
+    background-repeat: no-repeat;
+    background-position: 0 -1px;
+    cursor: pointer;
+}
+
+/* ------------------------------ Check Bubble styles ------------------------------*/
+
+.ped-bubble.check {
+    padding: 15px;
+    width: 360px;
+}
+
+.ped-bubble.check .ped-current-word{
+    font-size: 13px;
+    height: 35px;
+    width: 100%;
+}
+
+.ped-bubble.check .ped-current-word .word {
+    font-weight: bold;
+}
+
+.ped-bubble.check .ped-base-word {
+    height: 60px;
+    width: 100%;
+    font-size: 18px;
+    display: flex;
+    flex-direction: row;
+}
+
+.ped-bubble.check .ped-base-word .word-part {
+    width: 90%;
+}
+
+.ped-bubble.check .ped-base-word .audio-button {
+    width: 10%;
+    cursor: pointer;
+}
+
+
+.ped-bubble.check .ped-base-word .word {
+    font-weight: bold;
+}
+
+.ped-bubble.check .ped-base-word .other-meanings {
+    font-size: 13px;
+    color: #45a7dd;
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    cursor: pointer;
+}
+
+.ped-bubble.check .ped-word-actions{
+    height: 65px;
+    width: 100%;
+}
+
+.ped-bubble.check .ped-word-actions .ped-bubble-button {
+    cursor: pointer;
+    padding: 0 20px;
+    width: 110px;
+    height: 40px;
+    border-radius: 3px;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 15px;
+}
+
+.ped-bubble.check .ped-word-actions .ped-bubble-button .plus {
+    font-size: 30px;
+}
+
+.ped-bubble.check .ped-word-actions .ped-bubble-button.ped-bubble-success-button{
+    background-color: #85d360;
+}
+
+.ped-bubble.check .puzzle-english-dictionary-info{
+    height: 30px;
+    width: 100%;
+    font-size: 15px;
+}
+
+.ped-bubble.check .ped-bubble-footer{
+    height: 65px;
+    background-color: indigo;
+    width: 100%;
+}
+
+.ped-bubble.check .ped-audio-part {
+    height: 95px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    overflow: hidden;
+}
+
+.ped-bubble.check .ped-audio-part .audio-item {
+    height: 80px;
+    width: 35px;
+    margin: 5px 10px 5px 5px;
+    opacity: 0.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+}
+
+.ped-bubble.check .ped-audio-part .audio-item.hidden {
+    display: none;
+}
+
+.ped-bubble.check .ped-audio-part .audio-item:hover,.active{
+    opacity: 1 !important;
+}
+
+.ped-bubble.check .ped-audio-part .audio-item .face {
+    height: 35px;
+}

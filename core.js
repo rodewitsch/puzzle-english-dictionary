@@ -2,6 +2,7 @@ const CorePuzzleEnglishDictionaryModule = (() => {
     return {
         url: 'https://puzzle-english.com',
         domain: 'puzzle-english.com',
+        partner_id: 2676311,
         /**
          * Getting the cookies needed to successfully complete requests
          * @returns {Promise<string>}
@@ -26,7 +27,7 @@ const CorePuzzleEnglishDictionaryModule = (() => {
         checkWords: function (cookies, words) {
             const formData = new FormData();
             formData.append('words', words);
-            return fetch('https://puzzle-english.com/api2/dictionary/checkWordsFromMassImport', {
+            return fetch(`${this.url}/api2/dictionary/checkWordsFromMassImport`, {
                 method: 'POST',
                 headers: { cookies },
                 body: formData
@@ -44,7 +45,7 @@ const CorePuzzleEnglishDictionaryModule = (() => {
             const formData = new FormData();
             formData.append('words', JSON.stringify(words));
             formData.append('idSet', '0');
-            return fetch('https://puzzle-english.com/api2/dictionary/addWordsFromMassImport', {
+            return fetch(`${this.url}/api2/dictionary/addWordsFromMassImport`, {
                 method: 'POST',
                 headers: { cookies },
                 body: formData
@@ -169,6 +170,45 @@ const CorePuzzleEnglishDictionaryModule = (() => {
             link.parentElement.classList.remove('isDisabled');
             link.href = link.getAttribute('data-href');
             link.removeAttribute('aria-disabled');
+        },
+        getSelected: function () {
+            if (window.getSelection) {
+                return window.getSelection();
+            } else if (document.getSelection) {
+                return document.getSelection();
+            } else {
+                var selection = document.selection && document.selection.createRange();
+                if (selection.text) {
+                    return selection.text;
+                }
+                return false;
+            }
+        },
+        checkWordBaloon: async function (word) {
+            const PARAMS = {
+                ajax_action: 'ajax_balloon_Show',
+                piece_index: 0,
+                word,
+                external: 1,
+                partner_id: this.partner_id
+            };
+            const RAW_RESPONSE = await fetch(`${this.url}?${new URLSearchParams(PARAMS).toString()}`);
+            return await RAW_RESPONSE.json();
+        },
+        addWordBaloon: async function (info) {
+            debugger;
+            const PARAMS = {
+                ajax_action: 'ajax_dictionary_addWord',
+                word: info.word,
+                translation: info.translation,
+                part_of_speech: info.partOfSpeech,
+                is_dictionary_page: 1,
+                external: 1
+            };
+            debugger;
+            const RAW_RESPONSE = await fetch(`${this.url}?${new URLSearchParams(PARAMS).toString()}`);
+            debugger;
+            return await RAW_RESPONSE.json();
         }
     }
 })();

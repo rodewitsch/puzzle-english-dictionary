@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 19 13" width="19" height="13">
+  <defs>
+    <path id="aasccc83" d="M17 13H2c-1.1 0-2-.9-2-2V2C0 .9.9 0 2 0h15c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2z"/>
+  </defs>
+  <clipPath id="boioioer993">
+    <use xlink:href="#aasccc83" overflow="visible"/>
+  </clipPath>
+  <g clip-path="url(#boioioer993)">
+    <path fill="#c41013" d="M9 0h10v1H9z"/>
+    <path fill="#ffe4e4" d="M9 1h10v1H9z"/>
+    <path fill="#c41013" d="M9 2h10v1H9z"/>
+    <path fill="#ffe4e4" d="M9 3h10v1H9z"/>
+    <path fill="#c41013" d="M9 4h10v1H9z"/>
+    <path fill="#ffe4e4" d="M9 5h10v1H9z"/>
+    <path fill="#c41013" d="M9 6h10v1H9z"/>
+    <path fill="#ffe4e4" d="M0 7h19v1H0z"/>
+    <path fill="#c41013" d="M0 8h19v1H0z"/>
+    <path fill="#ffe4e4" d="M0 9h19v1H0z"/>
+    <path fill="#c41013" d="M0 10h19v1H0z"/>
+    <path fill="#ffe4e4" d="M0 11h19v1H0z"/>
+    <path fill="#c41013" d="M0 12h19v1H0z"/>
+    <path fill="#00237d" d="M0 0h9v7H0z"/>
+  </g>
+</svg>
