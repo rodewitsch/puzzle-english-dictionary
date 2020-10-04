@@ -1,9 +1,13 @@
 /* ------------------------------------ Defaults -------------------------------------*/
 .ped-bubble {
+    font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
+    font-size: 13px;
+    color: #777;
     z-index: 2147483647;
     background-color: white;
     border-radius: 3px;
     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.3);
+    line-height: 1.5em;
 }
 
 /* ------------------------------ Initial Bubble styles ------------------------------*/
