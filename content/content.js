@@ -72,17 +72,23 @@ class Bubble {
         this.currentSpeakerIndex = 0;
         this.currentSelection = selection;
         this.component = document.createElement('div');
+
+        this.word;
+        this.translation;
+        this.partOfSpeech;
+
+        this.children = {};
     }
 
     render() {
         this.component.classList.add('ped-bubble', 'initial');
-        const ADD_WORD_BUTTON = new InitialButtonComponent(
+        this.children.ADD_WORD_BUTTON = new InitialButtonComponent(
             { backgroundImage: 'buttons', backgroundPosition: 'left' },
             () => { chrome.runtime.sendMessage({ type: "simpleAddWord", options: { word: this.currentSelection } }); this.destroy; }
         );
-        this.add(ADD_WORD_BUTTON.render());
+        this.add(this.children.ADD_WORD_BUTTON.render());
 
-        const SHOW_WORD_PREVIEW_BUTTON = new InitialButtonComponent(
+        this.children.SHOW_WORD_PREVIEW_BUTTON = new InitialButtonComponent(
             { backgroundImage: 'buttons', backgroundPosition: 'center' },
             () => {
                 chrome.runtime.sendMessage({ type: "checkWord", options: { word: this.currentSelection } }, async (response) => {
@@ -90,12 +96,13 @@ class Bubble {
                     this.component.classList.add('check');
 
                     if (!response.Word.id) {
-                        const CURRENT_WORD_VALUE_COMPONENT = new CurrentWordComponent('Перевод не найден');
-                        this.add(CURRENT_WORD_VALUE_COMPONENT.render());
+                        this.children.CURRENT_WORD_VALUE_COMPONENT = new CurrentWordComponent('Перевод не найден');
+                        this.add(this.children.CURRENT_WORD_VALUE_COMPONENT.render());
                         return;
                     }
 
-                    const CURRENT_WORD = response.Word.word,
+                    const WORD_INFO = response.Word,
+                        CURRENT_WORD = response.Word.word,
                         BASE_WORD = response.Word.base_word,
                         ARTICLE = response.Word.article,
                         TRANSLATION = response.Word.translation,
@@ -105,44 +112,59 @@ class Bubble {
                             ? response.Word.base_forms
                             : response.Word.parts_of_speech)[response.Word.part_of_speech].description;
 
+                    this.word = CURRENT_WORD;
+
                     if (response.Word.id != response.Word.base_word_id) {
-                        const CURRENT_WORD_VALUE_COMPONENT = new CurrentWordComponent(CURRENT_WORD, PART_OF_SPEECH_DESCR);
-                        this.add(CURRENT_WORD_VALUE_COMPONENT.render());
+                        this.children.CURRENT_WORD_VALUE_COMPONENT = new CurrentWordComponent(CURRENT_WORD, PART_OF_SPEECH_DESCR);
+                        this.add(this.children.CURRENT_WORD_VALUE_COMPONENT.render());
                     }
 
-                    const BASE_WORD_VALUE_COMPONENT = new BaseWordComponent(this, BASE_WORD, TRANSLATION, SPEAKERS, ARTICLE);
-                    this.add(BASE_WORD_VALUE_COMPONENT.render());
+                    this.children.BASE_WORD_VALUE_COMPONENT = new BaseWordComponent(this, BASE_WORD, TRANSLATION, SPEAKERS, ARTICLE);
+                    this.add(this.children.BASE_WORD_VALUE_COMPONENT.render());
+
+                    this.children.OTHER_MEANINGS_COMPONENT = new OtherMeaningsComponent(this, WORD_INFO);
+                    this.add(this.children.OTHER_MEANINGS_COMPONENT.render());
 
                     if (SPEAKERS && SPEAKERS.length > 1) {
-                        const AUDIO_PART_COMPONENT = new WordPronunciationComponent(this, BASE_WORD, SPEAKERS);
-                        this.add(AUDIO_PART_COMPONENT.render());
+                        this.children.AUDIO_PART_COMPONENT = new WordPronunciationComponent(this, BASE_WORD, SPEAKERS);
+                        this.add(this.children.AUDIO_PART_COMPONENT.render());
                     }
 
-                    const WORD_ACTION_COMPONENT = new WordActionsComponent(BASE_WORD, TRANSLATION, PART_OF_SPEECH)
-                    this.add(WORD_ACTION_COMPONENT.render());
+                    this.children.WORD_ACTION_COMPONENT = new WordActionsComponent(this, BASE_WORD, TRANSLATION, PART_OF_SPEECH)
+                    this.add(this.children.WORD_ACTION_COMPONENT.render());
 
                     if (response.html) {
                         const DICTIONARY_SIZE = (response.html.match(/<span>В вашем словаре.*?(\d+).*?<\/span>/) || [])[1];
                         if (Number(DICTIONARY_SIZE)) {
-                            const DICTIONARY_INFO_COMPONENT = new DictionaryInfoComponent(DICTIONARY_SIZE);
-                            this.add(DICTIONARY_INFO_COMPONENT.render());
+                            this.children.DICTIONARY_INFO_COMPONENT = new DictionaryInfoComponent(DICTIONARY_SIZE);
+                            this.add(this.children.DICTIONARY_INFO_COMPONENT.render());
                         }
                     }
                 });
             }
         );
-        this.add(SHOW_WORD_PREVIEW_BUTTON.render());
+        this.add(this.children.SHOW_WORD_PREVIEW_BUTTON.render());
 
 
-        const CLOSE_PREVIEW_BUTTON = new InitialButtonComponent(
+        this.children.CLOSE_PREVIEW_BUTTON = new InitialButtonComponent(
             { backgroundImage: 'buttons', backgroundPosition: 'right' },
             () => this.destroy()
         );
-        this.add(CLOSE_PREVIEW_BUTTON.render());
+        this.add(this.children.CLOSE_PREVIEW_BUTTON.render());
         return this.component;
     }
 
     add(elem) { this.component.appendChild(elem); }
+
+    changeTranslation(info) {
+        this.translation = info.translation;
+        this.partOfSpeech = info.partOfSpeech
+        this.children.BASE_WORD_VALUE_COMPONENT.changeTranslation(this.translation);
+    }
+
+    saveWord() {
+        chrome.runtime.sendMessage({ type: "addWord", options: { word: this.word, translation: this.translation, partOfSpeech: this.partOfSpeech } }, (response) => { });
+    }
 
     setCurrentSpeakerIndex(value = 0) {
         this.currentSpeakerIndex = value;
@@ -160,6 +182,69 @@ class Bubble {
     destroy() {
         this.currentSelection = null;
         this.component.remove();
+    }
+}
+class OtherMeaningsComponent {
+    constructor(parent, wordInfo) {
+        this.parent = parent;
+        this.wordInfo = wordInfo;
+        this.component = document.createElement('div');
+    }
+
+    render() {
+        this.component.classList.add('other-meanings');
+        const BASE_FORMS = this.wordInfo.base_forms,
+            PARTS_OF_SPEECH = this.wordInfo.parts_of_speech,
+            MEANINGS = Object.values(Object.keys(BASE_FORMS).length ? BASE_FORMS : PARTS_OF_SPEECH);
+
+        const OTHER_MEANINGS_HEADER = document.createElement('p');
+        OTHER_MEANINGS_HEADER.classList.add('meanings-header');
+        OTHER_MEANINGS_HEADER.innerText = 'Другие значения'
+
+        this.component.appendChild(OTHER_MEANINGS_HEADER);
+
+        for (const MEANING of MEANINGS) {
+            const MEANING_VALUE = document.createElement('p');
+            MEANING_VALUE.innerText = MEANING.part_of_speech_ru;
+            MEANING_VALUE.classList.add('meanings-part');
+            this.component.appendChild(MEANING_VALUE);
+
+            const MEANINGS_LIST = document.createElement('ul');
+
+            const MEANING_GROUPS = MEANING.values
+                .reduce((acc, value) => {
+                    if (!acc[value.synonym_group]) {
+                        acc[value.synonym_group] = [value];
+                    } else {
+                        acc[value.synonym_group] = [...acc[value.synonym_group], value];
+                    }
+                    return acc;
+                }, {})
+
+            for (const MEANING_GROUP_KEY in MEANING_GROUPS) {
+                const MEANING_GROUP = MEANING_GROUPS[MEANING_GROUP_KEY];
+                const MEANING_LIST_ITEM = document.createElement('li');
+                MEANING_GROUP.forEach((meaningGroupItem, index) => {
+                    const MEANING_GROUP_ITEM_COMPONENT = document.createElement('span');
+                    MEANING_GROUP_ITEM_COMPONENT.classList.add('meaning-word');
+                    MEANING_GROUP_ITEM_COMPONENT.innerText = (!index ? '' : ', ') + meaningGroupItem.value;
+                    MEANING_GROUP_ITEM_COMPONENT.addEventListener('click', () => {
+                        this.parent.component.classList.remove('pick');
+                        this.parent.component.classList.add('check');
+                        this.parent.changeTranslation({
+                            translation: meaningGroupItem.value,
+                            partOfSpeech: MEANING.part_of_speech
+                        });
+                    })
+                    MEANING_LIST_ITEM.appendChild(MEANING_GROUP_ITEM_COMPONENT);
+                })
+                MEANINGS_LIST.appendChild(MEANING_LIST_ITEM)
+            }
+
+            this.component.appendChild(MEANINGS_LIST);
+        }
+
+        return this.component;
     }
 }
 class CurrentWordComponent {
@@ -189,8 +274,14 @@ class BaseWordComponent {
         this.component.classList.add('ped-base-word');
         const WORD_PART = document.createElement('div');
         WORD_PART.classList.add('word-part');
-        WORD_PART.innerHTML = `<span>${this.article} </span><span class="word">${this.word}</span><span> - ${this.translation}</span><br><span class="other-meanings">Другие значения</span>`;
+        WORD_PART.innerHTML = `<span>${this.article} </span><span class="word">${this.word}</span><span class="translation"> - ${this.translation}</span><br><span class="other-meanings-button">Другие значения</span>`;
         this.component.appendChild(WORD_PART);
+
+        const OTHER_MEANINGS_BUTTON = this.component.querySelector('.other-meanings-button');
+        OTHER_MEANINGS_BUTTON.addEventListener('click', () => {
+            this.parent.component.classList.add('pick');
+            this.parent.component.classList.remove('check');
+        });
 
         const AUDIO_BUTTON = document.createElement('div');
         AUDIO_BUTTON.classList.add('audio-button');
@@ -204,6 +295,11 @@ class BaseWordComponent {
         })
         this.component.appendChild(AUDIO_BUTTON);
         return this.component;
+    }
+
+    changeTranslation(translation) {
+        const TRANSLATION_COMPONENT = this.component.querySelector('.translation');
+        TRANSLATION_COMPONENT.innerText = `- ${translation}`;
     }
 }
 class WordPronunciationComponent {
@@ -238,7 +334,8 @@ class WordPronunciationComponent {
     }
 }
 class WordActionsComponent {
-    constructor(word, translation, partOfSpeech) {
+    constructor(parent, word, translation, partOfSpeech) {
+        this.parent = parent;
         this.word = word;
         this.translation = translation;
         this.partOfSpeech = partOfSpeech;
@@ -251,9 +348,7 @@ class WordActionsComponent {
         BUBBLE_BUTTON.classList.add('ped-bubble-button', 'ped-bubble-success-button');
         BUBBLE_BUTTON.innerHTML = `<span class="plus">+</span><span>в словарь</span>`;
 
-        BUBBLE_BUTTON.addEventListener('click', (event) => {
-            chrome.runtime.sendMessage({ type: "addWord", options: { word: this.word, translation: this.translation, partOfSpeech: this.partOfSpeech } }, (response) => { });
-        })
+        BUBBLE_BUTTON.addEventListener('click', (event) => this.parent.saveWord())
 
         this.component.append(BUBBLE_BUTTON);
         return this.component;

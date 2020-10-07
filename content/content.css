@@ -37,6 +37,14 @@
     width: 360px;
 }
 
+.ped-bubble.check .other-meanings {
+    display: none;
+}
+
+.ped-bubble.check .ped-base-word,.ped-bubble.check .ped-current-word,.ped-bubble.check .ped-audio-part,.ped-bubble.check .ped-word-actions, .ped-bubble.check .puzzle-english-dictionary-info{
+    display: block;
+}
+
 .ped-bubble.check .ped-current-word{
     font-size: 13px;
     height: 35px;
@@ -69,7 +77,7 @@
     font-weight: bold;
 }
 
-.ped-bubble.check .ped-base-word .other-meanings {
+.ped-bubble.check .ped-base-word .other-meanings-button {
     font-size: 13px;
     color: #45a7dd;
     text-decoration: underline;
@@ -146,4 +154,26 @@
 
 .ped-bubble.check .ped-audio-part .audio-item .face {
     height: 35px;
+}
+/* ------------------------------ Pick Bubble styles ------------------------------*/
+.ped-bubble.pick {
+    padding: 15px;
+    width: 360px;
+}
+
+.ped-bubble.pick .ped-base-word,.ped-bubble.pick .ped-current-word,.ped-bubble.pick .ped-audio-part,.ped-bubble.pick .ped-word-actions,.ped-bubble.pick .puzzle-english-dictionary-info{
+    display: none;
+}
+
+.ped-bubble.pick .meanings-header {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.ped-bubble.pick .meanings-part {
+    text-transform:capitalize;
+}
+
+.ped-bubble.pick span {
+    cursor: pointer;
 }
