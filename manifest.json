@@ -35,8 +35,6 @@
     ],
     "permissions": [
         "activeTab",
-        "cookies",
-        "https://puzzle-english.com/",
         "contextMenus"
     ]
 }

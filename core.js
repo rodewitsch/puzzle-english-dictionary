@@ -70,41 +70,6 @@ const CorePuzzleEnglishDictionaryModule = (() => {
                 element.appendChild(link);
             })
         },
-        /**
-         * Wrap an element in a 'ballon-row' div
-         * @param {object} document - DOM
-         * @param {string} url - href of a style
-         * @return {void}
-         */
-        wrapElem: function (document, elem) {
-            let div = document.createElement('div');
-            div.setAttribute('class', 'balloon-row');
-            div.setAttribute('style', 'display: inline;');
-            div.innerHTML = elem.innerHTML;
-            elem.innerHTML = null;
-            elem.appendChild(div);
-        },
-        /**
-         * Disable link
-         * @param {object} link 
-         * @returns <void>
-         */
-        disableLink: function (link) {
-            link.parentElement.classList.add('isDisabled');
-            link.setAttribute('data-href', link.href);
-            link.href = '';
-            link.setAttribute('aria-disabled', 'true');
-        },
-        /**
-         * Enable link
-         * @param {object} link 
-         * @returns <void>
-         */
-        enableLink: function (link) {
-            link.parentElement.classList.remove('isDisabled');
-            link.href = link.getAttribute('data-href');
-            link.removeAttribute('aria-disabled');
-        },
         getSelected: function () {
             if (window.getSelection) {
                 return window.getSelection();
