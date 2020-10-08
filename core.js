@@ -3,33 +3,18 @@ const CorePuzzleEnglishDictionaryModule = (() => {
         url: 'https://puzzle-english.com',
         domain: 'puzzle-english.com',
         partner_id: 2676311,
-        /**
-         * Getting the cookies needed to successfully complete requests
-         * @returns {Promise<string>}
-         */
-        getAuthCookies: function () {
-            const COOKIES_KEYS = ['PHPSESSID'];
-
-            return Promise
-                .all(COOKIES_KEYS.map(KEY => this.getCookie(KEY)))
-                .then(COOKIES =>
-                    Promise.resolve(
-                        COOKIES.reduce((acc, cookie, index) => acc += `${COOKIES_KEYS[index]}=${cookie.value};`, '')
-                    )
-                )
-        },
+        time: new Date().getTime(),
         /**
          * Check words and return object for addWords function
          * @param {string} cookies - auth cookies
          * @param {string} words - string of words
          * @returns {Promise<object>}
          */
-        checkWords: function (cookies, words) {
+        checkWords: function (words) {
             const formData = new FormData();
             formData.append('words', words);
             return fetch(`${this.url}/api2/dictionary/checkWordsFromMassImport`, {
                 method: 'POST',
-                headers: { cookies },
                 body: formData
             })
                 .then(response => response.json())
@@ -41,67 +26,16 @@ const CorePuzzleEnglishDictionaryModule = (() => {
          * @param {object} words - object from checkWords function
          * @returns {Promise<object>}
          */
-        addWords: function (cookies, words) {
+        addWords: function (words) {
             const formData = new FormData();
             formData.append('words', JSON.stringify(words));
             formData.append('idSet', '0');
             return fetch(`${this.url}/api2/dictionary/addWordsFromMassImport`, {
                 method: 'POST',
-                headers: { cookies },
                 body: formData
             })
                 .then(response => response.json())
                 .then(data => data.error || !data.status ? Promise.reject(data.error) : Promise.resolve(data));
-        },
-        /**
-         * Return params of a cookie
-         * @param {string} name
-         * @param {string} [url = this.url] 
-         * @returns {Promise<object>}
-         */
-        getCookie: function (name, url = this.url) {
-            return new Promise((resolve, reject) => {
-                chrome.cookies.get({ url, name }, cookie => cookie ? resolve(cookie) : reject(cookie));
-            })
-        },
-        /**
-         * Sets a cookie with the given cookie data
-         * @param {object} params - the params of the cookie
-         * @param {string} [params.url = this.url] - the request-URI to associate with the setting of the cookie
-         * @param  {string} [params.domain = this.domain] - the domain of the cookie (e.g. "www.google.com", "example.com")
-         * @param {string} [params.sameSite = "no_restriction"] - the cookie's same-site status. Enum "no_restriction", "lax", "strict", or "unspecified"
-         * @param {string} [params.path = "/"] - the path of the cookie
-         * @param {boolean} [params.secure = true] - whether the cookie should be marked as Secure
-         * @param {boolean} [params.httpOnly = true] - whether the cookie should be marked as HttpOnly
-         * @param {string} [params.name] - the name of the cookie.
-         * @param {string} [params.value] - the value of the cookie.
-         * @param {number} [params.expirationDate] - the expiration date of the cookie.
-         * @returns {Promise<any>}
-         */
-        setCookie: function (params) {
-            params = {
-                url: this.url,
-                domain: this.domain,
-                sameSite: 'no_restriction',
-                path: "/",
-                secure: true,
-                httpOnly: true,
-                ...params
-            }
-            return new Promise((resolve, reject) => {
-                chrome.cookies.set(params, cookie => cookie ? resolve(cookie) : reject(cookie));
-            })
-        },
-        /**
-         * Remove a cookie
-         * @param {string} name
-         * @param {string} [url = this.url] 
-         * @returns {Promise<object>}
-         */
-        removeCookie: function (name, url = this.url) {
-            return new Promise((resolve, reject) => {
-                chrome.cookies.remove({ url, name }, result => result ? resolve(result) : reject(result));
-            })
         },
         /**
          * Inject a script to an element
@@ -314,7 +248,7 @@ const CorePuzzleEnglishDictionaryModule = (() => {
             }
         },
         playAudio: function (speaker, word) {
-            new Audio(`https://static.puzzle-english.com/words/${speaker}/${word}.mp3?${new Date().getTime()}`).play();
+            new Audio(`https://static.puzzle-english.com/words/${speaker}/${word}.mp3?${this.time}`).play();
         },
         getTextAsset: async function (path) {
             const URL = chrome.extension.getURL(path),

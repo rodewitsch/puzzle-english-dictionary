@@ -3,11 +3,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         NEED_AUTH_AREA = document.querySelector('.need-auth-area'),
         SUBMIT_BUTTON = document.querySelector('.redesign-button'),
         GO_TO_SITE_BUTTON = document.querySelector('#go-to-site'),
-        WORDS_AREA = document.querySelector('#words-area'),
-        COOKIES = CorePuzzleEnglishDictionaryModule.getAuthCookies();
+        WORDS_AREA = document.querySelector('#words-area');
 
     // check auth
-    try { await CorePuzzleEnglishDictionaryModule.checkWords(COOKIES, 'test auth'); }
+    try { await CorePuzzleEnglishDictionaryModule.checkWords('test auth'); }
     catch (err) {
         WORK_AREA.classList.add("hide-area");
         NEED_AUTH_AREA.classList.remove("hide-area");
@@ -26,9 +25,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     SUBMIT_BUTTON.onclick = async (event) => {
         if (!WORDS_AREA.value) return;
         disableButton(SUBMIT_BUTTON);
-        const PREVIEW_OBJECT = await CorePuzzleEnglishDictionaryModule.checkWords(COOKIES, WORDS_AREA.value);
+        const PREVIEW_OBJECT = await CorePuzzleEnglishDictionaryModule.checkWords(WORDS_AREA.value);
         try {
-            const ADDING_RESULT = await CorePuzzleEnglishDictionaryModule.addWords(COOKIES, PREVIEW_OBJECT.previewWords);
+            const ADDING_RESULT = await CorePuzzleEnglishDictionaryModule.addWords(PREVIEW_OBJECT.previewWords);
             event.target.innerText = `Добавлено слов ${ADDING_RESULT.addCount}`;
         }
         catch (err) { event.target.innerText = `Слова не добавлены`; }

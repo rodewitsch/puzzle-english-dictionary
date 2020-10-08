@@ -30,6 +30,18 @@
     cursor: pointer;
 }
 
+.ped-bubble.initial.disabled .ped-bubble-button:nth-child(1) {
+    cursor: not-allowed;
+    filter: grayscale(100%);
+}
+
+.ped-bubble.disabled .audio-button{
+    visibility: hidden;
+}
+
+.ped-bubble.disabled .ped-word-actions{
+    display: none !important;
+}
 /* ------------------------------ Check Bubble styles ------------------------------*/
 
 .ped-bubble.check {
@@ -159,6 +171,7 @@
 .ped-bubble.pick {
     padding: 15px;
     width: 360px;
+    background-color: #f7f8f8;
 }
 
 .ped-bubble.pick .ped-base-word,.ped-bubble.pick .ped-current-word,.ped-bubble.pick .ped-audio-part,.ped-bubble.pick .ped-word-actions,.ped-bubble.pick .puzzle-english-dictionary-info{
@@ -170,10 +183,39 @@
     font-size: 16px;
 }
 
+.ped-bubble.pick .meaning-phrase-header {
+    background-color: white;
+    padding: 15px;
+    font-size: 16px;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
 .ped-bubble.pick .meanings-part {
     text-transform:capitalize;
 }
 
+.ped-bubble.pick ul {
+    list-style: none;
+}
+
+.ped-bubble.pick li:before {
+    content: "\2013";
+    position: absolute;
+    left: 40px;
+    line-height: 1.5;
+}
+
 .ped-bubble.pick span {
     cursor: pointer;
+}
+
+.ped-bubble.pick span:hover {
+    color: #309cca;
+}
+
+.ped-bubble.pick .meaning-back-button{
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
 }

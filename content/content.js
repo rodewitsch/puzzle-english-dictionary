@@ -1,53 +1,7 @@
 "use strict";
-// TODO: depracated
-(() => {
-    const CPEDM = CorePuzzleEnglishDictionaryModule;
-
-    async function injectDependencies() {
-        await CPEDM.injectScript(document.head, 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.js');
-        await Promise.all([
-            CPEDM.injectScript(document.head, 'https://puzzle-english.com/wp-content/plugins/pe-balloon/jBox.min.js'),
-            CPEDM.injectScript(document.head, 'https://puzzle-english.com/wp-content/plugins/pe-balloon/pe_balloon.min.js'),
-            CPEDM.injectStyle(document.head, 'https://puzzle-english.com/wp-content/themes/english/extensions/dictionary/js/jBox.css'),
-            CPEDM.injectStyle(document.head, 'https://puzzle-english.com/wp-content/themes/english/assets/css/balloon.css')
-        ]);
-    }
-
-    function prepareDocument() {
-        for (const elem of document.querySelectorAll('div, yt-formatted-string')) {
-            if (elem.children.length != 0) continue;
-            CPEDM.wrapElem(document, elem);
-        }
-        for (const elem of document.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6, span, em')) {
-            if (elem.querySelector('svg')) continue;
-            CPEDM.wrapElem(document, elem);
-        }
-    }
-
-    async function initTranslation() {
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.innerHTML = `$(function () {
-            PuzzleEnglishBaloonInitted = true;
-            PE_Balloon.init({
-                wrap_words: true, id_user: 2676311, our_helper: false});
-            });`
-        document.head.appendChild(script);
-    }
-
-    chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-        if (request.message == 'startTranslate') {
-            await injectDependencies();
-            prepareDocument();
-            initTranslation();
-            sendResponse('ok');
-        }
-    });
-})();
-
 /** CorePuzzleEnglishDictionaryModule alias */
 const CPEDM = CorePuzzleEnglishDictionaryModule;
-
+let currentSelection = null, authorization = false;
 class Host {
     constructor(x, y) {
         this.x = x;
@@ -65,54 +19,66 @@ class Host {
         return this.component
     };
 
+    destroy() {
+        this.component.remove();
+    }
+
     add(elem) { this.component.shadowRoot.appendChild(elem); }
 }
 class Bubble {
-    constructor(selection) {
-        this.currentSpeakerIndex = 0;
+    constructor(parent, selection) {
+        this.parent = parent;
+        this.currentSpeakerIndex = -1;
         this.currentSelection = selection;
         this.component = document.createElement('div');
-
         this.word;
         this.translation;
         this.partOfSpeech;
-
         this.children = {};
     }
 
     render() {
         this.component.classList.add('ped-bubble', 'initial');
+        if (!authorization) {
+            chrome.runtime.sendMessage({ type: "checkAuth" }, null, ({ auth }) => {
+                if (!auth) this.component.classList.add('disabled');
+                authorization = auth;
+            });
+        }
         this.children.ADD_WORD_BUTTON = new InitialButtonComponent(
             { backgroundImage: 'buttons', backgroundPosition: 'left' },
-            () => { chrome.runtime.sendMessage({ type: "simpleAddWord", options: { word: this.currentSelection } }); this.destroy; }
+            () => {
+                chrome.runtime.sendMessage({ type: "simpleAddWord", options: { word: this.currentSelection } });
+                this.destroy();
+            }
         );
         this.add(this.children.ADD_WORD_BUTTON.render());
 
         this.children.SHOW_WORD_PREVIEW_BUTTON = new InitialButtonComponent(
             { backgroundImage: 'buttons', backgroundPosition: 'center' },
             () => {
+                this.component.classList.remove('initial');
+                this.component.classList.add('check');
                 chrome.runtime.sendMessage({ type: "checkWord", options: { word: this.currentSelection } }, async (response) => {
-                    this.component.classList.remove('initial');
-                    this.component.classList.add('check');
-
                     if (!response.Word.id) {
                         this.children.CURRENT_WORD_VALUE_COMPONENT = new CurrentWordComponent('Перевод не найден');
                         this.add(this.children.CURRENT_WORD_VALUE_COMPONENT.render());
                         return;
                     }
-
                     const WORD_INFO = response.Word,
                         CURRENT_WORD = response.Word.word,
                         BASE_WORD = response.Word.base_word,
                         ARTICLE = response.Word.article,
                         TRANSLATION = response.Word.translation,
-                        SPEAKERS = response.word_speakers,
+                        SPEAKERS = response.word_speakers.splice(0, 8),
                         PART_OF_SPEECH = response.Word.part_of_speech,
                         PART_OF_SPEECH_DESCR = (Object.keys(response.Word.base_forms).length
                             ? response.Word.base_forms
                             : response.Word.parts_of_speech)[response.Word.part_of_speech].description;
 
                     this.word = CURRENT_WORD;
+                    this.translation = TRANSLATION;
+                    this.partOfSpeech = PART_OF_SPEECH;
 
                     if (response.Word.id != response.Word.base_word_id) {
                         this.children.CURRENT_WORD_VALUE_COMPONENT = new CurrentWordComponent(CURRENT_WORD, PART_OF_SPEECH_DESCR);
@@ -145,7 +111,6 @@ class Bubble {
         );
         this.add(this.children.SHOW_WORD_PREVIEW_BUTTON.render());
 
-
         this.children.CLOSE_PREVIEW_BUTTON = new InitialButtonComponent(
             { backgroundImage: 'buttons', backgroundPosition: 'right' },
             () => this.destroy()
@@ -172,16 +137,11 @@ class Bubble {
         const ACTIVE_ITEM = this.component.querySelector('.audio-item.active');
         if (ACTIVE_ITEM) ACTIVE_ITEM.classList.remove('active');
         AUDIO_ITEMS.item(this.currentSpeakerIndex).classList.add('active');
-        if (this.currentSpeakerIndex > 5) {
-            AUDIO_ITEMS.forEach((item, index) => index > this.currentSpeakerIndex - 5 || item.classList.add('hidden'));
-        } else {
-            AUDIO_ITEMS.forEach(item => item.classList.remove('hidden'));
-        }
     }
 
     destroy() {
         this.currentSelection = null;
-        this.component.remove();
+        this.parent.component.remove();
     }
 }
 class OtherMeaningsComponent {
@@ -193,6 +153,21 @@ class OtherMeaningsComponent {
 
     render() {
         this.component.classList.add('other-meanings');
+
+        const BACK_BUTTON = document.createElement('span');
+        BACK_BUTTON.classList.add('meaning-back-button');
+        BACK_BUTTON.innerText = '← Назад';
+        BACK_BUTTON.addEventListener('click', () => {
+            this.parent.component.classList.remove('pick');
+            this.parent.component.classList.add('check');
+        })
+        this.component.appendChild(BACK_BUTTON);
+
+        const MEANING_PHRASE_HEADER = document.createElement('div');
+        MEANING_PHRASE_HEADER.classList.add('meaning-phrase-header');
+        MEANING_PHRASE_HEADER.innerHTML = `Значение слова <b>${this.wordInfo.word}</b> в данной фразе`;
+        this.component.appendChild(MEANING_PHRASE_HEADER);
+
         const BASE_FORMS = this.wordInfo.base_forms,
             PARTS_OF_SPEECH = this.wordInfo.parts_of_speech,
             MEANINGS = Object.values(Object.keys(BASE_FORMS).length ? BASE_FORMS : PARTS_OF_SPEECH);
@@ -208,6 +183,11 @@ class OtherMeaningsComponent {
             MEANING_VALUE.innerText = MEANING.part_of_speech_ru;
             MEANING_VALUE.classList.add('meanings-part');
             this.component.appendChild(MEANING_VALUE);
+
+            const MEANING_VALUE_PART_OF_SPEECH = document.createElement('p');
+            MEANING_VALUE_PART_OF_SPEECH.innerHTML = `${MEANING.article} <b>${MEANING.word}<b>`;
+            MEANING_VALUE_PART_OF_SPEECH.classList.add('meanings-part-of-speech');
+            this.component.appendChild(MEANING_VALUE_PART_OF_SPEECH);
 
             const MEANINGS_LIST = document.createElement('ul');
 
@@ -289,9 +269,10 @@ class BaseWordComponent {
         CPEDM.getTextAsset(`/assets/audio-button.svg`).then(svg => AUDIO_BUTTON.innerHTML = svg)
 
         AUDIO_BUTTON.addEventListener('click', event => {
-            const SPEAKER_INFO = CPEDM.getSpeakerInfo(this.speakers[this.parent.currentSpeakerIndex]);
-            CPEDM.playAudio(SPEAKER_INFO.audio, this.word);
             this.parent.setCurrentSpeakerIndex(this.parent.currentSpeakerIndex == this.speakers.length - 1 ? 0 : this.parent.currentSpeakerIndex + 1);
+            const SPEAKER_INFO = CPEDM.getSpeakerInfo(this.speakers[this.parent.currentSpeakerIndex]);
+            chrome.runtime.sendMessage({ type: "playWord", options: { speaker: SPEAKER_INFO.audio, word: this.word } });
+
         })
         this.component.appendChild(AUDIO_BUTTON);
         return this.component;
@@ -312,13 +293,20 @@ class WordPronunciationComponent {
 
     render() {
         this.component.classList.add('ped-audio-part');
-        this.speakers.forEach((speaker, index) => {
+
+        this.component.addEventListener('mou', (event) => {
+            console.log(event);
+            event.preventDefault();
+            event.stopPropagation();
+        })
+        for (let index = 0; index < this.speakers.length; index++) {
+            let speaker = this.speakers[index];
             const AUDIO_ITEM = document.createElement('div');
             AUDIO_ITEM.classList.add('audio-item', speaker);
             const SPEAKER_INFO = CPEDM.getSpeakerInfo(speaker);
             AUDIO_ITEM.addEventListener('click', () => {
                 this.parent.setCurrentSpeakerIndex(index);
-                CPEDM.playAudio(SPEAKER_INFO.audio, this.word)
+                chrome.runtime.sendMessage({ type: "playWord", options: { speaker: SPEAKER_INFO.audio, word: this.word } });
             });
             Promise
                 .all([
@@ -327,9 +315,9 @@ class WordPronunciationComponent {
                 ])
                 .then(([FLAG_SVG, FACE_SVG]) => {
                     AUDIO_ITEM.innerHTML = `<div class="flag">${FLAG_SVG}</div><div class="face">${FACE_SVG}</div><div class="name">${SPEAKER_INFO.name}</div>`;
-                    this.component.appendChild(AUDIO_ITEM);
                 })
-        });
+            this.component.appendChild(AUDIO_ITEM);
+        }
         return this.component;
     }
 }
@@ -348,7 +336,12 @@ class WordActionsComponent {
         BUBBLE_BUTTON.classList.add('ped-bubble-button', 'ped-bubble-success-button');
         BUBBLE_BUTTON.innerHTML = `<span class="plus">+</span><span>в словарь</span>`;
 
-        BUBBLE_BUTTON.addEventListener('click', (event) => this.parent.saveWord())
+        BUBBLE_BUTTON.addEventListener('click', (event) => {
+            this.parent.saveWord();
+            BUBBLE_BUTTON.innerHTML = `<span>Добавлено</span>`;
+        },
+            { once: true }
+        )
 
         this.component.append(BUBBLE_BUTTON);
         return this.component;
@@ -386,16 +379,14 @@ class InitialButtonComponent {
     }
 }
 
-let currentSelection = null;
-
 document.addEventListener('mouseup', (event) => {
     const selection = CPEDM.getSelected().toString();
-    if (selection && selection.trim() && selection != currentSelection) {
+    if (selection && selection.trim() && selection != currentSelection && !/[^a-zA-Z'\- ]/.test(selection)) {
         currentSelection = selection;
         setTimeout(() => {
             // initial popup
             const HOST = new Host(event.pageX, event.pageY);
-            const POPUP = new Bubble(selection.trim());
+            const POPUP = new Bubble(HOST, selection.trim());
             HOST.add(POPUP.render());
             document.body.appendChild(HOST.render());
         }, 150);
