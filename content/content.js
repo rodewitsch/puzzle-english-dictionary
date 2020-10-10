@@ -1,7 +1,7 @@
 "use strict";
 /** CorePuzzleEnglishDictionaryModule alias */
 const CPEDM = CorePuzzleEnglishDictionaryModule;
-let currentSelection = null, authorization = false;
+let authorization = false;
 class Host {
     constructor(x, y) {
         this.x = x;
@@ -72,9 +72,7 @@ class Bubble {
                         TRANSLATION = response.Word.translation,
                         SPEAKERS = response.word_speakers.splice(0, 8),
                         PART_OF_SPEECH = response.Word.part_of_speech,
-                        PART_OF_SPEECH_DESCR = (Object.keys(response.Word.base_forms).length
-                            ? response.Word.base_forms
-                            : response.Word.parts_of_speech)[response.Word.part_of_speech].description;
+                        PART_OF_SPEECH_DESCR = { ...response.Word.base_forms, ...response.Word.parts_of_speech }[response.Word.part_of_speech].description;
 
                     this.word = CURRENT_WORD;
                     this.translation = TRANSLATION;
@@ -170,7 +168,7 @@ class OtherMeaningsComponent {
 
         const BASE_FORMS = this.wordInfo.base_forms,
             PARTS_OF_SPEECH = this.wordInfo.parts_of_speech,
-            MEANINGS = Object.values(Object.keys(BASE_FORMS).length ? BASE_FORMS : PARTS_OF_SPEECH);
+            MEANINGS = Object.values({ ...BASE_FORMS, ...PARTS_OF_SPEECH });
 
         const OTHER_MEANINGS_HEADER = document.createElement('p');
         OTHER_MEANINGS_HEADER.classList.add('meanings-header');
@@ -381,8 +379,8 @@ class InitialButtonComponent {
 
 document.addEventListener('mouseup', (event) => {
     const selection = CPEDM.getSelected().toString();
-    if (selection && selection.trim() && selection != currentSelection && !/[^a-zA-Z'\- ]/.test(selection)) {
-        currentSelection = selection;
+    document.querySelectorAll('div.puzzle-english-dictionary-host').forEach(popup => popup.remove())
+    if (selection && selection.trim() && !/[^a-zA-Z’'\- ]/.test(selection)) {
         setTimeout(() => {
             // initial popup
             const HOST = new Host(event.pageX, event.pageY);
@@ -390,8 +388,5 @@ document.addEventListener('mouseup', (event) => {
             HOST.add(POPUP.render());
             document.body.appendChild(HOST.render());
         }, 150);
-    } else {
-        currentSelection = null;
-        document.querySelectorAll('div.puzzle-english-dictionary-host').forEach(popup => popup.remove())
     }
 });
