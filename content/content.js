@@ -378,6 +378,7 @@ class InitialButtonComponent {
 }
 
 document.addEventListener('mouseup', (event) => {
+    if (event.target.nodeName == 'INPUT' || event.target.nodeName == 'TEXTAREA') return;
     const selection = CPEDM.getSelected().toString();
     document.querySelectorAll('div.puzzle-english-dictionary-host').forEach(popup => popup.remove())
     if (selection && selection.trim() && !/[^a-zA-Z’'\- ]/.test(selection)) {
