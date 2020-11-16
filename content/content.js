@@ -384,7 +384,7 @@ document.addEventListener('mouseup', (event) => {
     if (selection && selection.trim() && !/[^a-zA-Z’'\- ]/.test(selection)) {
         setTimeout(() => {
             // initial popup
-            const HOST = new Host(event.pageX, event.pageY);
+            const HOST = new Host(event.pageX, event.pageY + 20);
             const POPUP = new Bubble(HOST, selection.trim());
             HOST.add(POPUP.render());
             document.body.appendChild(HOST.render());
