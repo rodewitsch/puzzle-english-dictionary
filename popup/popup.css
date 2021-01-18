@@ -6,6 +6,15 @@ body {
 
 header {
     position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#options {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
 }
 
 .foreign-landing__footer-info-logo-text {

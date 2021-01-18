@@ -5,7 +5,7 @@
     "version": "3.2",
     "browser_action": {
         "default_icon": "/assets/images/icons/icon128.png",
-        "default_popup": "popup.html"
+        "default_popup": "/popup/popup.html"
     },
     "icons": {
         "16": "/assets/images/icons/icon16.png",
@@ -29,12 +29,14 @@
             ]
         }
     ],
+    "options_page": "/options/options.html",
     "web_accessible_resources": [
         "/content/content.css",
         "/assets/*"
     ],
     "permissions": [
         "activeTab",
-        "contextMenus"
+        "contextMenus",
+        "storage"
     ]
 }

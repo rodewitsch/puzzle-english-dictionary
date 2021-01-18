@@ -3,7 +3,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         NEED_AUTH_AREA = document.querySelector('.need-auth-area'),
         SUBMIT_BUTTON = document.querySelector('.redesign-button'),
         GO_TO_SITE_BUTTON = document.querySelector('#go-to-site'),
-        WORDS_AREA = document.querySelector('#words-area');
+        WORDS_AREA = document.querySelector('#words-area'),
+        OPTIONS_BUTTON = document.querySelector('#options');
+
+    OPTIONS_BUTTON.onclick = () => {
+        if (chrome.runtime.openOptionsPage) {
+            chrome.runtime.openOptionsPage();
+        } else {
+            window.open(chrome.runtime.getURL('options.html'));
+        }
+    };
 
     // check auth
     try { await CorePuzzleEnglishDictionaryModule.checkWords('test auth'); }

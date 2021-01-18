@@ -26,7 +26,7 @@ class Host {
     add(elem) { this.component.shadowRoot.appendChild(elem); }
 }
 class Bubble {
-    constructor(parent, selection) {
+    constructor(parent, selection, options) {
         this.parent = parent;
         this.currentSpeakerIndex = -1;
         this.currentSelection = selection;
@@ -35,9 +35,12 @@ class Bubble {
         this.translation;
         this.partOfSpeech;
         this.children = {};
+        this.options = options;
+        console.log(this.options);
     }
 
     render() {
+
         this.component.classList.add('ped-bubble', 'initial');
         if (!authorization) {
             chrome.runtime.sendMessage({ type: "checkAuth" }, null, ({ auth }) => {
@@ -45,17 +48,18 @@ class Bubble {
                 authorization = auth;
             });
         }
+
         this.children.ADD_WORD_BUTTON = new InitialButtonComponent(
-            { backgroundImage: 'buttons', backgroundPosition: 'left' },
+            { backgroundImage: 'add', backgroundPosition: 'left' },
             () => {
                 chrome.runtime.sendMessage({ type: "simpleAddWord", options: { word: this.currentSelection } });
                 this.destroy();
             }
         );
-        this.add(this.children.ADD_WORD_BUTTON.render());
+        if (this.options.fastAdd) this.add(this.children.ADD_WORD_BUTTON.render());
 
         this.children.SHOW_WORD_PREVIEW_BUTTON = new InitialButtonComponent(
-            { backgroundImage: 'buttons', backgroundPosition: 'center' },
+            { backgroundImage: 'show', backgroundPosition: 'center' },
             () => {
                 this.component.classList.remove('initial');
                 this.component.classList.add('check');
@@ -107,13 +111,13 @@ class Bubble {
                 });
             }
         );
-        this.add(this.children.SHOW_WORD_PREVIEW_BUTTON.render());
+        if (this.options.showTranslate) this.add(this.children.SHOW_WORD_PREVIEW_BUTTON.render());
 
         this.children.CLOSE_PREVIEW_BUTTON = new InitialButtonComponent(
-            { backgroundImage: 'buttons', backgroundPosition: 'right' },
+            { backgroundImage: 'close', backgroundPosition: 'right' },
             () => this.destroy()
         );
-        this.add(this.children.CLOSE_PREVIEW_BUTTON.render());
+        if (this.options.closeButton) this.add(this.children.CLOSE_PREVIEW_BUTTON.render());
         return this.component;
     }
 
@@ -377,17 +381,26 @@ class InitialButtonComponent {
     }
 }
 
-document.addEventListener('mouseup', (event) => {
-    if (event.target.nodeName == 'INPUT' || event.target.nodeName == 'TEXTAREA') return;
-    const selection = CPEDM.getSelected().toString();
-    document.querySelectorAll('div.puzzle-english-dictionary-host').forEach(popup => popup.remove())
-    if (selection && selection.trim() && !/[^a-zA-Z’'\- ]/.test(selection)) {
-        setTimeout(() => {
-            // initial popup
-            const HOST = new Host(event.pageX, event.pageY + 20);
-            const POPUP = new Bubble(HOST, selection.trim());
-            HOST.add(POPUP.render());
-            document.body.appendChild(HOST.render());
-        }, 150);
+document.onmousedown = (downEvent) => {
+    document.onmouseup = (upEvent) => {
+        chrome.storage.sync.get(
+            ['bubble', 'fastAdd', 'showTranslate', 'closeButton'],
+            (items) => {
+                if (items.bubble && items.fastAdd || items.showTranslate || items.closeButton) {
+                    if (downEvent.target.nodeName == 'INPUT' || upEvent.target.nodeName == 'INPUT' || upEvent.target.nodeName == 'TEXTAREA') return;
+                    const selection = CPEDM.getSelected().toString();
+                    document.querySelectorAll('div.puzzle-english-dictionary-host').forEach(popup => popup.remove());
+                    if (selection && selection.trim() && !/[а-яА-Я {2}]/.test(selection.trim()) && !(selection.trim().match(/ /g) || []).length) {
+                        setTimeout(() => {
+                            // initial popup
+                            const HOST = new Host(upEvent.pageX, upEvent.pageY + 15);
+                            const POPUP = new Bubble(HOST, selection.trim(), { fastAdd: items.fastAdd, showTranslate: items.showTranslate, closeButton: items.closeButton });
+                            HOST.add(POPUP.render());
+                            document.body.appendChild(HOST.render());
+                        }, 150);
+                    }
+                }
+            }
+        );
     }
-});
+}
