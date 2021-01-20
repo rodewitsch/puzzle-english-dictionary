@@ -2,6 +2,7 @@
 /** CorePuzzleEnglishDictionaryModule alias */
 const CPEDM = CorePuzzleEnglishDictionaryModule;
 let authorization = false;
+
 class Host {
     constructor(x, y) {
         this.x = x;
@@ -389,14 +390,22 @@ document.onmousedown = (downEvent) => {
                 if (items.bubble && items.fastAdd || items.showTranslate || items.closeButton) {
                     if (downEvent.target.nodeName == 'INPUT' || upEvent.target.nodeName == 'INPUT' || upEvent.target.nodeName == 'TEXTAREA') return;
                     const selection = CPEDM.getSelected().toString();
-                    document.querySelectorAll('div.puzzle-english-dictionary-host').forEach(popup => popup.remove());
+                    document.querySelectorAll('.puzzle-english-dictionary-host').forEach(popup => popup.remove());
                     if (selection && selection.trim() && !/[а-яА-Я {2}]/.test(selection.trim()) && !(selection.trim().match(/ /g) || []).length) {
                         setTimeout(() => {
                             // initial popup
-                            const HOST = new Host(upEvent.pageX, upEvent.pageY + 15);
-                            const POPUP = new Bubble(HOST, selection.trim(), { fastAdd: items.fastAdd, showTranslate: items.showTranslate, closeButton: items.closeButton });
-                            HOST.add(POPUP.render());
-                            document.body.appendChild(HOST.render());
+                            // const HOST = new Host(upEvent.pageX, upEvent.pageY + 15);
+                            // const POPUP = new Bubble(HOST, selection.trim(), { fastAdd: items.fastAdd, showTranslate: items.showTranslate, closeButton: items.closeButton });
+                            // HOST.add(POPUP.render());
+                            // document.body.appendChild(HOST.render());
+
+                            const BUBBLE_BUTTONS = document.createElement('puzzle-english-bubble-buttons');
+                            BUBBLE_BUTTONS.attributes.positionX = upEvent.pageX;
+                            BUBBLE_BUTTONS.attributes.positionY = upEvent.pageY + 15;
+                            BUBBLE_BUTTONS.attributes.fastAdd = items.fastAdd;
+                            BUBBLE_BUTTONS.attributes.showTranslate = items.showTranslate;
+                            BUBBLE_BUTTONS.attributes.closeButton = items.closeButton;
+                            document.body.appendChild(BUBBLE_BUTTONS);
                         }, 150);
                     }
                 }

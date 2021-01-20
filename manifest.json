@@ -24,7 +24,10 @@
                 "<all_urls>"
             ],
             "js": [
+                "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
                 "core.js",
+                "/content/components/bubbleButton.js",
+                "/content/components/puzzleEnglishBubbleButtons.js",
                 "/content/content.js"
             ]
         }
