@@ -6,6 +6,32 @@ chrome.contextMenus.create({
   visible: true
 });
 
+(() => {
+  chrome.storage.sync.get(
+    [
+      'bubble',
+      'fastAdd',
+      'showTranslate',
+      'closeButton',
+      'contextMenu'
+    ],
+    (items) => {
+      if (Object.keys(items).length == 0 || Object.keys(items).some(item => item === undefined)) {
+        chrome.storage.sync.set(
+          {
+            bubble: true,
+            fastAdd: true,
+            showTranslate: true,
+            closeButton: true,
+            contextMenu: true
+          },
+          () => chrome.runtime.sendMessage({ type: "changeOptions" })
+        );
+      }
+    }
+  );
+})();
+
 
 function syncMenu() {
   chrome.storage.sync.get(

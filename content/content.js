@@ -386,7 +386,7 @@ document.onmousedown = (downEvent) => {
         chrome.storage.sync.get(
             ['bubble', 'fastAdd', 'showTranslate', 'closeButton'],
             (items) => {
-                if (items.bubble && items.fastAdd || items.showTranslate || items.closeButton) {
+                if (items.bubble && (items.fastAdd || items.showTranslate || items.closeButton)) {
                     if (downEvent.target.nodeName == 'INPUT' || upEvent.target.nodeName == 'INPUT' || upEvent.target.nodeName == 'TEXTAREA') return;
                     const selection = CPEDM.getSelected().toString();
                     document.querySelectorAll('div.puzzle-english-dictionary-host').forEach(popup => popup.remove());
