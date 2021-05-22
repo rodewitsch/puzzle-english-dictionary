@@ -27,7 +27,8 @@
                 "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
                 "core.js",
                 "/content/components/bubbleButton.js",
-                "/content/components/puzzleEnglishBubbleButtons.js",
+                "/content/components/initialButtons.js",
+                "/content/components/puzzleEnglishDictionaryHost.js",
                 "/content/content.js"
             ]
         }

@@ -18,5 +18,8 @@
   "homepage": "https://github.com/rodewitsch/PuzzleEnglishDictionary#readme",
   "dependencies": {
     "@webcomponents/webcomponentsjs": "^2.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.27.0"
   }
 }
