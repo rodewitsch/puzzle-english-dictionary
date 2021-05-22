@@ -6,17 +6,11 @@ class InitialButtons extends HTMLElement {
 
   render() {
     // eslint-disable-next-line no-undef
-    chrome.storage.sync.get(['fastAdd', 'showTranslate', 'closeButton'], (items) => {
+    chrome.storage.sync.get(['fastAdd', 'showTranslate', 'closeButton'], ({ fastAdd, showTranslate, closeButton }) => {
       const TEMPLATE = document.createElement('template');
-      TEMPLATE.innerHTML = `
-        ${items.fastAdd ? '<bubble-button cast-event="fast-add" background-image="add"></bubble-button>' : ''}
-        ${
-          items.showTranslate
-            ? '<bubble-button cast-event="show-translate" background-image="show"></bubble-button>'
-            : ''
-        }
-        ${items.closeButton ? '<bubble-button cast-event="close-button" background-image="close"></bubble-button>' : ''}
-        `;
+      if (fastAdd) TEMPLATE.innerHTML += '<bubble-button type="add"></bubble-button>';
+      if (showTranslate) TEMPLATE.innerHTML += '<bubble-button type="show"></bubble-button>';
+      if (closeButton) TEMPLATE.innerHTML += '<bubble-button type="close"></bubble-button>';
       this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
     });
   }
@@ -30,4 +24,3 @@ class InitialButtons extends HTMLElement {
 }
 
 customElements.define('initial-buttons', InitialButtons);
-

@@ -5,10 +5,11 @@ class BubbleButton extends HTMLElement {
   }
 
   render() {
+    this.type = this.getAttribute('type');
     // eslint-disable-next-line no-undef
-    const ICON_URL = chrome.extension.getURL(`/assets/images/icons/${this.getAttribute('background-image')}.png`);
-
-    this.shadowRoot.innerHTML = `
+    const ICON_URL = chrome.extension.getURL(`/assets/images/icons/${this.type}.png`);
+    const TEMPLATE = document.createElement('template');
+    TEMPLATE.innerHTML = `
         <style>
             .button {
                 height: 30px;
@@ -17,12 +18,13 @@ class BubbleButton extends HTMLElement {
             }
         </style>
         <img src="${ICON_URL}" class="button"></img>
-        `;
+    `;
+    this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
   }
 
   connectedCallback() {
     this.addEventListener('click', () => {
-      this.dispatchEvent(new CustomEvent(this.getAttribute('cast-event'), {bubbles: true, composed: true}));
+      this.dispatchEvent(new CustomEvent(`bubble-button-${this.type}`, { bubbles: true, composed: true }));
     });
     if (!this.rendered) {
       this.render();

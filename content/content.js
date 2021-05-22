@@ -445,7 +445,7 @@ document.onmousedown = (downEvent) => {
         )
           return;
         const SELECTION = CPEDM.getSelected().toString();
-        document.querySelectorAll('.puzzle-english-dictionary-host').forEach((popup) => popup.remove());
+        document.querySelectorAll('puzzle-english-dictionary-host').forEach((popup) => popup.remove());
         if (
           SELECTION &&
           SELECTION.trim() &&
