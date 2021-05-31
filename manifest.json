@@ -30,6 +30,7 @@
         "/content/components/showTranslate/currentMeaning.js",
         "/content/components/showTranslate/pronunciationButton.js",
         "/content/components/showTranslate/pronunciationSlider.js",
+        "/content/components/showTranslate/pronunciationActor.js",
         "/content/components/showTranslate/addWord.js",
         "/content/components/showTranslate/baseWord.js",
         "/content/components/showTranslate/dictionaryInfo.js"

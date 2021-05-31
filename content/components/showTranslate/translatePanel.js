@@ -5,12 +5,6 @@ class TranslatePanel extends HTMLElement {
     this.store = StoreInstance;
     this.attachShadow({ mode: 'open' });
     this.addEventListener('click', () => {
-      if (!this.subscribeTestSubscription) {
-        this.subscribeTestSubscription = this.store.subscribe('subscribeTest', (data) =>
-          console.log('TranslatePanel', 'subscription', data)
-        );
-      }
-      this.store.subscribeTest = 2;
       // this.dispatchEvent(new CustomEvent(this.getAttribute('cast-event'), { bubbles: true, composed: true }));
     });
   }
@@ -22,14 +16,15 @@ class TranslatePanel extends HTMLElement {
             :host {
               display: block;
               width: 280px;
-              padding: 0px 15px;
+              padding: 15px;
             }
             .base-word-row {
               display: flex;
               justify-content: space-between;
             }
         </style>
-        <current-meaning></current-meaning>
+
+        ${this.store.translation.Word.id !== this.store.translation.Word.base_word_id ? '<current-meaning></current-meaning>' : ''}
         <div class="base-word-row">
           <base-word></base-word>
           <pronunciation-button></pronunciation-button>

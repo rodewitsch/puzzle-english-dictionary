@@ -26,7 +26,7 @@ class PronunciationButton extends HTMLElement {
   connectedCallback() {
     console.log('pronunciation-button');
     this.addEventListener('click', () => {
-      this.dispatchEvent(new CustomEvent(this.getAttribute('cast-event'), { bubbles: true, composed: true }));
+      this.dispatchEvent(new CustomEvent('pronounce-word', { bubbles: true, composed: true }));
     });
     if (!this.rendered) {
       this.render();

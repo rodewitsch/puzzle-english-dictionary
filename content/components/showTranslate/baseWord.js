@@ -2,6 +2,8 @@ class BaseWord extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
+    // eslint-disable-next-line no-undef
+    this.store = StoreInstance;
   }
 
   render() {
@@ -26,13 +28,16 @@ class BaseWord extends HTMLElement {
             }
           </style>
           <p>
-            <span>to</span> <b>frustrate</b> - <span>срывать</span>
+            <span>${this.store.translation.Word.article}</span> <b>${this.store.translation.Word.base_word}</b> - <span>${this.store.translation.Word.translation}</span>
           </p>
           <p class="other-meanings">
             Другие значения
           </p>
       `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+    this.shadowRoot.querySelector('.other-meanings').addEventListener('click', () => {
+      this.dispatchEvent(new CustomEvent('changeviewtype', { bubbles: true, composed: true }));
+    });
   }
 
   connectedCallback() {

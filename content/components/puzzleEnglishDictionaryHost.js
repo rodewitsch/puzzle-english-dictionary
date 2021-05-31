@@ -34,30 +34,41 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
         this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
         const INITIAL_BUTTONS = this.shadowRoot.querySelector('initial-buttons');
         INITIAL_BUTTONS.addEventListener('bubble-button-add', (event) => console.log('fast-add', event));
-        INITIAL_BUTTONS.addEventListener('bubble-button-show', () => this.setAttribute('type', 'show-translate'));
+        INITIAL_BUTTONS.addEventListener('bubble-button-show', () => this.setAttribute('type', 'show-translation'));
         INITIAL_BUTTONS.addEventListener('bubble-button-close', (event) => console.log('close-button', event));
         break;
       }
-      case 'show-translate': {
-        this.store.translate = await this.getTranslate();
+      case 'show-translation': {
+        this.store.translation = await this.getTranslation();
         TEMPLATE.innerHTML += `<translate-panel></translate-panel>`;
         this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
         break;
       }
+      case 'other-meanings': {
+        TEMPLATE.innerHTML += `<div>Другие значения</div>`;
+        this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+        break;
+      }
     }
+
+    this.shadowRoot.addEventListener('changeviewtype', () => this.setAttribute('type', 'other-meanings'));
+    // TODO: отписаться от событий при разрушении компонента
   }
 
-  getTranslate() {
+  getTranslation() {
     return new Promise((resolve) => {
       // eslint-disable-next-line no-undef
-      chrome.runtime.sendMessage({ type: 'checkWord', options: { word: this.store.selectedWord } }, async (response) => {
-        if (!response.Word.id) {
-          // TODO: отрисовать компонент не найденого перевода
-          console.log('Перевод не найден');
-          return resolve();
+      chrome.runtime.sendMessage(
+        { type: 'checkWord', options: { word: this.store.selectedWord } },
+        async (response) => {
+          if (!response.Word.id) {
+            // TODO: отрисовать компонент не найденого перевода
+            console.log('Перевод не найден');
+            return resolve();
+          }
+          return resolve(response);
         }
-        return resolve(response);
-      });
+      );
     });
   }
 

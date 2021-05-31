@@ -1,50 +1,58 @@
 class Store {
-  #store = {
-    selectedWord: {
-      value: null,
-      subscriptions: new Map()
-    },
-    translate: {
-      value: null,
-      subscriptions: new Map()
-    },
-    subscribeTest: {
-      value: null,
-      subscriptions: new Map()
-    }
-  };
+  constructor() {
+    this._store = {
+      selectedWord: {
+        value: null,
+        subscriptions: new Map()
+      },
+      translation: {
+        value: null,
+        subscriptions: new Map()
+      },
+      currentSpeaker: {
+        value: null,
+        subscriptions: new Map()
+      }
+    };
+  }
 
   get selectedWord() {
-    return this.#store.selectedWord.value;
+    return this._store.selectedWord.value;
   }
 
   set selectedWord(value) {
-    this.#store.selectedWord.value = value;
+    this._store.selectedWord.value = value;
+    this._executeSubscriptions('selectedWord', value);
   }
 
-  get translate() {
-    return this.#store.translate.value;
+  get translation() {
+    return this._store.translation.value;
   }
 
-  set translate(value) {
-    this.#store.translate.value = value;
+  set translation(value) {
+    this._store.translation.value = value;
+    this._executeSubscriptions('translation', value);
   }
 
-  get subscribeTest() {
-    return this.#store.subscribeTest.value;
+  get currentSpeaker() {
+    return this._store.currentSpeaker.value;
   }
 
-  set subscribeTest(value) {
-    this.#store.subscribeTest.value = value;
-    if (this.#store.subscribeTest.subscriptions.size) {
-      this.#store.subscribeTest.subscriptions.forEach((subscription) => subscription(value));
+  set currentSpeaker(value) {
+    this._store.currentSpeaker.value = value;
+    this._executeSubscriptions('currentSpeaker', value);
+  }
+
+  _executeSubscriptions(key, value) {
+    if (this._store[key].subscriptions.size) {
+      this._store[key].subscriptions.forEach((subscription) => subscription(value));
     }
   }
 
   subscribe(key, listener) {
-    if (!this.#store[key]) throw new Error(`Cannot subscribe. Key "${key}" is not registered`);
+    if (!this._store[key]) throw new Error(`Cannot subscribe. Key "${key}" is not registered`);
     const identifier = Symbol();
-    this.#store[key].subscriptions.set(identifier, listener);
+    this._store[key].subscriptions.set(identifier, listener);
     return identifier;
   }
 }
