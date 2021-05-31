@@ -453,12 +453,13 @@ document.onmousedown = (downEvent) => {
           !(SELECTION.trim().match(/ /g) || []).length
         ) {
           setTimeout(() => {
+            StoreInstance.selectedWord = SELECTION.trim();
             const BUBBLE_HOST = document.createElement('puzzle-english-dictionary-host');
             BUBBLE_HOST.addEventListener('mousedown', (event) => event.stopPropagation());
             BUBBLE_HOST.addEventListener('mouseup', (event) => event.stopPropagation());
             BUBBLE_HOST.setAttribute('type', 'initial');
-            BUBBLE_HOST.setAttribute('positionX', upEvent.pageX);
-            BUBBLE_HOST.setAttribute('positionY', upEvent.pageY + 15);
+            BUBBLE_HOST.setAttribute('position-x', upEvent.pageX);
+            BUBBLE_HOST.setAttribute('position-y', upEvent.pageY + 15);
             document.body.appendChild(BUBBLE_HOST);
           }, 150);
         }

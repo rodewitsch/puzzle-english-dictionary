@@ -15,6 +15,7 @@ class BubbleButton extends HTMLElement {
                 height: 30px;
                 margin-right: -8px;
                 cursor: pointer;
+                margin-bottom: -4px;
             }
         </style>
         <img src="${ICON_URL}" class="button"></img>

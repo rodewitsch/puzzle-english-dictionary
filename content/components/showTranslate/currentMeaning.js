@@ -8,9 +8,15 @@ class CurrentMeaning extends HTMLElement {
     const TEMPLATE = document.createElement('template');
     TEMPLATE.innerHTML = `
           <style>
-  
+            :host {
+              font-size: 13px;
+              font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
+              color: #777;
+            }
           </style>
-          <div>current meaning</div>
+          <p>
+            <b>frustrated</b> <span>past simple</span>
+          </p>
       `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
   }
@@ -19,6 +25,7 @@ class CurrentMeaning extends HTMLElement {
     this.addEventListener('click', () => {
       this.dispatchEvent(new CustomEvent(this.getAttribute('cast-event'), { bubbles: true, composed: true }));
     });
+    
     if (!this.rendered) {
       this.render();
       this.rendered = true;

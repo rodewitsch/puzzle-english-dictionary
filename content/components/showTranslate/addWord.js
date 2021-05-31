@@ -8,9 +8,32 @@ class AddWord extends HTMLElement {
     const TEMPLATE = document.createElement('template');
     TEMPLATE.innerHTML = `
           <style>
-  
+            :host{
+              font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
+            }
+            .button {
+              cursor: pointer;
+              padding: 0 20px;
+              width: 110px;
+              height: 40px;
+              border-radius: 3px;
+              color: white;
+              display: flex;
+              justify-content: space-around;
+              align-items: center;
+              font-size: 15px;
+            }
+            .button .plus {
+              font-size: 30px;
+            }
+            .success{
+              background-color: #85d360;
+            }
           </style>
-          <div>AddWord</div>
+          <div class="button success">
+            <span class="plus">+</span>
+            <span>в словарь</span>
+          </div>
       `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
   }

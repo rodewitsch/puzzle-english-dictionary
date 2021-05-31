@@ -21,6 +21,7 @@
       "js": [
         "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
         "core.js",
+        "/content/store.js",
         "/content/content.js",
         "/content/components/puzzleEnglishDictionaryHost.js",
         "/content/components/initial/bubbleButton.js",
@@ -30,6 +31,7 @@
         "/content/components/showTranslate/pronunciationButton.js",
         "/content/components/showTranslate/pronunciationSlider.js",
         "/content/components/showTranslate/addWord.js",
+        "/content/components/showTranslate/baseWord.js",
         "/content/components/showTranslate/dictionaryInfo.js"
       ]
     }

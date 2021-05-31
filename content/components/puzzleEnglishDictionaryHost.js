@@ -1,12 +1,14 @@
 class PuzzleEnglishDictionaryHost extends HTMLElement {
   constructor() {
     super();
+    // eslint-disable-next-line no-undef
+    this.store = StoreInstance;
     this.attachShadow({ mode: 'open' });
   }
 
-  render() {
-    this.positionX = this.getAttribute('positionX');
-    this.positionY = this.getAttribute('positionY');
+  async render() {
+    this.positionX = this.getAttribute('position-x');
+    this.positionY = this.getAttribute('position-y');
     this.viewType = this.getAttribute('type');
     const TEMPLATE = document.createElement('template');
     TEMPLATE.innerHTML += `
@@ -16,7 +18,6 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
           left: ${this.positionX}px; 
           top: ${this.positionY}px; 
           z-index: 2147483647;
-          height: 30px;
           background-color: white;
           border-radius: 5px;
           padding-left: 3px;
@@ -38,11 +39,26 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
         break;
       }
       case 'show-translate': {
+        this.store.translate = await this.getTranslate();
         TEMPLATE.innerHTML += `<translate-panel></translate-panel>`;
         this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
         break;
       }
     }
+  }
+
+  getTranslate() {
+    return new Promise((resolve) => {
+      // eslint-disable-next-line no-undef
+      chrome.runtime.sendMessage({ type: 'checkWord', options: { word: this.store.selectedWord } }, async (response) => {
+        if (!response.Word.id) {
+          // TODO: отрисовать компонент не найденого перевода
+          console.log('Перевод не найден');
+          return resolve();
+        }
+        return resolve(response);
+      });
+    });
   }
 
   connectedCallback() {

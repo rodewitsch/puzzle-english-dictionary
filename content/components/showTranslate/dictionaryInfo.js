@@ -8,9 +8,13 @@ class DictionaryInfo extends HTMLElement {
     const TEMPLATE = document.createElement('template');
     TEMPLATE.innerHTML = `
           <style>
-  
+            :host{
+              font-size: 15px;
+              font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
+              color: #777;
+            }
           </style>
-          <div>DictionaryInfo</div>
+          <p>В вашем словаре слов: 1436</p>
       `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
   }
