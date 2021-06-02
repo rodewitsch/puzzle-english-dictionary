@@ -4,7 +4,7 @@ class PronunciationSlider extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     // eslint-disable-next-line no-undef
     this.store = StoreInstance;
-    this.speakers = this.store.translation.word_speakers.splice(0, 8);
+    this.speakers = this.store.translation.word_speakers.slice(0, 8);
 
     this.store.subscribe('currentSpeaker', (number) => {
       const ACTORS = this.shadowRoot.querySelectorAll('pronunciation-actor');

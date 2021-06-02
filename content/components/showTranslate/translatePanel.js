@@ -5,7 +5,6 @@ class TranslatePanel extends HTMLElement {
     this.store = StoreInstance;
     this.attachShadow({ mode: 'open' });
     this.addEventListener('click', () => {
-      // this.dispatchEvent(new CustomEvent(this.getAttribute('cast-event'), { bubbles: true, composed: true }));
     });
   }
 

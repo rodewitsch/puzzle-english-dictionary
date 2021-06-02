@@ -6,6 +6,8 @@ class PronunciationButton extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     // eslint-disable-next-line no-undef
     this.CPEDM = CorePuzzleEnglishDictionaryModule;
+    // eslint-disable-next-line no-undef
+    this.store = StoreInstance;
   }
 
   render() {
@@ -26,7 +28,8 @@ class PronunciationButton extends HTMLElement {
   connectedCallback() {
     console.log('pronunciation-button');
     this.addEventListener('click', () => {
-      this.dispatchEvent(new CustomEvent('pronounce-word', { bubbles: true, composed: true }));
+      const speakers = this.store.translation.word_speakers.slice(0, 8);
+      this.store.currentSpeaker = this.store.currentSpeaker === speakers.length - 1 ? 0 : this.store.currentSpeaker + 1;
     });
     if (!this.rendered) {
       this.render();

@@ -7,6 +7,18 @@ class PronunciationActor extends HTMLElement {
     this.actorNumber = this.getAttribute('actorNumber');
     // eslint-disable-next-line no-undef
     this.store = StoreInstance;
+
+    this.store.subscribe('currentSpeaker', (number) => {
+      if (number === +this.actorNumber) this.playWord();
+    });
+  }
+
+  playWord() {
+    // eslint-disable-next-line no-undef
+    chrome.runtime.sendMessage({
+      type: 'playWord',
+      options: { speaker: this.speakerInfo.audio, word: this.store.translation.Word.base_word }
+    });
   }
 
   render() {
@@ -43,7 +55,7 @@ class PronunciationActor extends HTMLElement {
   }
 
   connectedCallback() {
-    this.addEventListener('click', () => (this.store.currentSpeaker = this.actorNumber));
+    this.addEventListener('click', () => this.store.currentSpeaker = +this.actorNumber);
     if (!this.rendered) {
       this.render();
       this.rendered = true;

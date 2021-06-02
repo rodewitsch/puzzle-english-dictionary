@@ -10,7 +10,7 @@ class Store {
         subscriptions: new Map()
       },
       currentSpeaker: {
-        value: null,
+        value: -1,
         subscriptions: new Map()
       }
     };
