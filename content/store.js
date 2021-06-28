@@ -55,6 +55,11 @@ class Store {
     this._store[key].subscriptions.set(identifier, listener);
     return identifier;
   }
+
+  unsubscribe(key, subscription) {
+    if (!this._store[key]) throw new Error(`Cannot subscribe. Key "${key}" is not registered`);
+    this._store[key].subscriptions.delete(subscription);
+  }
 }
 
 const StoreInstance = new Store();

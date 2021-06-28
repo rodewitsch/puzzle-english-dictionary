@@ -26,7 +26,6 @@ class PronunciationButton extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log('pronunciation-button');
     this.addEventListener('click', () => {
       const speakers = this.store.translation.word_speakers.slice(0, 8);
       this.store.currentSpeaker = this.store.currentSpeaker === speakers.length - 1 ? 0 : this.store.currentSpeaker + 1;

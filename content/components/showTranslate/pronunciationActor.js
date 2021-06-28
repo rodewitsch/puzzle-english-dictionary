@@ -7,10 +7,11 @@ class PronunciationActor extends HTMLElement {
     this.actorNumber = this.getAttribute('actorNumber');
     // eslint-disable-next-line no-undef
     this.store = StoreInstance;
-
-    this.store.subscribe('currentSpeaker', (number) => {
-      if (number === +this.actorNumber) this.playWord();
-    });
+    this.subscriptions = [
+      this.store.subscribe('currentSpeaker', (number) => {
+        if (number === +this.actorNumber) this.playWord();
+      })
+    ];
   }
 
   playWord() {
@@ -55,10 +56,16 @@ class PronunciationActor extends HTMLElement {
   }
 
   connectedCallback() {
-    this.addEventListener('click', () => this.store.currentSpeaker = +this.actorNumber);
+    this.addEventListener('click', () => (this.store.currentSpeaker = +this.actorNumber));
     if (!this.rendered) {
       this.render();
       this.rendered = true;
+    }
+  }
+
+  disconnectedCallback() {
+    if (this.subscriptions && this.subscriptions.length) {
+      this.subscriptions.forEach((subscription) => this.store.unsubscribe('currentSpeaker', subscription));
     }
   }
 }

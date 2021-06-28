@@ -33,7 +33,9 @@
         "/content/components/showTranslate/pronunciationActor.js",
         "/content/components/showTranslate/addWord.js",
         "/content/components/showTranslate/baseWord.js",
-        "/content/components/showTranslate/dictionaryInfo.js"
+        "/content/components/showTranslate/dictionaryInfo.js",
+        "/content/components/otherMeanings/otherMeanings.js",
+        "/content/components/otherMeanings/meaning.js"
       ]
     }
   ],

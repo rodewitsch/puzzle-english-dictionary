@@ -36,7 +36,7 @@ class BaseWord extends HTMLElement {
       `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
     this.shadowRoot.querySelector('.other-meanings').addEventListener('click', () => {
-      this.dispatchEvent(new CustomEvent('changeviewtype', { bubbles: true, composed: true }));
+      this.dispatchEvent(new CustomEvent('changeviewtype', { bubbles: true, composed: true, detail: 'other-meanings' }));
     });
   }
 

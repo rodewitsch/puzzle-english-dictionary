@@ -36,10 +36,15 @@ class TranslatePanel extends HTMLElement {
   }
 
   connectedCallback() {
+    console.log('translate-panel', 'connected');
     if (!this.rendered) {
       this.render();
       this.rendered = true;
     }
+  }
+
+  disconnectedCallback() {
+    console.log('translate-panel', 'disconnected');
   }
 }
 

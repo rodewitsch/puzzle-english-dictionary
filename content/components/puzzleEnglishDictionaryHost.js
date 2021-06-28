@@ -33,25 +33,33 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
         TEMPLATE.innerHTML += `<initial-buttons></initial-buttons>`;
         this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
         const INITIAL_BUTTONS = this.shadowRoot.querySelector('initial-buttons');
-        INITIAL_BUTTONS.addEventListener('bubble-button-add', (event) => console.log('fast-add', event));
-        INITIAL_BUTTONS.addEventListener('bubble-button-show', () => this.setAttribute('type', 'show-translation'));
-        INITIAL_BUTTONS.addEventListener('bubble-button-close', (event) => console.log('close-button', event));
+        INITIAL_BUTTONS.addEventListener('bubble-button-add', (event) => console.log('fast-add', event), {
+          once: true
+        });
+        INITIAL_BUTTONS.addEventListener('bubble-button-show', async () => {
+          this.store.translation = await this.getTranslation();
+          this.setAttribute('type', 'show-translation'), { once: true };
+        });
+        INITIAL_BUTTONS.addEventListener('bubble-button-close', () => this.remove(), {
+          once: true
+        });
         break;
       }
       case 'show-translation': {
-        this.store.translation = await this.getTranslation();
         TEMPLATE.innerHTML += `<translate-panel></translate-panel>`;
         this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
         break;
       }
       case 'other-meanings': {
-        TEMPLATE.innerHTML += `<div>Другие значения</div>`;
+        TEMPLATE.innerHTML += `<other-meanings></other-meanings>`;
         this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
         break;
       }
     }
 
-    this.shadowRoot.addEventListener('changeviewtype', () => this.setAttribute('type', 'other-meanings'));
+    this.shadowRoot.addEventListener('changeviewtype', (event) => this.setAttribute('type', event.detail), {
+      once: true
+    });
     // TODO: отписаться от событий при разрушении компонента
   }
 
@@ -79,11 +87,16 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
     }
   }
 
+  disconnectedCallback() {
+    this.store.translation = null;
+  }
+
   static get observedAttributes() {
     return ['type'];
   }
 
   attributeChangedCallback() {
+    console.log('host', 'attributeChangedCallback');
     this.render();
   }
 }
