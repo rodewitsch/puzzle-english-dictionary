@@ -2,6 +2,8 @@ class DictionaryInfo extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
+    // eslint-disable-next-line no-undef
+    this.store = StoreInstance;
   }
 
   render() {
@@ -14,7 +16,7 @@ class DictionaryInfo extends HTMLElement {
               color: #777;
             }
           </style>
-          <p>В вашем словаре слов: 1436</p>
+          <p>В вашем словаре слов: ${(this.store.translation.html.match(/<span>В вашем словаре.*?(\d+).*?<\/span>/) || [])[1]}</p>
       `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
   }

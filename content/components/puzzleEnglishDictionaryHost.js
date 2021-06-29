@@ -4,6 +4,10 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
     // eslint-disable-next-line no-undef
     this.store = StoreInstance;
     this.attachShadow({ mode: 'open' });
+    if (!this.store.authorization) {
+      // eslint-disable-next-line no-undef
+      chrome.runtime.sendMessage({ type: 'checkAuth' }, null, ({ auth }) => (this.store.authorization = auth));
+    }
   }
 
   async render() {
@@ -20,8 +24,6 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
           z-index: 2147483647;
           background-color: white;
           border-radius: 5px;
-          padding-left: 3px;
-          padding-right: 8px;
           box-shadow: 0 5px 20px 0 rgb(0 0 0 / 30%);
         }
       </style>
@@ -33,9 +35,11 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
         TEMPLATE.innerHTML += `<initial-buttons></initial-buttons>`;
         this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
         const INITIAL_BUTTONS = this.shadowRoot.querySelector('initial-buttons');
-        INITIAL_BUTTONS.addEventListener('bubble-button-add', (event) => console.log('fast-add', event), {
-          once: true
-        });
+        if (this.store.authorization) {
+          INITIAL_BUTTONS.addEventListener('bubble-button-add', (event) => console.log('fast-add', event), {
+            once: true
+          });
+        }
         INITIAL_BUTTONS.addEventListener('bubble-button-show', async () => {
           this.store.translation = await this.getTranslation();
           this.setAttribute('type', 'show-translation'), { once: true };
@@ -95,9 +99,8 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
     return ['type'];
   }
 
-  attributeChangedCallback() {
-    console.log('host', 'attributeChangedCallback');
-    this.render();
+  attributeChangedCallback(name, oldValue, newValue) {
+    if(oldValue !== newValue) this.render();
   }
 }
 

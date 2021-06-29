@@ -21,6 +21,7 @@ class CurrentMeaning extends HTMLElement {
               color: #777;
               display: block;
               width: 100%;
+              height: 30px;
             }
             p {
               margin: 0;

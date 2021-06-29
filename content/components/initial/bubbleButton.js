@@ -11,12 +11,15 @@ class BubbleButton extends HTMLElement {
     const TEMPLATE = document.createElement('template');
     TEMPLATE.innerHTML = `
         <style>
-            .button {
-                height: 30px;
-                margin-right: -8px;
-                cursor: pointer;
-                margin-bottom: -4px;
-            }
+          :host{
+            padding: 1px;
+          }
+          .button {
+              height: 25px;
+              margin-right: -8px;
+              cursor: pointer;
+              margin-bottom: -4px;
+          }
         </style>
         <img src="${ICON_URL}" class="button"></img>
     `;

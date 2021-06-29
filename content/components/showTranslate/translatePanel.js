@@ -4,8 +4,7 @@ class TranslatePanel extends HTMLElement {
     // eslint-disable-next-line no-undef
     this.store = StoreInstance;
     this.attachShadow({ mode: 'open' });
-    this.addEventListener('click', () => {
-    });
+    this.addEventListener('click', () => {});
   }
 
   render() {
@@ -14,38 +13,44 @@ class TranslatePanel extends HTMLElement {
         <style>
             :host {
               display: block;
-              width: 280px;
-              padding: 15px;
+              width: 360px;
+              padding: 15px 10px;
             }
             .base-word-row {
               display: flex;
               justify-content: space-between;
+              height: 50px;
+            }
+            .disabled {
+              cursor: not-allowed;
+              filter: grayscale(100%);
             }
         </style>
 
-        ${this.store.translation.Word.id !== this.store.translation.Word.base_word_id ? '<current-meaning></current-meaning>' : ''}
+        ${
+          this.store.translation.Word.id !== this.store.translation.Word.base_word_id
+            ? '<current-meaning></current-meaning>'
+            : ''
+        }
         <div class="base-word-row">
           <base-word></base-word>
           <pronunciation-button></pronunciation-button>
         </div>
         <pronunciation-slider></pronunciation-slider>
-        <add-word></add-word>
-        <dictionary-info></dictionary-info>
+        ${this.store.authorization ? '<add-word></add-word>' : ''}
+        ${this.store.authorization ? '<dictionary-info></dictionary-info>' : ''}
     `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
   }
 
   connectedCallback() {
-    console.log('translate-panel', 'connected');
     if (!this.rendered) {
       this.render();
       this.rendered = true;
     }
   }
 
-  disconnectedCallback() {
-    console.log('translate-panel', 'disconnected');
-  }
+  disconnectedCallback() {}
 }
 
 customElements.define('translate-panel', TranslatePanel);

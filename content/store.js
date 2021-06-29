@@ -1,6 +1,10 @@
 class Store {
   constructor() {
     this._store = {
+      authorization: {
+        value: null,
+        subscriptions: new Map()
+      },
       selectedWord: {
         value: null,
         subscriptions: new Map()
@@ -14,6 +18,15 @@ class Store {
         subscriptions: new Map()
       }
     };
+  }
+
+  get authorization() {
+    return this._store.authorization.value;
+  }
+
+  set authorization(value) {
+    this._store.authorization.value = value;
+    this._executeSubscriptions('authorization', value);
   }
 
   get selectedWord() {

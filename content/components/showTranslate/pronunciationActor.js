@@ -27,20 +27,28 @@ class PronunciationActor extends HTMLElement {
     const TEMPLATE = document.createElement('template');
     TEMPLATE.innerHTML = `
           <style>
-              .face {
-                height: 40px;
-                width: 40px;
+              :host{
+                height: 75px;
+                width: 30px;
+                margin: 5px 10px 5px 5px;
+                opacity: 0.5;
                 display: flex;
+                flex-direction: column;
                 align-items: center;
-                justify-content: center;
+                cursor: pointer;
+                justify-content: space-between;
               }
-              .flag {
+              .face {
+                width: 25px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
               }
               .name {
                 text-align: center;
+                font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
+                font-size: 13px;
+                color: #777;
               }
           </style>
       `;

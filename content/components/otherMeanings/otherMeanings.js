@@ -22,10 +22,26 @@ class OtherMeanings extends HTMLElement {
                 padding: 15px;
                 width: 360px;
                 background-color: #f7f8f8;
+                color: #777;
+                font-size: 13px;
+                line-height: 1.5em;
               }
               .back {
-                  cursor: pointer;
+                cursor: pointer;
+                display: block;
+                margin-bottom: 10px;
+                font-weight: bold;
               }
+              .meaning-phrase-header {
+                background-color: white;
+                padding: 15px;
+                font-size: 15px;
+                margin-left: -15px;
+                margin-right: -15px;
+             }
+             .meaning-header {
+              font-size: 15px;
+             }
               ul{
                 list-style: none;
               }
@@ -46,8 +62,8 @@ class OtherMeanings extends HTMLElement {
               }
             </style>
             <div class="back">← Назад</div>
-            <p>Значение слова <b>${this.WORD}</b> в данной фразе</p>
-            <p><b>Другие значения</b></p>
+            <p class="meaning-phrase-header">Значение слова <b>${this.WORD}</b> в данной фразе</p>
+            <p class="meaning-header"><b>Другие значения</b></p>
 
             ${this.MEANINGS.map((meaning) => {
               const MEANINGS_GROUPS = meaning.values.reduce((acc, value) => {

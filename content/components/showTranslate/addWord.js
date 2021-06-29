@@ -10,11 +10,13 @@ class AddWord extends HTMLElement {
           <style>
             :host{
               font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
+              display: block;
+              margin-top: 5px;
             }
             .button {
               cursor: pointer;
               padding: 0 20px;
-              width: 110px;
+              width: 100px;
               height: 40px;
               border-radius: 3px;
               color: white;
