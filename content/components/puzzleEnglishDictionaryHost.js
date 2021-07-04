@@ -11,7 +11,7 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
   async render() {
     const positionX =
       this.getAttribute('type') !== 'initial' && +this.getAttribute('position-x') + 360 > window.innerWidth
-        ? +this.getAttribute('position-x') + (window.innerWidth - +this.getAttribute('position-x') - 400)
+        ? +this.getAttribute('position-x') + (window.innerWidth - +this.getAttribute('position-x') - 420)
         : this.getAttribute('position-x');
     const TEMPLATE = document.createElement('template');
     TEMPLATE.innerHTML += `
