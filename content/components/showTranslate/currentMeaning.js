@@ -2,7 +2,6 @@ class CurrentMeaning extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    // eslint-disable-next-line no-undef
     this.store = StoreInstance;
     this.currentMeaning = this.store.translation.Word.word;
     this.partOfSpeech = {
@@ -28,7 +27,7 @@ class CurrentMeaning extends HTMLElement {
             }
           </style>
           <p>
-            <b>${this.currentMeaning}</b> <span>${this.partOfSpeech}</span>
+            <b>${this.currentMeaning}</b> <span>${this.partOfSpeech || ''}</span>
           </p>
       `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));

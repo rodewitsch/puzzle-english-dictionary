@@ -24,7 +24,7 @@
         "/content/store.js",
         "/content/content.js",
         "/content/components/puzzleEnglishDictionaryHost.js",
-        "/content/components/initial/bubbleButton.js",
+        "/content/components/initial/initialButton.js",
         "/content/components/initial/initialButtons.js",
         "/content/components/showTranslate/translatePanel.js",
         "/content/components/showTranslate/currentMeaning.js",
@@ -33,9 +33,10 @@
         "/content/components/showTranslate/pronunciationActor.js",
         "/content/components/showTranslate/addWord.js",
         "/content/components/showTranslate/baseWord.js",
+        "/content/components/showTranslate/noTranslation.js",
         "/content/components/showTranslate/dictionaryInfo.js",
         "/content/components/otherMeanings/otherMeanings.js",
-        "/content/components/otherMeanings/meaning.js"
+        "/content/components/otherMeanings/otherMeaning.js"
       ]
     }
   ],

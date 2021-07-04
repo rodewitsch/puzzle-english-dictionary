@@ -2,31 +2,33 @@ class InitialButtons extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    // eslint-disable-next-line no-undef
     this.store = StoreInstance;
+    this.subscriptions = [this.store.subscribe('authorization', () => this.render())];
   }
 
   render() {
-    // eslint-disable-next-line no-undef
+    while (this.shadowRoot.lastChild) this.shadowRoot.removeChild(this.shadowRoot.lastChild);
     chrome.storage.sync.get(['fastAdd', 'showTranslate', 'closeButton'], ({ fastAdd, showTranslate, closeButton }) => {
       const TEMPLATE = document.createElement('template');
       TEMPLATE.innerHTML += `
       <style>
-      :host{
-        width: 63px;
-        display: block;
-      }
-      .disabled {
-        cursor: not-allowed;
-        filter: grayscale(100%);
-      }
+        :host{
+          width: 63px;
+          display: block;
+        }
+        .disabled {
+          cursor: not-allowed;
+          filter: grayscale(100%);
+        }
       </style>
     `;
       if (fastAdd) {
-        TEMPLATE.innerHTML += `<bubble-button class="${this.store.authorization || 'disabled'}" type="add"></bubble-button>`;
+        TEMPLATE.innerHTML += `<initial-button class="${
+          this.store.authorization || 'disabled'
+        }" type="add"></initial-button>`;
       }
-      if (showTranslate) TEMPLATE.innerHTML += `<bubble-button type="show"></bubble-button>`;
-      if (closeButton) TEMPLATE.innerHTML += `<bubble-button type="close"></bubble-button>`;
+      if (showTranslate) TEMPLATE.innerHTML += '<initial-button type="show"></initial-button>';
+      if (closeButton) TEMPLATE.innerHTML += '<initial-button type="close"></initial-button>';
       this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
     });
   }
@@ -35,6 +37,12 @@ class InitialButtons extends HTMLElement {
     if (!this.rendered) {
       this.render();
       this.rendered = true;
+    }
+  }
+
+  disconnectedCallback() {
+    if (this.subscriptions && this.subscriptions.length) {
+      this.subscriptions.forEach((subscription) => this.store.unsubscribe(subscription));
     }
   }
 }

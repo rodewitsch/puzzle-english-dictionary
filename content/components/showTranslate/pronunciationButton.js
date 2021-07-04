@@ -1,12 +1,7 @@
-/** CorePuzzleEnglishDictionaryModule alias */
-// eslint-disable-next-line no-undef
 class PronunciationButton extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    // eslint-disable-next-line no-undef
-    this.CPEDM = CorePuzzleEnglishDictionaryModule;
-    // eslint-disable-next-line no-undef
     this.store = StoreInstance;
   }
 
@@ -19,7 +14,7 @@ class PronunciationButton extends HTMLElement {
             }
           </style>
       `;
-    this.CPEDM.getTextAsset(`/assets/audio-button.svg`).then((svg) => {
+    CorePuzzleEnglishDictionaryModule.getTextAsset(`/assets/audio-button.svg`).then((svg) => {
       TEMPLATE.innerHTML += svg;
       this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
     });

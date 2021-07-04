@@ -2,7 +2,6 @@ class BaseWord extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    // eslint-disable-next-line no-undef
     this.store = StoreInstance;
   }
 

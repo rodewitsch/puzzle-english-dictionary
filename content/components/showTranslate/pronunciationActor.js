@@ -2,10 +2,8 @@ class PronunciationActor extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    // eslint-disable-next-line no-undef
-    this.speakerInfo = CPEDM.getSpeakerInfo(this.getAttribute('speaker'));
+    this.speakerInfo = CorePuzzleEnglishDictionaryModule.getSpeakerInfo(this.getAttribute('speaker'));
     this.actorNumber = this.getAttribute('actorNumber');
-    // eslint-disable-next-line no-undef
     this.store = StoreInstance;
     this.subscriptions = [
       this.store.subscribe('currentSpeaker', (number) => {
@@ -15,7 +13,6 @@ class PronunciationActor extends HTMLElement {
   }
 
   playWord() {
-    // eslint-disable-next-line no-undef
     chrome.runtime.sendMessage({
       type: 'playWord',
       options: { speaker: this.speakerInfo.audio, word: this.store.translation.Word.base_word }
@@ -53,10 +50,8 @@ class PronunciationActor extends HTMLElement {
           </style>
       `;
     Promise.all([
-      // eslint-disable-next-line no-undef
-      CPEDM.getTextAsset(`/assets/flags/${this.speakerInfo.flag}`),
-      // eslint-disable-next-line no-undef
-      CPEDM.getTextAsset(`/assets/faces/${this.speakerInfo.face}`)
+      CorePuzzleEnglishDictionaryModule.getTextAsset(`/assets/flags/${this.speakerInfo.flag}`),
+      CorePuzzleEnglishDictionaryModule.getTextAsset(`/assets/faces/${this.speakerInfo.face}`)
     ]).then(([FLAG_SVG, FACE_SVG]) => {
       TEMPLATE.innerHTML += `<div class="flag">${FLAG_SVG}</div><div class="face">${FACE_SVG}</div><div class="name">${this.speakerInfo.name}</div>`;
       this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
@@ -73,7 +68,7 @@ class PronunciationActor extends HTMLElement {
 
   disconnectedCallback() {
     if (this.subscriptions && this.subscriptions.length) {
-      this.subscriptions.forEach((subscription) => this.store.unsubscribe('currentSpeaker', subscription));
+      this.subscriptions.forEach((subscription) => this.store.unsubscribe(subscription));
     }
   }
 }

@@ -2,7 +2,6 @@ class OtherMeanings extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    // eslint-disable-next-line no-undef
     this.store = StoreInstance;
 
     this.WORD = this.store.translation.Word.word;
@@ -54,10 +53,10 @@ class OtherMeanings extends HTMLElement {
               .meanings-part{
                 text-transform: capitalize;
               }
-              meaning-word{
+              other-meaning{
                 cursor: pointer;
               }
-              meaning-word:hover{
+              other-meaning:hover{
                 color: #309cca;
               }
             </style>
@@ -74,6 +73,7 @@ class OtherMeanings extends HTMLElement {
                 }
                 return acc;
               }, {});
+              
               return `
               <p class="meanings-part">${meaning.part_of_speech_ru}</p>
               ${meaning.article} <b>${meaning.word}</b>
@@ -84,7 +84,7 @@ class OtherMeanings extends HTMLElement {
                       `<li>${meaningGroup
                         .map(
                           (word) =>
-                            `<meaning-word article="${meaning.article}" translation="${word.value}" partofspeech="${meaning.part_of_speech}"></meaning-word>`
+                            `<other-meaning article="${meaning.article}" translation="${word.value}" partofspeech="${meaning.part_of_speech}"></other-meaning>`
                         )
                         .join(', ')}</li>`
                   )
@@ -99,10 +99,6 @@ class OtherMeanings extends HTMLElement {
         new CustomEvent('changeviewtype', { bubbles: true, composed: true, detail: 'show-translation' })
       );
     });
-  }
-
-  changeMeaning(value) {
-    console.log(value);
   }
 
   connectedCallback() {

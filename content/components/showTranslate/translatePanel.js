@@ -1,13 +1,13 @@
 class TranslatePanel extends HTMLElement {
   constructor() {
     super();
-    // eslint-disable-next-line no-undef
     this.store = StoreInstance;
     this.attachShadow({ mode: 'open' });
-    this.addEventListener('click', () => {});
+    this.subscriptions = [this.store.subscribe('translation', () => this.render())];
   }
 
   render() {
+    while (this.shadowRoot.lastChild) this.shadowRoot.removeChild(this.shadowRoot.lastChild);
     const TEMPLATE = document.createElement('template');
     TEMPLATE.innerHTML = `
         <style>
@@ -25,6 +25,13 @@ class TranslatePanel extends HTMLElement {
               cursor: not-allowed;
               filter: grayscale(100%);
             }
+            .already-exists {
+              font-size: 15px;
+              font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
+              color: #777;
+              display: block;
+              margin-top: 10px;
+            }
         </style>
 
         ${
@@ -37,7 +44,8 @@ class TranslatePanel extends HTMLElement {
           <pronunciation-button></pronunciation-button>
         </div>
         <pronunciation-slider></pronunciation-slider>
-        ${this.store.authorization ? '<add-word></add-word>' : ''}
+        ${this.store.authorization && !this.checkWordVocabularyExisting() ? '<add-word></add-word>' : ''}
+        ${this.checkWordVocabularyExisting() ? '<div class="already-exists">Слово уже в словаре</div>' : ''}
         ${this.store.authorization ? '<dictionary-info></dictionary-info>' : ''}
     `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
@@ -50,7 +58,19 @@ class TranslatePanel extends HTMLElement {
     }
   }
 
-  disconnectedCallback() {}
+  disconnectedCallback() {
+    if (this.subscriptions && this.subscriptions.length) {
+      this.subscriptions.forEach((subscription) => this.store.unsubscribe(subscription));
+    }
+  }
+
+  checkWordVocabularyExisting() {
+    return !!this.store.translation.allAddedTranslations.find(
+      (addedTranslations) =>
+        `${addedTranslations.word}.${addedTranslations.translate}` ===
+        `${this.store.translation.Word.word}.${this.store.translation.Word.translation}`
+    );
+  }
 }
 
 customElements.define('translate-panel', TranslatePanel);

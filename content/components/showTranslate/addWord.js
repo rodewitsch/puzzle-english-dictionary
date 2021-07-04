@@ -2,6 +2,7 @@ class AddWord extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
+    this.store = StoreInstance;
   }
 
   render() {
@@ -42,7 +43,28 @@ class AddWord extends HTMLElement {
 
   connectedCallback() {
     this.addEventListener('click', () => {
-      this.dispatchEvent(new CustomEvent(this.getAttribute('cast-event'), { bubbles: true, composed: true }));
+      chrome.runtime.sendMessage(
+        {
+          type: 'addWord',
+          options: {
+            word: this.store.translation.Word.word,
+            translation: this.store.translation.Word.translation,
+            partOfSpeech: this.store.translation.Word.part_of_speech
+          }
+        },
+        () => {
+          this.store.translation = {
+            ...this.store.translation,
+            allAddedTranslations: [
+              ...this.store.translation.allAddedTranslations,
+              {
+                word: this.store.translation.Word.word,
+                translate: this.store.translation.Word.translation
+              }
+            ]
+          };
+        }
+      );
     });
     if (!this.rendered) {
       this.render();

@@ -2,15 +2,16 @@ class PronunciationSlider extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    // eslint-disable-next-line no-undef
     this.store = StoreInstance;
     this.speakers = this.store.translation.word_speakers.slice(0, 8);
 
-    this.store.subscribe('currentSpeaker', (number) => {
-      const ACTORS = this.shadowRoot.querySelectorAll('pronunciation-actor');
-      ACTORS.forEach((actor) => actor.classList.remove('active'));
-      ACTORS[number].classList.add('active');
-    });
+    this.subscriptions = [
+      this.store.subscribe('currentSpeaker', (number) => {
+        const ACTORS = this.shadowRoot.querySelectorAll('pronunciation-actor');
+        ACTORS.forEach((actor) => actor.classList.remove('active'));
+        ACTORS[number].classList.add('active');
+      })
+    ];
   }
 
   render() {
@@ -43,6 +44,12 @@ class PronunciationSlider extends HTMLElement {
     if (!this.rendered) {
       this.render();
       this.rendered = true;
+    }
+  }
+
+  disconnectedCallback() {
+    if (this.subscriptions && this.subscriptions.length) {
+      this.subscriptions.forEach((subscription) => this.store.unsubscribe(subscription));
     }
   }
 }
