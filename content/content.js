@@ -2,7 +2,20 @@
 
 document.onmousedown = (downEvent) => {
   document.onmouseup = (upEvent) => {
-    chrome.storage.sync.get(['bubble'], (items) => {
+    chrome.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu'], (items) => {
+      if (items.bubble === undefined) {
+        items.bubble = true;
+        chrome.storage.sync.set(
+          {
+            bubble: true,
+            fastAdd: items.fastAdd === undefined ? true : items.fastAdd,
+            showTranslate: items.showTranslate === undefined ? true : items.showTranslate,
+            closeButton: items.closeButton === undefined ? true : items.closeButton,
+            contextMenu: items.contextMenu === undefined ? true : items.contextMenu
+          },
+          () => {}
+        );
+      }
       if (items && items.bubble) {
         if (
           downEvent.target.nodeName == 'INPUT' ||

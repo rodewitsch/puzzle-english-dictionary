@@ -3,6 +3,9 @@ class DictionaryInfo extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this.store = StoreInstance;
+    this.store.translation.dictionaryWordsCount =
+      +(this.store.translation.dictionaryWordsCount ||
+      (this.store.translation.html.match(/<span>В вашем словаре.*?(\d+).*?<\/span>/) || [])[1]);
   }
 
   render() {
@@ -15,7 +18,7 @@ class DictionaryInfo extends HTMLElement {
               color: #777;
             }
           </style>
-          <p>В вашем словаре слов: ${(this.store.translation.html.match(/<span>В вашем словаре.*?(\d+).*?<\/span>/) || [])[1]}</p>
+          <p>В вашем словаре слов: ${this.store.translation.dictionaryWordsCount}</p>
       `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
   }

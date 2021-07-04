@@ -53,6 +53,7 @@ class AddWord extends HTMLElement {
           }
         },
         () => {
+          this.store.translation.dictionaryWordsCount += 1;
           this.store.translation = {
             ...this.store.translation,
             allAddedTranslations: [

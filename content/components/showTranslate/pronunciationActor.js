@@ -25,7 +25,7 @@ class PronunciationActor extends HTMLElement {
     TEMPLATE.innerHTML = `
           <style>
               :host{
-                height: 75px;
+                height: 80px;
                 width: 30px;
                 margin: 5px 10px 5px 5px;
                 opacity: 0.5;

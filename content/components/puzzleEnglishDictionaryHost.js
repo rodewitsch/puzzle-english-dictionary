@@ -9,12 +9,17 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
   }
 
   async render() {
+    const positionX =
+      this.getAttribute('type') !== 'initial' && +this.getAttribute('position-x') + 360 > window.innerWidth
+        ? +this.getAttribute('position-x') + (window.innerWidth - +this.getAttribute('position-x') - 400)
+        : this.getAttribute('position-x');
     const TEMPLATE = document.createElement('template');
     TEMPLATE.innerHTML += `
       <style>
         :host {
+          all: initial;
           position: absolute;
-          left: ${this.getAttribute('position-x')}px; 
+          left: ${positionX}px; 
           top: ${this.getAttribute('position-y')}px; 
           z-index: 2147483647;
           background-color: white;

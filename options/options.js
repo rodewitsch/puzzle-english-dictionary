@@ -1,7 +1,5 @@
-/* eslint-disable no-undef */
 // Saves options to chrome.storage
 function save_options() {
-  // eslint-disable-next-line no-undef
   chrome.storage.sync.set(
     {
       bubble: getOptionElem("bubble").checked,
