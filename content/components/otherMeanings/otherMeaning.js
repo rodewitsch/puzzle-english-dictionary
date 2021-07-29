@@ -2,7 +2,6 @@ class OtherMeaning extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.store = StoreInstance;
   }
 
   render() {
@@ -20,9 +19,9 @@ class OtherMeaning extends HTMLElement {
 
   connectedCallback() {
     this.addEventListener('click', () => {
-      this.store.translation.Word.translation = this.getAttribute('translation');
-      this.store.translation.Word.part_of_speech = this.getAttribute('partofspeech');
-      this.store.translation.Word.article = this.getAttribute('article');
+      ExtStore.translation.Word.translation = this.getAttribute('translation');
+      ExtStore.translation.Word.part_of_speech = this.getAttribute('partofspeech');
+      ExtStore.translation.Word.article = this.getAttribute('article');
       this.dispatchEvent(
         new CustomEvent('changeviewtype', { bubbles: true, composed: true, detail: 'show-translation' })
       );

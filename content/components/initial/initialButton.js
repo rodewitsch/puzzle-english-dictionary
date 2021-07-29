@@ -11,10 +11,11 @@ class InitialButton extends HTMLElement {
         <style>
           :host{
             padding: 1px;
+            width: 17px;
+            display: block;
           }
           img {
               height: 25px;
-              margin-right: -8px;
               cursor: pointer;
               margin-bottom: -4px;
           }
@@ -25,13 +26,18 @@ class InitialButton extends HTMLElement {
   }
 
   connectedCallback() {
-    this.addEventListener('click', () =>
-      this.dispatchEvent(new CustomEvent(`initial-button-${this.type}`, { bubbles: true, composed: true }))
-    );
+    this.addEventListener('click', () => {
+      if (this.type === 'add' && !ExtStore.authorization) return;
+      this.dispatchEvent(new CustomEvent(`initial-button-${this.type}`, { bubbles: true, composed: true }));
+    });
+
     if (!this.rendered) {
       this.render();
       this.rendered = true;
     }
+  }
+
+  disconnectedCallback() {
   }
 }
 

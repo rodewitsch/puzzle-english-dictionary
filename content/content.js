@@ -28,11 +28,11 @@ document.onmousedown = (downEvent) => {
         if (
           SELECTION &&
           SELECTION.trim() &&
-          !/[а-яА-Я {2}]/.test(SELECTION.trim()) &&
+          !/[а-яА-Я {2}.(){}<>]/.test(SELECTION.trim()) &&
           !(SELECTION.trim().match(/ /g) || []).length
         ) {
           setTimeout(() => {
-            StoreInstance.selectedWord = SELECTION.trim();
+            ExtStore.selectedWord = SELECTION.trim();
             const BUBBLE_HOST = document.createElement('puzzle-english-dictionary-host');
             BUBBLE_HOST.addEventListener('mousedown', (event) => event.stopPropagation());
             BUBBLE_HOST.addEventListener('mouseup', (event) => event.stopPropagation());

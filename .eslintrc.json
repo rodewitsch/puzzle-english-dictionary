@@ -5,7 +5,7 @@
     "webextensions": true
   },
   "globals": {
-    "StoreInstance": "writable",
+    "ExtStore": "writable",
     "CorePuzzleEnglishDictionaryModule": "readonly"
   },
   "extends": "eslint:recommended",

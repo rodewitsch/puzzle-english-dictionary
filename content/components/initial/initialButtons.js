@@ -2,8 +2,7 @@ class InitialButtons extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.store = StoreInstance;
-    this.subscriptions = [this.store.subscribe('authorization', () => this.render())];
+    this.subscriptions = [ExtStore.subscribe('authorization', () => this.render())];
   }
 
   render() {
@@ -13,8 +12,9 @@ class InitialButtons extends HTMLElement {
       TEMPLATE.innerHTML += `
       <style>
         :host{
-          width: 63px;
-          display: block;
+          display: flex;
+          padding-right: 5px;
+          padding-left: 3px;
         }
         .disabled {
           cursor: not-allowed;
@@ -24,7 +24,7 @@ class InitialButtons extends HTMLElement {
     `;
       if (fastAdd) {
         TEMPLATE.innerHTML += `<initial-button class="${
-          this.store.authorization || 'disabled'
+          ExtStore.authorization || 'disabled'
         }" type="add"></initial-button>`;
       }
       if (showTranslate) TEMPLATE.innerHTML += '<initial-button type="show"></initial-button>';
@@ -42,7 +42,7 @@ class InitialButtons extends HTMLElement {
 
   disconnectedCallback() {
     if (this.subscriptions && this.subscriptions.length) {
-      this.subscriptions.forEach((subscription) => this.store.unsubscribe(subscription));
+      this.subscriptions.forEach((subscription) => ExtStore.unsubscribe(subscription));
     }
   }
 }

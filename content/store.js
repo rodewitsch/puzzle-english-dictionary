@@ -98,4 +98,4 @@ class Store {
 }
 
 // eslint-disable-next-line no-unused-vars
-const StoreInstance = new Store();
+const ExtStore = new Store();

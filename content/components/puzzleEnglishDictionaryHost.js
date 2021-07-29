@@ -1,25 +1,18 @@
 class PuzzleEnglishDictionaryHost extends HTMLElement {
   constructor() {
     super();
-    this.store = StoreInstance;
     this.attachShadow({ mode: 'open' });
-    if (!this.store.authorization) {
-      chrome.runtime.sendMessage({ type: 'checkAuth' }, null, ({ auth }) => (this.store.authorization = auth));
-    }
+    if (!ExtStore.authorization) this.checkAuth();
   }
 
   async render() {
-    const positionX =
-      this.getAttribute('type') !== 'initial' && +this.getAttribute('position-x') + 360 > window.innerWidth
-        ? +this.getAttribute('position-x') + (window.innerWidth - +this.getAttribute('position-x') - 420)
-        : this.getAttribute('position-x');
     const TEMPLATE = document.createElement('template');
     TEMPLATE.innerHTML += `
       <style>
         :host {
           all: initial;
           position: absolute;
-          left: ${positionX}px; 
+          left: ${this.calculatePositionX()}px; 
           top: ${this.getAttribute('position-y')}px; 
           z-index: 2147483647;
           background-color: white;
@@ -35,22 +28,13 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
         TEMPLATE.innerHTML += '<initial-buttons></initial-buttons>';
         this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
         const INITIAL_BUTTONS = this.shadowRoot.querySelector('initial-buttons');
-        if (this.store.authorization) {
-          INITIAL_BUTTONS.addEventListener('initial-button-add', (event) => console.log('fast-add', event), {
-            once: true
-          });
-        }
-        INITIAL_BUTTONS.addEventListener('initial-button-show', async () => {
-          this.store.translation = await this.getTranslation();
-          this.setAttribute('type', 'show-translation'), { once: true };
-        });
-        INITIAL_BUTTONS.addEventListener('initial-button-close', () => this.remove(), {
-          once: true
-        });
+        INITIAL_BUTTONS.addEventListener('initial-button-add', () => this.addWordListener(), { once: true });
+        INITIAL_BUTTONS.addEventListener('initial-button-show', () => this.showTranslationsListener(), { once: true });
+        INITIAL_BUTTONS.addEventListener('initial-button-close', () => this.closeBubbleListener(), { once: true });
         break;
       }
       case 'show-translation': {
-        TEMPLATE.innerHTML += this.store.translation
+        TEMPLATE.innerHTML += ExtStore.translation
           ? '<translate-panel></translate-panel>'
           : '<no-translation></no-translation>';
         this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
@@ -63,21 +47,67 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
       }
     }
 
-    this.shadowRoot.addEventListener('changeviewtype', (event) => this.setAttribute('type', event.detail), {
-      once: true
+    this.shadowRoot.addEventListener('changeviewtype', (event) => this.changeViewTypeListener(event), { once: true });
+  }
+
+  /**
+   * Dispatch the event to check authorization
+   */
+  checkAuth() {
+    chrome.runtime.sendMessage(
+      { type: 'checkAuth', options: { word: ExtStore.selectedWord } },
+      null,
+      ({ auth }) => (ExtStore.authorization = auth)
+    );
+  }
+
+  /**
+   * Calculate offset from the right side of a window
+   * @returns {Number}
+   */
+  calculatePositionX() {
+    let positionX = this.getAttribute('position-x');
+    if (this.getAttribute('type') !== 'initial' && +this.getAttribute('position-x') + 360 > window.innerWidth) {
+      positionX = +this.getAttribute('position-x') + (window.innerWidth - +this.getAttribute('position-x') - 420);
+    }
+    if (this.getAttribute('type') === 'initial' && +this.getAttribute('position-x') + 60 > window.innerWidth) {
+      positionX = +this.getAttribute('position-x') + (window.innerWidth - +this.getAttribute('position-x') - 90);
+    }
+    return positionX;
+  }
+
+  /**
+   * Simple adding a selected word to a dictionary
+   */
+  addWordListener() {
+    chrome.runtime.sendMessage({ type: 'simpleAddWord', options: { word: ExtStore.selectedWord } }, async () =>
+      this.remove()
+    );
+  }
+
+  /**
+   * Get selected word translations and change the view type
+   */
+  async showTranslationsListener() {
+    chrome.runtime.sendMessage({ type: 'checkWord', options: { word: ExtStore.selectedWord } }, async (response) => {
+      ExtStore.translation = !response.Word.id ? null : response;
+      this.setAttribute('type', 'show-translation'), { once: true };
     });
   }
 
-  getTranslation() {
-    return new Promise((resolve) => {
-      chrome.runtime.sendMessage(
-        { type: 'checkWord', options: { word: this.store.selectedWord } },
-        async (response) => {
-          if (!response.Word.id) return resolve(null);
-          return resolve(response);
-        }
-      );
-    });
+  /**
+   * Close the translations panel
+   */
+  closeBubbleListener() {
+    this.remove();
+  }
+
+  /**
+   * Change the view type
+   * @param {HTMLEvent} event
+   */
+  changeViewTypeListener(event) {
+    this.setAttribute('type', event.detail);
   }
 
   connectedCallback() {
@@ -88,7 +118,7 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
   }
 
   disconnectedCallback() {
-    this.store.cleanStore();
+    ExtStore.cleanStore();
   }
 
   static get observedAttributes() {

@@ -32,6 +32,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type == 'simpleAddWord' && request.options && request.options.word) {
     (async () => {
       await addWord(request.options.word);
+      chrome.browserAction.setBadgeText({ text: '+1' });
       sendResponse({ message: 'ok' });
     })();
   }
@@ -57,7 +58,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type == 'checkAuth') {
     (async () => {
       try {
-        await CorePuzzleEnglishDictionaryModule.checkWords('test auth');
+        await CorePuzzleEnglishDictionaryModule.checkWords((request.options || {}).word || 'test auth');
         sendResponse({ auth: true });
       } catch (err) {
         sendResponse({ auth: false });

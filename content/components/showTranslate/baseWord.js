@@ -2,7 +2,6 @@ class BaseWord extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.store = StoreInstance;
   }
 
   render() {
@@ -27,7 +26,7 @@ class BaseWord extends HTMLElement {
             }
           </style>
           <p>
-            <span>${this.store.translation.Word.article}</span> <b>${this.store.translation.Word.base_word}</b> - <span>${this.store.translation.Word.translation}</span>
+            <span>${ExtStore.translation.Word.article}</span> <b>${ExtStore.translation.Word.base_word}</b> - <span>${ExtStore.translation.Word.translation}</span>
           </p>
           <p class="other-meanings">
             Другие значения

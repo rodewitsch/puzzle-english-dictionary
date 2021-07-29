@@ -1,9 +1,8 @@
 class TranslatePanel extends HTMLElement {
   constructor() {
     super();
-    this.store = StoreInstance;
     this.attachShadow({ mode: 'open' });
-    this.subscriptions = [this.store.subscribe('translation', () => this.render())];
+    this.subscriptions = [ExtStore.subscribe('translation', () => this.render())];
   }
 
   render() {
@@ -35,7 +34,7 @@ class TranslatePanel extends HTMLElement {
         </style>
 
         ${
-          this.store.translation.Word.id !== this.store.translation.Word.base_word_id
+          ExtStore.translation.Word.id !== ExtStore.translation.Word.base_word_id
             ? '<current-meaning></current-meaning>'
             : ''
         }
@@ -44,9 +43,9 @@ class TranslatePanel extends HTMLElement {
           <pronunciation-button></pronunciation-button>
         </div>
         <pronunciation-slider></pronunciation-slider>
-        ${this.store.authorization && !this.checkWordVocabularyExisting() ? '<add-word></add-word>' : ''}
+        ${ExtStore.authorization && !this.checkWordVocabularyExisting() ? '<add-word></add-word>' : ''}
         ${this.checkWordVocabularyExisting() ? '<div class="already-exists">Слово уже в словаре</div>' : ''}
-        ${this.store.authorization ? '<dictionary-info></dictionary-info>' : ''}
+        ${ExtStore.authorization ? '<dictionary-info></dictionary-info>' : ''}
     `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
   }
@@ -60,15 +59,19 @@ class TranslatePanel extends HTMLElement {
 
   disconnectedCallback() {
     if (this.subscriptions && this.subscriptions.length) {
-      this.subscriptions.forEach((subscription) => this.store.unsubscribe(subscription));
+      this.subscriptions.forEach((subscription) => ExtStore.unsubscribe(subscription));
     }
   }
 
+  /**
+   * Check the existence of the selected word in the user's dictionary
+   * @returns {Boolean}
+   */
   checkWordVocabularyExisting() {
-    return !!this.store.translation.allAddedTranslations.find(
+    return !!ExtStore.translation.allAddedTranslations.find(
       (addedTranslations) =>
         `${addedTranslations.word}.${addedTranslations.translate}` ===
-        `${this.store.translation.Word.word}.${this.store.translation.Word.translation}`
+        `${ExtStore.translation.Word.word}.${ExtStore.translation.Word.translation}`
     );
   }
 }

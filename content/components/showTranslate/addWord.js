@@ -2,7 +2,6 @@ class AddWord extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.store = StoreInstance;
   }
 
   render() {
@@ -47,20 +46,20 @@ class AddWord extends HTMLElement {
         {
           type: 'addWord',
           options: {
-            word: this.store.translation.Word.word,
-            translation: this.store.translation.Word.translation,
-            partOfSpeech: this.store.translation.Word.part_of_speech
+            word: ExtStore.translation.Word.word,
+            translation: ExtStore.translation.Word.translation,
+            partOfSpeech: ExtStore.translation.Word.part_of_speech
           }
         },
         () => {
-          this.store.translation.dictionaryWordsCount += 1;
-          this.store.translation = {
-            ...this.store.translation,
+          ExtStore.translation.dictionaryWordsCount += 1;
+          ExtStore.translation = {
+            ...ExtStore.translation,
             allAddedTranslations: [
-              ...this.store.translation.allAddedTranslations,
+              ...ExtStore.translation.allAddedTranslations,
               {
-                word: this.store.translation.Word.word,
-                translate: this.store.translation.Word.translation
+                word: ExtStore.translation.Word.word,
+                translate: ExtStore.translation.Word.translation
               }
             ]
           };

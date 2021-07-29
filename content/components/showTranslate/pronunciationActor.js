@@ -4,9 +4,8 @@ class PronunciationActor extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     this.speakerInfo = CorePuzzleEnglishDictionaryModule.getSpeakerInfo(this.getAttribute('speaker'));
     this.actorNumber = this.getAttribute('actorNumber');
-    this.store = StoreInstance;
     this.subscriptions = [
-      this.store.subscribe('currentSpeaker', (number) => {
+      ExtStore.subscribe('currentSpeaker', (number) => {
         if (number === +this.actorNumber) this.playWord();
       })
     ];
@@ -15,7 +14,7 @@ class PronunciationActor extends HTMLElement {
   playWord() {
     chrome.runtime.sendMessage({
       type: 'playWord',
-      options: { speaker: this.speakerInfo.audio, word: this.store.translation.Word.base_word }
+      options: { speaker: this.speakerInfo.audio, word: ExtStore.translation.Word.base_word }
     });
   }
 
@@ -59,7 +58,7 @@ class PronunciationActor extends HTMLElement {
   }
 
   connectedCallback() {
-    this.addEventListener('click', () => (this.store.currentSpeaker = +this.actorNumber));
+    this.addEventListener('click', () => (ExtStore.currentSpeaker = +this.actorNumber));
     if (!this.rendered) {
       this.render();
       this.rendered = true;
@@ -68,7 +67,7 @@ class PronunciationActor extends HTMLElement {
 
   disconnectedCallback() {
     if (this.subscriptions && this.subscriptions.length) {
-      this.subscriptions.forEach((subscription) => this.store.unsubscribe(subscription));
+      this.subscriptions.forEach((subscription) => ExtStore.unsubscribe(subscription));
     }
   }
 }

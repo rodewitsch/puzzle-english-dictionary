@@ -2,11 +2,10 @@ class PronunciationSlider extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.store = StoreInstance;
-    this.speakers = this.store.translation.word_speakers.slice(0, 8);
+    this.speakers = ExtStore.translation.word_speakers.slice(0, 8);
 
     this.subscriptions = [
-      this.store.subscribe('currentSpeaker', (number) => {
+      ExtStore.subscribe('currentSpeaker', (number) => {
         const ACTORS = this.shadowRoot.querySelectorAll('pronunciation-actor');
         ACTORS.forEach((actor) => actor.classList.remove('active'));
         ACTORS[number].classList.add('active');
@@ -49,7 +48,7 @@ class PronunciationSlider extends HTMLElement {
 
   disconnectedCallback() {
     if (this.subscriptions && this.subscriptions.length) {
-      this.subscriptions.forEach((subscription) => this.store.unsubscribe(subscription));
+      this.subscriptions.forEach((subscription) => ExtStore.unsubscribe(subscription));
     }
   }
 }

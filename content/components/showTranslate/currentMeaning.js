@@ -2,12 +2,11 @@ class CurrentMeaning extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.store = StoreInstance;
-    this.currentMeaning = this.store.translation.Word.word;
+    this.currentMeaning = ExtStore.translation.Word.word;
     this.partOfSpeech = {
-      ...this.store.translation.Word.base_forms,
-      ...this.store.translation.Word.parts_of_speech
-    }[this.store.translation.Word.part_of_speech].description;
+      ...ExtStore.translation.Word.base_forms,
+      ...ExtStore.translation.Word.parts_of_speech
+    }[ExtStore.translation.Word.part_of_speech].description;
   }
 
   render() {

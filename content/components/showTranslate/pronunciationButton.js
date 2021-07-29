@@ -2,7 +2,6 @@ class PronunciationButton extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.store = StoreInstance;
   }
 
   render() {
@@ -22,8 +21,8 @@ class PronunciationButton extends HTMLElement {
 
   connectedCallback() {
     this.addEventListener('click', () => {
-      const speakers = this.store.translation.word_speakers.slice(0, 8);
-      this.store.currentSpeaker = this.store.currentSpeaker === speakers.length - 1 ? 0 : this.store.currentSpeaker + 1;
+      const speakers = ExtStore.translation.word_speakers.slice(0, 8);
+      ExtStore.currentSpeaker = ExtStore.currentSpeaker === speakers.length - 1 ? 0 : ExtStore.currentSpeaker + 1;
     });
     if (!this.rendered) {
       this.render();

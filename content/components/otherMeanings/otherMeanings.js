@@ -2,12 +2,11 @@ class OtherMeanings extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.store = StoreInstance;
 
-    this.WORD = this.store.translation.Word.word;
+    this.WORD = ExtStore.translation.Word.word;
     this.MEANINGS = Object.values({
-      ...this.store.translation.Word.base_forms,
-      ...this.store.translation.Word.parts_of_speech
+      ...ExtStore.translation.Word.base_forms,
+      ...ExtStore.translation.Word.parts_of_speech
     });
   }
 
@@ -64,7 +63,7 @@ class OtherMeanings extends HTMLElement {
             <p class="meaning-phrase-header">Значение слова <b>${this.WORD}</b> в данной фразе</p>
             <p class="meaning-header"><b>Другие значения</b></p>
 
-            ${this.MEANINGS.map((meaning) => {
+            ${this.MEANINGS.filter(meaning => meaning.values).map((meaning) => {
               const MEANINGS_GROUPS = meaning.values.reduce((acc, value) => {
                 if (!acc[value.synonym_group]) {
                   acc[value.synonym_group] = [value];
