@@ -55,14 +55,12 @@ class PronunciationActor extends HTMLElement {
       TEMPLATE.innerHTML += `<div class="flag">${FLAG_SVG}</div><div class="face">${FACE_SVG}</div><div class="name">${this.speakerInfo.name}</div>`;
       this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
     });
+    return true;
   }
 
   connectedCallback() {
     this.addEventListener('click', () => (ExtStore.currentSpeaker = +this.actorNumber));
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
-    }
+    if (!this.rendered) this.rendered = this.render();
   }
 
   disconnectedCallback() {

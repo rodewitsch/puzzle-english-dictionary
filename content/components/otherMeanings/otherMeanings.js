@@ -63,17 +63,18 @@ class OtherMeanings extends HTMLElement {
             <p class="meaning-phrase-header">Значение слова <b>${this.WORD}</b> в данной фразе</p>
             <p class="meaning-header"><b>Другие значения</b></p>
 
-            ${this.MEANINGS.filter(meaning => meaning.values).map((meaning) => {
-              const MEANINGS_GROUPS = meaning.values.reduce((acc, value) => {
-                if (!acc[value.synonym_group]) {
-                  acc[value.synonym_group] = [value];
-                } else {
-                  acc[value.synonym_group] = [...acc[value.synonym_group], value];
-                }
-                return acc;
-              }, {});
-              
-              return `
+            ${this.MEANINGS.filter((meaning) => meaning.values)
+              .map((meaning) => {
+                const MEANINGS_GROUPS = meaning.values.reduce((acc, value) => {
+                  if (!acc[value.synonym_group]) {
+                    acc[value.synonym_group] = [value];
+                  } else {
+                    acc[value.synonym_group] = [...acc[value.synonym_group], value];
+                  }
+                  return acc;
+                }, {});
+
+                return `
               <p class="meanings-part">${meaning.part_of_speech_ru}</p>
               ${meaning.article} <b>${meaning.word}</b>
               <ul>
@@ -90,7 +91,8 @@ class OtherMeanings extends HTMLElement {
                   .join('')}
               </ul>
             `;
-            }).join('')}
+              })
+              .join('')}
         `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
     this.shadowRoot.querySelector('.back').addEventListener('click', () => {
@@ -98,13 +100,11 @@ class OtherMeanings extends HTMLElement {
         new CustomEvent('changeviewtype', { bubbles: true, composed: true, detail: 'show-translation' })
       );
     });
+    return true;
   }
 
   connectedCallback() {
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
-    }
+    if (!this.rendered) this.rendered = this.render();
   }
 }
 

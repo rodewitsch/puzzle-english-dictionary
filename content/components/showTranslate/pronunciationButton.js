@@ -17,6 +17,7 @@ class PronunciationButton extends HTMLElement {
       TEMPLATE.innerHTML += svg;
       this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
     });
+    return true;
   }
 
   connectedCallback() {
@@ -24,10 +25,7 @@ class PronunciationButton extends HTMLElement {
       const speakers = ExtStore.translation.word_speakers.slice(0, 8);
       ExtStore.currentSpeaker = ExtStore.currentSpeaker === speakers.length - 1 ? 0 : ExtStore.currentSpeaker + 1;
     });
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
-    }
+    if (!this.rendered) this.rendered = this.render();
   }
 }
 

@@ -23,6 +23,7 @@ class InitialButton extends HTMLElement {
         <img src="${chrome.extension.getURL(`/assets/images/icons/${this.type}.png`)}"></img>
     `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+    return true;
   }
 
   connectedCallback() {
@@ -30,15 +31,10 @@ class InitialButton extends HTMLElement {
       if (this.type === 'add' && !ExtStore.authorization) return;
       this.dispatchEvent(new CustomEvent(`initial-button-${this.type}`, { bubbles: true, composed: true }));
     });
-
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
-    }
+    if (!this.rendered) this.rendered = this.render();
   }
 
-  disconnectedCallback() {
-  }
+  disconnectedCallback() {}
 }
 
 customElements.define('initial-button', InitialButton);

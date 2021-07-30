@@ -15,6 +15,7 @@ class OtherMeaning extends HTMLElement {
           <span>${this.getAttribute('translation')}</span>
       `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+    return true;
   }
 
   connectedCallback() {
@@ -26,10 +27,7 @@ class OtherMeaning extends HTMLElement {
         new CustomEvent('changeviewtype', { bubbles: true, composed: true, detail: 'show-translation' })
       );
     });
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
-    }
+    if (!this.rendered) this.rendered = this.render();
   }
 }
 

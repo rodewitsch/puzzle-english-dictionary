@@ -36,16 +36,11 @@ class BaseWord extends HTMLElement {
     this.shadowRoot.querySelector('.other-meanings').addEventListener('click', () => {
       this.dispatchEvent(new CustomEvent('changeviewtype', { bubbles: true, composed: true, detail: 'other-meanings' }));
     });
+    return true;
   }
 
   connectedCallback() {
-    this.addEventListener('click', () => {
-      this.dispatchEvent(new CustomEvent(this.getAttribute('cast-event'), { bubbles: true, composed: true }));
-    });
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
-    }
+    if (!this.rendered) this.rendered = this.render();
   }
 }
 

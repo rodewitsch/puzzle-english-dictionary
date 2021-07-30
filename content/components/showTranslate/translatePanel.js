@@ -48,13 +48,11 @@ class TranslatePanel extends HTMLElement {
         ${ExtStore.authorization ? '<dictionary-info></dictionary-info>' : ''}
     `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+    return true;
   }
 
   connectedCallback() {
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
-    }
+    if (!this.rendered) this.rendered = this.render();
   }
 
   disconnectedCallback() {

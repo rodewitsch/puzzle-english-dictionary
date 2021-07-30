@@ -30,14 +30,12 @@ class InitialButtons extends HTMLElement {
       if (showTranslate) TEMPLATE.innerHTML += '<initial-button type="show"></initial-button>';
       if (closeButton) TEMPLATE.innerHTML += '<initial-button type="close"></initial-button>';
       this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+      return true;
     });
   }
 
   connectedCallback() {
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
-    }
+    if (!this.rendered) this.rendered = this.render();
   }
 
   disconnectedCallback() {

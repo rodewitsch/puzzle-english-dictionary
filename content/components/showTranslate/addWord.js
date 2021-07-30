@@ -38,6 +38,7 @@ class AddWord extends HTMLElement {
           </div>
       `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+    return true;
   }
 
   connectedCallback() {
@@ -66,10 +67,7 @@ class AddWord extends HTMLElement {
         }
       );
     });
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
-    }
+    if (!this.rendered) this.rendered = this.render();
   }
 }
 

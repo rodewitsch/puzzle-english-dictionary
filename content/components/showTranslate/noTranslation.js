@@ -19,13 +19,11 @@ class NoTranslation extends HTMLElement {
           <span>Перевод слова не найден</span>
       `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+    return true;
   }
 
   connectedCallback() {
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
-    }
+    if (!this.rendered) this.rendered = this.render();
   }
 }
 

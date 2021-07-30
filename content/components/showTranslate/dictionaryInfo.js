@@ -20,16 +20,11 @@ class DictionaryInfo extends HTMLElement {
           <p>В вашем словаре слов: ${ExtStore.translation.dictionaryWordsCount}</p>
       `;
     this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+    return true;
   }
 
   connectedCallback() {
-    this.addEventListener('click', () => {
-      this.dispatchEvent(new CustomEvent(this.getAttribute('cast-event'), { bubbles: true, composed: true }));
-    });
-    if (!this.rendered) {
-      this.render();
-      this.rendered = true;
-    }
+    if (!this.rendered) this.rendered = this.render();
   }
 }
 
