@@ -1,42 +1,46 @@
 {
-    "manifest_version": 2,
-    "name": "Puzzle English Dictionary (Unofficial)",
-    "description": "Неофициальное расширение для добавления слов в словарь Puzzle English",
-    "version": "3.3",
-    "browser_action": {
-        "default_icon": "/assets/images/icons/icon128.png",
-        "default_popup": "/popup/popup.html"
-    },
-    "icons": {
-        "16": "/assets/images/icons/icon16.png",
-        "48": "/assets/images/icons/icon48.png",
-        "128": "/assets/images/icons/icon128.png"
-    },
-    "background": {
-        "scripts": [
-            "core.js",
-            "background.js"
-        ]
-    },
-    "content_scripts": [
-        {
-            "matches": [
-                "<all_urls>"
-            ],
-            "js": [
-                "core.js",
-                "/content/content.js"
-            ]
-        }
-    ],
-    "options_page": "/options/options.html",
-    "web_accessible_resources": [
-        "/content/content.css",
-        "/assets/*"
-    ],
-    "permissions": [
-        "activeTab",
-        "contextMenus",
-        "storage"
-    ]
+  "manifest_version": 2,
+  "name": "Puzzle English Dictionary (Unofficial)",
+  "description": "Неофициальное расширение для добавления слов в словарь Puzzle English",
+  "version": "4.0",
+  "browser_action": {
+    "default_icon": "/assets/images/icons/icon128.png",
+    "default_popup": "/popup/popup.html"
+  },
+  "icons": {
+    "16": "/assets/images/icons/icon16.png",
+    "48": "/assets/images/icons/icon48.png",
+    "128": "/assets/images/icons/icon128.png"
+  },
+  "background": {
+    "scripts": ["core.js", "background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
+        "core.js",
+        "/content/store.js",
+        "/content/content.js",
+        "/content/components/puzzleEnglishDictionaryHost.js",
+        "/content/components/initial/initialButton.js",
+        "/content/components/initial/initialButtons.js",
+        "/content/components/showTranslate/translatePanel.js",
+        "/content/components/showTranslate/currentMeaning.js",
+        "/content/components/showTranslate/pronunciationButton.js",
+        "/content/components/showTranslate/pronunciationSlider.js",
+        "/content/components/showTranslate/pronunciationActor.js",
+        "/content/components/showTranslate/addWord.js",
+        "/content/components/showTranslate/baseWord.js",
+        "/content/components/showTranslate/noTranslation.js",
+        "/content/components/showTranslate/dictionaryInfo.js",
+        "/content/components/otherMeanings/otherMeanings.js",
+        "/content/components/otherMeanings/otherMeaning.js"
+      ]
+    }
+  ],
+  "options_page": "/options/options.html",
+  "web_accessible_resources": ["/content/content.css", "/assets/*"],
+  "permissions": ["activeTab", "contextMenus", "storage"]
 }

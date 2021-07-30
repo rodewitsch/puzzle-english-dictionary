@@ -1,123 +1,168 @@
 body {
-    background-color: #f1efef;
-    height: 100%;
-    margin: 20px 0;
-    padding: 0;
-    font-family: arial,sans-serif;
-}
-
-a {
-    text-decoration: none;
-}
-
-.wrapper {
-    height: 100%;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    margin: 40px auto 20px;
-    padding: 32px;
-    width: 650px;
+  background-color: #f1efef;
+  height: 100%;
+  margin: 20px 0;
+  padding: 0;
+  font-family: arial, sans-serif;
 }
 
 header {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.settings-label {
-    font-size: 22px;
+a {
+  text-decoration: none;
 }
 
-.foreign-landing__footer-info-logo-text {
-    bottom: 0;
-    white-space: nowrap;
-    color: #333;
-    font-size: 12px;
-    font-weight: 500;
-    margin-left: -143px;
+.wrapper {
+  height: 100%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin: 40px auto 20px;
+  padding: 32px;
+  width: 650px;
 }
 
-.redesign-button_bg-green, .redesign-button_bg_green {
-    color: #fff!important;
-    background-color: #79c257;
+.header-title {
+  font-size: 22px;
+}
+
+.header-text {
+  bottom: 0;
+  white-space: nowrap;
+  color: #333;
+  font-size: 12px;
+  font-weight: 500;
+  margin-left: -143px;
 }
 
 .action-buttons {
-    margin-top: 25px;
-    display: flex;
-    justify-content: center;
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
 }
 
 .action-buttons button {
-    margin-right: 15px;
-}
-
-.redesign-button {
-    font-weight: bold;
-    position: relative;
-    cursor: pointer;
-    user-select: none;
-    box-sizing: border-box;
-    text-decoration: none;
-    display: inline-block;
-    vertical-align: middle;
-    text-align: center;
-    white-space: nowrap;
-    font-size: 11px;
-    padding: 7px 12px;
-    height: 30px;
-    border-radius: 3px;
-    border: 2px solid transparent;
-    box-sizing: border-box;
+  margin-right: 15px;
 }
 
 .option {
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 .option .checkbox {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .option label {
-    font-size: 13px;
-    cursor: pointer;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 .option input {
-    cursor: pointer;
-    opacity: 0;
-    height: 20px;
-    width: 25px;
-    margin-right: -25px;
-    z-index: 2;
+  cursor: pointer;
+  opacity: 0;
+  height: 20px;
+  width: 25px;
+  margin-right: -25px;
+  z-index: 2;
 }
 
 .option input:checked + div {
-    background: url(/assets/images/vocab-test-check.svg) center center no-repeat #71b26f;
-    border-color: #71b26f;
-    background-size: 15px;
+  background: url(/assets/images/vocab-test-check.svg) center center no-repeat #71b26f;
+  border-color: #71b26f;
+  background-size: 15px;
 }
 
 .nested-options {
-    margin-left: 35px;
+  margin-left: 35px;
 }
 
 .checkbox {
-    border-radius: 4px;
-    border: 2px solid #71b26f;
-    width: 20px;
-    height: 20px;
+  border-radius: 4px;
+  border: 2px solid #71b26f;
+  width: 20px;
+  height: 20px;
 }
 
 .checkbox.checked {
-    background: url(/assets/images/vocab-test-check.svg) center center no-repeat #71b26f;
-    border-color: #71b26f;
-    background-size: 15px;
+  background: url(/assets/images/vocab-test-check.svg) center center no-repeat #71b26f;
+  border-color: #71b26f;
+  background-size: 15px;
+}
+
+/* General button style */
+.btn {
+  font-weight: bold;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  white-space: nowrap;
+  font-size: 11px;
+  padding: 7px 12px;
+  height: 30px;
+  border-radius: 3px;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  position: relative;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.btn-green {
+  color: #fff !important;
+  background-color: #79c257;
+}
+
+.btn:after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+/* Pseudo elements for icons */
+.btn:before {
+  font-family: 'FontAwesome';
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:hover {
+  background: #bac0ba;
+}
+
+.btn:active {
+  background: #71b26f;
+  top: 2px;
+}
+
+.btn:before {
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  line-height: 3;
+  font-size: 140%;
+  width: 60px;
 }
