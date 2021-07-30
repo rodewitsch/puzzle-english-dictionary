@@ -28,7 +28,7 @@ document.onmousedown = (downEvent) => {
         if (
           SELECTION &&
           SELECTION.trim() &&
-          !/[а-яА-Я {2}.(){}<>]/.test(SELECTION.trim()) &&
+          !/[а-яА-Я {2}.(){}<>0-9-{2,}]/.test(SELECTION.trim()) &&
           !(SELECTION.trim().match(/ /g) || []).length
         ) {
           setTimeout(() => {
