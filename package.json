@@ -1,6 +1,6 @@
 {
   "name": "puzzleenglishdictionary",
-  "version": "1.0.0",
+  "version": "4.0.0",
   "description": "Chromium extension that allows you to add words to the Puzzle English dictionary.",
   "main": "background.js",
   "scripts": {
