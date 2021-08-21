@@ -17,12 +17,13 @@ class OtherMeanings extends HTMLElement {
               :host{
                 font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
                 display: block;
-                padding: 15px;
+                padding: 15px 10px;
                 width: 360px;
                 background-color: #f7f8f8;
                 color: #777;
                 font-size: 13px;
                 line-height: 1.5em;
+                border-radius: 5px;
               }
               .back {
                 cursor: pointer;
@@ -32,21 +33,22 @@ class OtherMeanings extends HTMLElement {
               }
               .meaning-phrase-header {
                 background-color: white;
-                padding: 15px;
+                padding: 15px 10px;
                 font-size: 15px;
-                margin-left: -15px;
-                margin-right: -15px;
+                margin-left: -10px;
+                margin-right: -10px;
              }
              .meaning-header {
               font-size: 15px;
              }
               ul{
                 list-style: none;
+                padding-left: 20px;
               }
               li::before{
                 content: "–";
                 position: absolute;
-                left: 40px;
+                left: 20px;
                 line-height: 1.5;
               }
               .meanings-part{

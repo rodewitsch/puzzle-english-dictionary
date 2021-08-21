@@ -14,6 +14,7 @@ class TranslatePanel extends HTMLElement {
               display: block;
               width: 360px;
               padding: 15px 10px;
+              min-height: 230px;
             }
             .base-word-row {
               display: flex;
