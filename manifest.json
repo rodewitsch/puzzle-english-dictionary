@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Puzzle English Dictionary (Unofficial)",
   "description": "Неофициальное расширение для добавления слов в словарь Puzzle English",
-  "version": "4.0",
+  "version": "4.1",
   "browser_action": {
     "default_icon": "/assets/images/icons/icon128.png",
     "default_popup": "/popup/popup.html"
@@ -42,5 +42,5 @@
   ],
   "options_page": "/options/options.html",
   "web_accessible_resources": ["/content/content.css", "/assets/*"],
-  "permissions": ["activeTab", "contextMenus", "storage"]
+  "permissions": ["contextMenus", "storage"]
 }
