@@ -26,7 +26,7 @@ class BaseWord extends HTMLElement {
             }
           </style>
           <p>
-            <span>${ExtStore.translation.Word.article}</span> <b>${ExtStore.translation.Word.base_word}</b> - <span>${ExtStore.translation.Word.translation}</span>
+            <span>${ExtStore.translation.Word.article || ''}</span> <b>${ExtStore.translation.Word.base_word}</b> - <span>${ExtStore.translation.Word.translation}</span>
           </p>
           <p class="other-meanings">
             Другие значения

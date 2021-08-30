@@ -19,7 +19,7 @@ class TranslatePanel extends HTMLElement {
             .base-word-row {
               display: flex;
               justify-content: space-between;
-              height: 50px;
+              min-height: 50px;
             }
             .disabled {
               cursor: not-allowed;
