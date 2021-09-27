@@ -10,6 +10,7 @@ class PronunciationButton extends HTMLElement {
           <style>
             :host {
               cursor: pointer;
+              margin-left: 10px;
             }
           </style>
       `;
