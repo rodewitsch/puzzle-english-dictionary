@@ -21,5 +21,6 @@
   },
   "devDependencies": {
     "eslint": "^7.27.0"
-  }
+  },
+  "bundledDependencies": ["@webcomponents/webcomponentsjs"]
 }
