@@ -1,4 +1,7 @@
 # PuzzleEnglishDictionary
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/rodewitsch/PuzzleEnglishDictionary.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rodewitsch/PuzzleEnglishDictionary/alerts/)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/rodewitsch/PuzzleEnglishDictionary.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rodewitsch/PuzzleEnglishDictionary/context:javascript)
+
 Chromium extension that allows you to add words to the Puzzle English dictionary.
 
 |   |  |
