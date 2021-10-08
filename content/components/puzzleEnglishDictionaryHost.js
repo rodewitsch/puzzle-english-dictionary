@@ -91,7 +91,7 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
   async showTranslationsListener() {
     chrome.runtime.sendMessage({ type: 'checkWord', options: { word: ExtStore.selectedWord } }, async (response) => {
       ExtStore.translation = !response.Word.id ? null : response;
-      this.setAttribute('type', 'show-translation'), { once: true };
+      this.setAttribute('type', 'show-translation');
     });
   }
 
