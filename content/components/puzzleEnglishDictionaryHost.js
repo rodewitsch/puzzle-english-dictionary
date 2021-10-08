@@ -47,7 +47,7 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
       }
     }
 
-    this.shadowRoot.addEventListener('changeviewtype', (event) => this.changeViewTypeListener(event), { once: true });
+    this.shadowRoot.addEventListener('changeviewtype', (event) => this.changeViewTypeListener(event));
   }
 
   /**
