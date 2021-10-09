@@ -29,7 +29,7 @@ document.onmousedown = (downEvent) => {
           SELECTION &&
           SELECTION.trim() &&
           /[a-zA-Z'\- ]/.test(SELECTION.trim()) &&
-          !/[а-яА-Я {2,}.(){}<>0-9-{2,}]/.test(SELECTION.trim())
+          !/[а-яА-Я0-9{}<>()\s]/.test(SELECTION.trim())
         ) {
           setTimeout(() => {
             ExtStore.selectedWord = SELECTION.trim();
