@@ -2,24 +2,25 @@ class PronunciationButton extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
+
+    this.render = () => {
+      const TEMPLATE = document.createElement('template');
+      TEMPLATE.innerHTML = `
+              <style>
+                :host {
+                  cursor: pointer;
+                  margin-left: 10px;
+                }
+              </style>
+          `;
+      CorePuzzleEnglishDictionaryModule.getTextAsset(`/assets/audio-button.svg`).then((svg) => {
+        TEMPLATE.innerHTML += svg;
+        this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+      });
+      return true;
+    }
   }
 
-  render() {
-    const TEMPLATE = document.createElement('template');
-    TEMPLATE.innerHTML = `
-          <style>
-            :host {
-              cursor: pointer;
-              margin-left: 10px;
-            }
-          </style>
-      `;
-    CorePuzzleEnglishDictionaryModule.getTextAsset(`/assets/audio-button.svg`).then((svg) => {
-      TEMPLATE.innerHTML += svg;
-      this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
-    });
-    return true;
-  }
 
   connectedCallback() {
     this.addEventListener('click', () => {

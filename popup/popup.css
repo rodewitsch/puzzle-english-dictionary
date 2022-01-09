@@ -1,7 +1,8 @@
 body {
     width: 360px;
-    height: 350px;
+    height: 360px;
     background: #f1efef;
+    overflow: hidden;
 }
 
 header {

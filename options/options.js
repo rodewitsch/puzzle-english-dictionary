@@ -15,32 +15,31 @@ document.addEventListener('DOMContentLoaded', () => {
   closeButtonOption.addEventListener('change', setBubbleGlobalOptionState);
 
   /**
-   * Saves options to chrome.storage
+   * Saves options to browser.storage
    */
-  function save_options() {
-    chrome.storage.sync.set(
+  async function save_options() {
+    await browser.storage.sync.set(
       {
         bubble: bubbleGlobalOption.checked,
         fastAdd: fastAddOption.checked,
         showTranslate: showTranslateOption.checked,
         closeButton: closeButtonOption.checked,
         contextMenu: contextMenuOption.checked
-      },
-      () => chrome.runtime.sendMessage({ type: 'changeOptions' })
+      }
     );
+    browser.runtime.sendMessage({ type: 'changeOptions' });
   }
 
   /**
-   * Restores select box and checkbox state using the preferences stored in chrome.storage.
+   * Restores select box and checkbox state using the preferences stored in browser.storage.
    */
-  function restore_options() {
-    chrome.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu'], (items) => {
-      bubbleGlobalOption.checked = items.bubble;
-      fastAddOption.checked = items.fastAdd;
-      showTranslateOption.checked = items.showTranslate;
-      closeButtonOption.checked = items.closeButton;
-      contextMenuOption.checked = items.contextMenu;
-    });
+  async function restore_options() {
+    const items = await browser.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu']);
+    bubbleGlobalOption.checked = items.bubble;
+    fastAddOption.checked = items.fastAdd;
+    showTranslateOption.checked = items.showTranslate;
+    closeButtonOption.checked = items.closeButton;
+    contextMenuOption.checked = items.contextMenu;
   }
 
   /**

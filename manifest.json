@@ -7,19 +7,30 @@
     "default_icon": "/assets/images/icons/icon128.png",
     "default_popup": "/popup/popup.html"
   },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{9279b9ec-4e5b-4b32-bdd5-c1d7e6da0a1f}",
+      "strict_min_version": "42.0"
+    }
+  },
   "icons": {
     "16": "/assets/images/icons/icon16.png",
     "48": "/assets/images/icons/icon48.png",
     "128": "/assets/images/icons/icon128.png"
   },
   "background": {
-    "scripts": ["core.js", "background.js"]
+    "scripts": [
+      "node_modules/webextension-polyfill/dist/browser-polyfill.js",
+      "core.js", 
+      "background.js"
+    ]
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
       "js": [
         "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
+        "node_modules/webextension-polyfill/dist/browser-polyfill.js",
         "core.js",
         "/content/store.js",
         "/content/content.js",
@@ -40,7 +51,10 @@
       ]
     }
   ],
-  "options_page": "/options/options.html",
+  "options_ui": {
+    "page": "/options/options.html",
+    "open_in_tab": true
+  },
   "web_accessible_resources": ["/content/content.css", "/assets/*"],
-  "permissions": ["contextMenus", "storage"]
+  "permissions": ["contextMenus", "storage", "https://puzzle-english.com/*"]
 }
