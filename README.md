@@ -5,7 +5,7 @@
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/gjaleekpebchkichhnhjollkhhkhpcgp?label=chrome%20web%20store%20users)
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/rating/gjaleekpebchkichhnhjollkhhkhpcgp?label=chrome%20web%20store%20rating)
 
-Chromium extension that allows you to add words to the Puzzle English dictionary.
+Chromium/Firefox extension that allows you to add words to the Puzzle English dictionary.
 
 |   |  |
 | ------------- | ------------- |
