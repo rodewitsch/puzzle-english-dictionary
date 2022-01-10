@@ -235,7 +235,7 @@ const CorePuzzleEnglishDictionaryModule = (() => {
       new Audio(`https://static.puzzle-english.com/words/${speaker}/${word}.mp3?${this.time}`).play();
     },
     getTextAsset: async function (path) {
-      const URL = browser.extension.getURL(path);
+      const URL = browser.runtime.getURL(path);
       const RAW = await fetch(URL);
       return await RAW.text();
     }
