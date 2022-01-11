@@ -4,6 +4,8 @@
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/rodewitsch/PuzzleEnglishDictionary.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rodewitsch/PuzzleEnglishDictionary/context:javascript)
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/gjaleekpebchkichhnhjollkhhkhpcgp?label=chrome%20web%20store%20users)
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/rating/gjaleekpebchkichhnhjollkhhkhpcgp?label=chrome%20web%20store%20rating)
+![Mozilla Add-on](https://img.shields.io/amo/users/puzzle-english-dict-unofficial?label=firefox%20%20users)
+![Mozilla Add-on](https://img.shields.io/amo/rating/puzzle-english-dict-unofficial?label=firefox%20%20rating)
 
 Chromium/Firefox extension that allows you to add words to the Puzzle English dictionary.
 
