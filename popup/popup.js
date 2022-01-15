@@ -10,10 +10,10 @@ document.addEventListener(
       OPTIONS_BUTTON = document.querySelector("#options");
 
     OPTIONS_BUTTON.onclick = () => {
-      if (chrome.runtime.openOptionsPage) {
-        chrome.runtime.openOptionsPage();
+      if (browser.runtime.openOptionsPage) {
+        browser.runtime.openOptionsPage();
       } else {
-        window.open(chrome.runtime.getURL("options.html"));
+        window.open(browser.runtime.getURL("options.html"));
       }
     };
 
@@ -33,7 +33,7 @@ document.addEventListener(
 
     // go to site handler
     GO_TO_SITE_BUTTON.onclick = () =>
-      chrome.tabs.create({ url: "https://puzzle-english.com" });
+      browser.tabs.create({ url: "https://puzzle-english.com" });
 
     // send words
     SUBMIT_BUTTON.onclick = async (event) => {

@@ -15,7 +15,8 @@ const CorePuzzleEnglishDictionaryModule = (() => {
       formData.append('words', words);
       return fetch(`${this.url}/api2/dictionary/checkWordsFromMassImport`, {
         method: 'POST',
-        body: formData
+        body: formData,
+        credentials: 'include'
       })
         .then((response) => response.json())
         .then((data) => (data.error ? Promise.reject(data.error) : Promise.resolve(data)));
@@ -32,7 +33,8 @@ const CorePuzzleEnglishDictionaryModule = (() => {
       formData.append('idSet', '0');
       return fetch(`${this.url}/api2/dictionary/addWordsFromMassImport`, {
         method: 'POST',
-        body: formData
+        body: formData,
+        credentials: 'include'
       })
         .then((response) => response.json())
         .then((data) => (data.error || !data.status ? Promise.reject(data.error) : Promise.resolve(data)));
@@ -233,8 +235,8 @@ const CorePuzzleEnglishDictionaryModule = (() => {
       new Audio(`https://static.puzzle-english.com/words/${speaker}/${word}.mp3?${this.time}`).play();
     },
     getTextAsset: async function (path) {
-      const URL = chrome.extension.getURL(path),
-        RAW = await fetch(URL);
+      const URL = browser.runtime.getURL(path);
+      const RAW = await fetch(URL);
       return await RAW.text();
     }
   };

@@ -1,4 +1,4 @@
-chrome.contextMenus.create({
+browser.contextMenus.create({
   title: "Добавить '%s' в словарь",
   id: 'MY_CONTEXT_MENU',
   contexts: ['selection'],
@@ -6,33 +6,29 @@ chrome.contextMenus.create({
   visible: true
 });
 
-function syncConfig() {
-  chrome.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu'], (items) => {
-    chrome.storage.sync.set(
-      {
-        bubble: items.bubble === undefined ? true : items.bubble,
-        fastAdd: items.fastAdd === undefined ? true : items.fastAdd,
-        showTranslate: items.showTranslate === undefined ? true : items.showTranslate,
-        closeButton: items.closeButton === undefined ? true : items.closeButton,
-        contextMenu: items.contextMenu === undefined ? true : items.contextMenu
-      },
-      () => {
-        chrome.storage.sync.get(['contextMenu'], (items) => {
-          chrome.contextMenus.update('MY_CONTEXT_MENU', { visible: !!items.contextMenu });
-        });
-      }
-    );
-  });
+async function syncConfig() {
+  const items = (await browser.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu']) || {})
+  await browser.storage.sync.set(
+    {
+      bubble: items.bubble === undefined ? true : items.bubble,
+      fastAdd: items.fastAdd === undefined ? true : items.fastAdd,
+      showTranslate: items.showTranslate === undefined ? true : items.showTranslate,
+      closeButton: items.closeButton === undefined ? true : items.closeButton,
+      contextMenu: items.contextMenu === undefined ? true : items.contextMenu
+    }
+  );
+  const { contextMenu } = await browser.storage.sync.get(['contextMenu']);
+  browser.contextMenus.update('MY_CONTEXT_MENU', { visible: !!contextMenu });
 }
 
 syncConfig();
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type == 'changeOptions') syncConfig();
   if (request.type == 'simpleAddWord' && request.options && request.options.word) {
     (async () => {
       await addWord(request.options.word);
-      chrome.browserAction.setBadgeText({ text: '+1' });
+      browser.browserAction.setBadgeText({ text: '+1' });
       sendResponse({ message: 'ok' });
     })();
   }
@@ -45,8 +41,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type == 'addWord' && request.options) {
     (async () => {
       const RESPONSE = await CorePuzzleEnglishDictionaryModule.addWordBaloon(request.options);
-      chrome.browserAction.setBadgeText({ text: '+1' });
-      setTimeout(() => chrome.browserAction.setBadgeText({ text: '' }), 1000);
+      browser.browserAction.setBadgeText({ text: '+1' });
+      setTimeout(() => browser.browserAction.setBadgeText({ text: '' }), 1000);
       sendResponse(RESPONSE);
     })();
   }
@@ -71,6 +67,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 async function addWord(word) {
   const PREVIEW_OBJECT = await CorePuzzleEnglishDictionaryModule.checkWords(word);
   await CorePuzzleEnglishDictionaryModule.addWords(PREVIEW_OBJECT.previewWords);
-  chrome.browserAction.setBadgeText({ text: '+1' });
-  setTimeout(() => chrome.browserAction.setBadgeText({ text: '' }), 1000);
+  browser.browserAction.setBadgeText({ text: '+1' });
+  setTimeout(() => browser.browserAction.setBadgeText({ text: '' }), 1000);
 }

@@ -11,34 +11,36 @@ class PronunciationSlider extends HTMLElement {
         ACTORS[number].classList.add('active');
       })
     ];
+
+    this.render = () => {
+      const TEMPLATE = document.createElement('template');
+      TEMPLATE.innerHTML = `
+            <style>
+              :host {
+                display: flex;
+                justify-content: left;
+                align-items: center;
+              }
+              pronunciation-actor{
+                opacity: 0.5;
+              }
+              pronunciation-actor:hover,pronunciation-actor.active{
+                opacity: 1;
+              }
+            </style>
+            ${this.speakers
+          .map(
+            (speaker, actorNumber) =>
+              `<pronunciation-actor speaker="${speaker}" actorNumber="${actorNumber}"></pronunciation-actor>`
+          )
+          .join('')}
+        `;
+      this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+      return true;
+    }
   }
 
-  render() {
-    const TEMPLATE = document.createElement('template');
-    TEMPLATE.innerHTML = `
-          <style>
-            :host {
-              display: flex;
-              justify-content: left;
-              align-items: center;
-            }
-            pronunciation-actor{
-              opacity: 0.5;
-            }
-            pronunciation-actor:hover,pronunciation-actor.active{
-              opacity: 1;
-            }
-          </style>
-          ${this.speakers
-            .map(
-              (speaker, actorNumber) =>
-                `<pronunciation-actor speaker="${speaker}" actorNumber="${actorNumber}"></pronunciation-actor>`
-            )
-            .join('')}
-      `;
-    this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
-    return true;
-  }
+
 
   connectedCallback() {
     if (!this.rendered) this.rendered = this.render();
