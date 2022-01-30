@@ -1,10 +1,16 @@
 'use strict';
 
+document.onkeyup = (e) => {
+  if (e.key.toLowerCase() === 'escape') {
+    document.querySelectorAll('puzzle-english-dictionary-host').forEach((popup) => popup.remove());
+  }
+}
+
 document.onmousedown = (downEvent) => {
   document.onmouseup = async (upEvent) => {
     const SELECTION = CorePuzzleEnglishDictionaryModule.getSelected().toString();
     document.querySelectorAll('puzzle-english-dictionary-host').forEach((popup) => popup.remove());
-    if(!SELECTION) return;
+    if (!SELECTION) return;
     const items = await browser.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu']);
     if (items.bubble === undefined) {
       items.bubble = true;
