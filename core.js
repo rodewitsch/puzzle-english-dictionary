@@ -238,6 +238,31 @@ const CorePuzzleEnglishDictionaryModule = (() => {
       const URL = browser.runtime.getURL(path);
       const RAW = await fetch(URL);
       return await RAW.text();
+    },
+    globalSearch: async function (value) {
+      const formData = new FormData();
+      formData.append('term', value);
+      formData.append('ajax_action', 'ajax_global_search_suggest');
+      return fetch(`${this.url}/`, {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+      })
+        .then((response) => response.text())
+        .then((data) => Promise.resolve(data));
+    },
+    addWordFromSearch: async function (word, translation) {
+      const formData = new FormData();
+      formData.append('word', word);
+      formData.append('translation', translation);
+      formData.append('ajax_action', 'ajax_dictionary_addWord');
+      return fetch(`${this.url}/`, {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+      })
+        .then((response) => response.json())
+        .then((data) => Promise.resolve(data));
     }
   };
 })();

@@ -7,7 +7,32 @@ document.addEventListener(
       SUBMIT_BUTTON = document.querySelector(".redesign-button"),
       GO_TO_SITE_BUTTON = document.querySelector("#go-to-site"),
       WORDS_AREA = document.querySelector("#words-area"),
-      OPTIONS_BUTTON = document.querySelector("#options");
+      OPTIONS_BUTTON = document.querySelector("#options"),
+      SEARCH_WORD_INPUT = document.querySelector('#seachWordInput'),
+      OPEN_LIST = document.querySelector('#openList'),
+      OPEN_SEARCH = document.querySelector('#openSearch'),
+      SEARCH_LIST = document.querySelector('#searchList');
+
+    OPEN_LIST.onclick = (event) => openTab(event, 'list');
+
+    OPEN_SEARCH.onclick = (event) => openTab(event, 'search');
+
+    SEARCH_WORD_INPUT.onchange = async () => {
+      if (SEARCH_WORD_INPUT.value.length > 0) {
+        const result = await CorePuzzleEnglishDictionaryModule.globalSearch(SEARCH_WORD_INPUT.value);
+        const words = parseGlobalSearchResult(result);
+        SEARCH_LIST.innerHTML = words.map(word => word.saved ? `<div><span>${word.word} - ${word.translation}</span>` : `<div><span>${word.word} - ${word.translation}</span><button data-word="${word.word}" data-translation="${word.translation}">Добавить</button></div>`).join('')
+        SEARCH_LIST.querySelectorAll('button').forEach(button => {
+          button.addEventListener('click', async (event) => {
+            const savingResult = await CorePuzzleEnglishDictionaryModule.addWordFromSearch(
+              event.target.dataset['word'],
+              event.target.dataset['translation']
+            );
+            console.log(savingResult);
+          }, { once: true });
+        })
+      }
+    }
 
     OPTIONS_BUTTON.onclick = () => {
       if (browser.runtime.openOptionsPage) {
@@ -66,4 +91,38 @@ function disableButton(button) {
 function enableButton(button) {
   button.classList.remove("redesign-button_bg-disabled");
   button.classList.add("redesign-button_bg_green");
+}
+
+function parseGlobalSearchResult(data) {
+  const template = document.createElement('template');
+  template.innerHTML = data.replace(/\\"/g, '"').replace(/\\n/g, '').replace(/<\\\//g, '</');
+  return Array.from(template.content.querySelectorAll("div[data-target]")).reduce((acc, i) => {
+    acc = [...acc, {
+      word: i.dataset['word'],
+      translation: i.dataset['translation'],
+      saved: !i.parentElement.querySelector('.global_search_add_word')
+    }];
+    return acc;
+  }, []);
+}
+
+function openTab(evt, cityName) {
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
 }
