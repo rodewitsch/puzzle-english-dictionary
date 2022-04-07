@@ -263,6 +263,13 @@ const CorePuzzleEnglishDictionaryModule = (() => {
       })
         .then((response) => response.json())
         .then((data) => Promise.resolve(data));
+    },
+    debounce(func, timeout = 300) {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => { func.apply(this, args); }, timeout);
+      };
     }
   };
 })();
