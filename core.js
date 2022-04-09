@@ -232,7 +232,16 @@ const CorePuzzleEnglishDictionaryModule = (() => {
       }
     },
     playAudio: function (speaker, word) {
-      new Audio(`https://static.puzzle-english.com/words/${speaker}/${word}.mp3?${this.time}`).play();
+      const iframe = document.createElement('iframe');
+      iframe.allow = 'autoplay';
+      iframe.src = `https://static.puzzle-english.com/words/${speaker}/${word}.mp3?${this.time}`;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      iframe.onload = () => {
+        setInterval(() => {
+          iframe.remove();
+        }, 1000);
+      };
     },
     getTextAsset: async function (path) {
       const URL = browser.runtime.getURL(path);

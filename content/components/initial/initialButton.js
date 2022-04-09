@@ -19,7 +19,7 @@ class InitialButton extends HTMLElement {
                 margin-bottom: -4px;
             }
           </style>
-          <img src="${browser.extension.getURL(`/assets/images/icons/${this.type}.png`)}"></img>
+          <img src="${browser.runtime.getURL(`/assets/images/icons/${this.type}.png`)}"></img>
       `;
       this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
       return true;
