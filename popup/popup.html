@@ -10,9 +10,9 @@
 <body>
     <header>
         <a href="https://puzzle-english.com/p/2676311?utm_source=partner-pe&utm_medium=cpa&utm_campaign=2676311"
-            class="redesign-header__logo foreign-landing__footer-info-logo " target="blank">
+            target="blank">
             <img src="/assets/images/redesign-logo_header.svg" width="248" height="39" alt="logo">
-            <span class="foreign-landing__footer-info-logo-text">
+            <span class="logo-text">
                 Понимай английский на слух!
             </span>
         </a>
@@ -30,21 +30,43 @@
         </div>
     </header>
 
-    <div class="work-area">
-        <textarea required class="dictionary-import__textarea" name="words" id="words-area" cols="30"
-            placeholder="Скопируйте сюда слова для импорта в ваш словарь.Каждое слово или выражение - с новой строки. Русские буквы и другие символы не английского алфавита будут проигнорированы."
-            rows="10"></textarea>
+    <div class="tab">
+        <button class="tablinks" id="open-search">Поиск</button>
+        <button class="tablinks" id="open-list">Добавление списком</button>
+    </div>
 
-        <div class="puzzle_ta_center">
-            <button id="addWords" class="redesign-button redesign-button_size_m redesign-button_bg-disabled">
-                <span>Добавить слова</span>
-            </button>
+    <div id="search" class="tabcontent">
+        <div class="work-area">
+            <input id="seach-word-input" type="text" class="import__input" placeholder="Поиск слова" autocomplete="off">
+            <div class="clean-input__button">
+                <i style="width: 13px; height: 13px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                        <path
+                            d="M15.7.3c-.4-.4-1-.4-1.3 0L8 6.7 1.6.3C1.2-.1.6-.1.3.3c-.4.4-.4 1 0 1.3L6.7 8 .3 14.4c-.4.4-.4 1 0 1.3.4.4 1 .4 1.3 0L8 9.3l6.4 6.4c.4.4 1 .4 1.3 0 .4-.4.4-1 0-1.3L9.3 8l6.4-6.4c.4-.4.4-1 0-1.3z"
+                            fill="#d0d0d0"></path>
+                    </svg>
+                </i>
+            </div>
+        </div>
+        <div id="search-list"></div>
+    </div>
+
+    <div id="list" class="tabcontent">
+        <div class="work-area">
+            <textarea required class="import__textarea" name="words" id="words-area" cols="30"
+                placeholder="Скопируйте сюда слова для импорта в ваш словарь. Каждое слово или выражение - с новой строки. Русские буквы и другие символы не английского алфавита будут проигнорированы."
+                rows="9"></textarea>
+            <div class="puzzle_ta_center">
+                <button id="add-words" class="button button_size_m button_bg-disabled">
+                    <span>Добавить слова</span>
+                </button>
+            </div>
         </div>
     </div>
 
     <div class="need-auth-area hide-area">
         <p>Для добавления слов необходима авторизация на сайте Puzzle English.</p>
-        <button id="go-to-site" class="redesign-button redesign-button_size_m">
+        <button id="go-to-site" class="button button_size_m">
             Перейти на сайт
         </button>
     </div>
