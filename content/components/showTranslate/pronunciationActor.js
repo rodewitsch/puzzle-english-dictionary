@@ -11,10 +11,7 @@ class PronunciationActor extends HTMLElement {
     ];
 
     this.playWord = () => {
-      browser.runtime.sendMessage({
-        type: 'playWord',
-        options: { speaker: this.speakerInfo.audio, word: ExtStore.translation.Word.base_word }
-      });
+      CorePuzzleEnglishDictionaryModule.playAudio(this.speakerInfo.audio, ExtStore.translation.Word.base_word);
     }
 
     this.render = () => {

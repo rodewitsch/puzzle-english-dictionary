@@ -41,8 +41,6 @@ class AddWord extends HTMLElement {
     }
   }
 
-
-
   connectedCallback() {
     this.addEventListener('click', async () => {
       await browser.runtime.sendMessage(

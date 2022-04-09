@@ -1,9 +1,14 @@
-browser.contextMenus.create({
-  title: "Добавить '%s' в словарь",
-  id: 'MY_CONTEXT_MENU',
-  contexts: ['selection'],
-  onclick: async (info) => addWord(info.selectionText),
-  visible: true
+// eslint-disable-next-line no-undef
+importScripts("node_modules/webextension-polyfill/dist/browser-polyfill.js", "core.js");
+
+browser.contextMenus.removeAll().then(() => {
+  browser.contextMenus.create({
+    title: "Добавить '%s' в словарь",
+    id: 'puzzlecontextmenu',
+    contexts: ['selection'],
+    onclick: async (info) => addWord(info.selectionText),
+    visible: true
+  });
 });
 
 async function syncConfig() {
@@ -18,7 +23,7 @@ async function syncConfig() {
     }
   );
   const { contextMenu } = await browser.storage.sync.get(['contextMenu']);
-  browser.contextMenus.update('MY_CONTEXT_MENU', { visible: !!contextMenu });
+  browser.contextMenus.update('puzzlecontextmenu', { visible: !!contextMenu });
 }
 
 syncConfig();
@@ -28,7 +33,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type == 'simpleAddWord' && request.options && request.options.word) {
     (async () => {
       await addWord(request.options.word);
-      browser.browserAction.setBadgeText({ text: '+1' });
+      browser.action.setBadgeText({ text: '+1' });
       sendResponse({ message: 'ok' });
     })();
   }
@@ -41,8 +46,8 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type == 'addWord' && request.options) {
     (async () => {
       const RESPONSE = await CorePuzzleEnglishDictionaryModule.addWordBaloon(request.options);
-      browser.browserAction.setBadgeText({ text: '+1' });
-      setTimeout(() => browser.browserAction.setBadgeText({ text: '' }), 1000);
+      browser.action.setBadgeText({ text: '+1' });
+      setTimeout(() => browser.action.setBadgeText({ text: '' }), 1000);
       sendResponse(RESPONSE);
     })();
   }
@@ -67,6 +72,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 async function addWord(word) {
   const PREVIEW_OBJECT = await CorePuzzleEnglishDictionaryModule.checkWords(word);
   await CorePuzzleEnglishDictionaryModule.addWords(PREVIEW_OBJECT.previewWords);
-  browser.browserAction.setBadgeText({ text: '+1' });
-  setTimeout(() => browser.browserAction.setBadgeText({ text: '' }), 1000);
+  browser.action.setBadgeText({ text: '+1' });
+  setTimeout(() => browser.action.setBadgeText({ text: '' }), 1000);
 }
