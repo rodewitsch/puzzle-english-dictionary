@@ -14,11 +14,19 @@ document.addEventListener(
       CLEAN_INPUT_BUTTON = document.querySelector('.clean-input__button'),
       SEARCH_LIST = document.querySelector('#search-list');
 
+
     openTab({ currentTarget: OPEN_SEARCH }, 'search');
+    setTimeout(() => SEARCH_WORD_INPUT.focus(), 200);
 
-    OPEN_LIST.onclick = (event) => openTab(event, 'list');
+    OPEN_LIST.onclick = (event) => {
+      openTab(event, 'list');
+      setTimeout(() => WORDS_AREA.focus(), 200);
+    };
 
-    OPEN_SEARCH.onclick = (event) => openTab(event, 'search');
+    OPEN_SEARCH.onclick = (event) => {
+      openTab(event, 'search');
+      setTimeout(() => SEARCH_WORD_INPUT.focus(), 200);
+    }
 
     CLEAN_INPUT_BUTTON.onclick = () => {
       SEARCH_LIST.innerHTML = '';
@@ -34,75 +42,75 @@ document.addEventListener(
       }
     };
 
-SEARCH_WORD_INPUT.oninput = CorePuzzleEnglishDictionaryModule.debounce(async () => {
-  if (SEARCH_WORD_INPUT.value.length > 0) {
-    const result = await CorePuzzleEnglishDictionaryModule.globalSearch(SEARCH_WORD_INPUT.value);
-    const words = parseGlobalSearchResult(result);
-    SEARCH_LIST.innerHTML = words.map(word => word.saved
-      ? `<div><span><strong>${word.word}</strong> - ${word.translation}</span></div>`
-      : `<div><span><strong>${word.word}</strong> - ${word.translation}</span><div class="global_search_add_word" data-word="${word.word}" data-translation="${word.translation}">Добавить</div></div>`).join('')
-    SEARCH_LIST.querySelectorAll("div.global_search_add_word").forEach(button => {
-      button.addEventListener('click', async (event) => {
-        await CorePuzzleEnglishDictionaryModule.addWordFromSearch(
-          event.target.dataset['word'],
-          event.target.dataset['translation']
+    SEARCH_WORD_INPUT.oninput = CorePuzzleEnglishDictionaryModule.debounce(async () => {
+      if (SEARCH_WORD_INPUT.value.length > 0) {
+        const result = await CorePuzzleEnglishDictionaryModule.globalSearch(SEARCH_WORD_INPUT.value);
+        const words = parseGlobalSearchResult(result);
+        SEARCH_LIST.innerHTML = words.map(word => word.saved
+          ? `<div><span><strong>${word.word}</strong> - ${word.translation}</span></div>`
+          : `<div><span><strong>${word.word}</strong> - ${word.translation}</span><div class="global_search_add_word" data-word="${word.word}" data-translation="${word.translation}">Добавить</div></div>`).join('')
+        SEARCH_LIST.querySelectorAll("div.global_search_add_word").forEach(button => {
+          button.addEventListener('click', async (event) => {
+            await CorePuzzleEnglishDictionaryModule.addWordFromSearch(
+              event.target.dataset['word'],
+              event.target.dataset['translation']
+            );
+            event.target.remove();
+          }, { once: true });
+        })
+      } else {
+        SEARCH_LIST.innerHTML = '';
+        CLEAN_INPUT_BUTTON.classList.remove('dirty');
+      }
+    }, 300);
+
+    OPTIONS_BUTTON.onclick = () => {
+      if (browser.runtime.openOptionsPage) {
+        browser.runtime.openOptionsPage();
+      } else {
+        window.open(browser.runtime.getURL("options.html"));
+      }
+    };
+
+    // check auth
+    try {
+      await CorePuzzleEnglishDictionaryModule.checkWords("test auth");
+    } catch (err) {
+      WORK_AREA.classList.add("hide-area");
+      NEED_AUTH_AREA.classList.remove("hide-area");
+    }
+
+    // registering a form validation handler
+    WORDS_AREA.oninput = (event) => {
+      if (event.target.value) return enableButton(SUBMIT_BUTTON);
+      disableButton(SUBMIT_BUTTON);
+    };
+
+    // go to site handler
+    GO_TO_SITE_BUTTON.onclick = () =>
+      browser.tabs.create({ url: "https://puzzle-english.com" });
+
+    // send words
+    SUBMIT_BUTTON.onclick = async (event) => {
+      if (!WORDS_AREA.value) return;
+      disableButton(SUBMIT_BUTTON);
+      const PREVIEW_OBJECT = await CorePuzzleEnglishDictionaryModule.checkWords(
+        WORDS_AREA.value
+      );
+      try {
+        const ADDING_RESULT = await CorePuzzleEnglishDictionaryModule.addWords(
+          PREVIEW_OBJECT.previewWords
         );
-        event.target.remove();
-      }, { once: true });
-    })
-  } else {
-    SEARCH_LIST.innerHTML = '';
-    CLEAN_INPUT_BUTTON.classList.remove('dirty');
-  }
-}, 300);
-
-OPTIONS_BUTTON.onclick = () => {
-  if (browser.runtime.openOptionsPage) {
-    browser.runtime.openOptionsPage();
-  } else {
-    window.open(browser.runtime.getURL("options.html"));
-  }
-};
-
-// check auth
-try {
-  await CorePuzzleEnglishDictionaryModule.checkWords("test auth");
-} catch (err) {
-  WORK_AREA.classList.add("hide-area");
-  NEED_AUTH_AREA.classList.remove("hide-area");
-}
-
-// registering a form validation handler
-WORDS_AREA.oninput = (event) => {
-  if (event.target.value) return enableButton(SUBMIT_BUTTON);
-  disableButton(SUBMIT_BUTTON);
-};
-
-// go to site handler
-GO_TO_SITE_BUTTON.onclick = () =>
-  browser.tabs.create({ url: "https://puzzle-english.com" });
-
-// send words
-SUBMIT_BUTTON.onclick = async (event) => {
-  if (!WORDS_AREA.value) return;
-  disableButton(SUBMIT_BUTTON);
-  const PREVIEW_OBJECT = await CorePuzzleEnglishDictionaryModule.checkWords(
-    WORDS_AREA.value
-  );
-  try {
-    const ADDING_RESULT = await CorePuzzleEnglishDictionaryModule.addWords(
-      PREVIEW_OBJECT.previewWords
-    );
-    event.target.innerText = `Добавлено слов ${ADDING_RESULT.addCount}`;
-  } catch (err) {
-    event.target.innerText = `Слова не добавлены`;
-  } finally {
-    WORDS_AREA.value = "";
-    setTimeout(() => (event.target.innerText = `Добавить слова`), 1000);
-  }
-};
+        event.target.innerText = `Добавлено слов ${ADDING_RESULT.addCount}`;
+      } catch (err) {
+        event.target.innerText = `Слова не добавлены`;
+      } finally {
+        WORDS_AREA.value = "";
+        setTimeout(() => (event.target.innerText = `Добавить слова`), 1000);
+      }
+    };
   },
-false
+  false
 );
 
 function disableButton(button) {
