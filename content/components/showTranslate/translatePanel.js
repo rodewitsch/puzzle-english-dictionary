@@ -44,7 +44,7 @@ class TranslatePanel extends HTMLElement {
           <pronunciation-slider></pronunciation-slider>
           ${ExtStore.authorization && !this.checkWordVocabularyExisting() ? '<add-word></add-word>' : ''}
           ${this.checkWordVocabularyExisting() ? '<div class="already-exists">Слово уже в словаре</div>' : ''}
-          ${ExtStore.authorization ? '<dictionary-info></dictionary-info>' : ''}
+          ${ExtStore.authorization ? '<dictionary-info></dictionary-info>' : '<need-auth></need-auth>'}
       `;
       this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
       return true;

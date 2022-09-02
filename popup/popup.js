@@ -76,8 +76,10 @@ document.addEventListener(
     try {
       await CorePuzzleEnglishDictionaryModule.checkWords("test auth");
     } catch (err) {
-      WORK_AREA.classList.add("hide-area");
-      NEED_AUTH_AREA.classList.remove("hide-area");
+      if (err === 'Authentication required') {
+        WORK_AREA.classList.add("hide-area");
+        NEED_AUTH_AREA.classList.remove("hide-area");
+      }
     }
 
     // registering a form validation handler

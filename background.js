@@ -65,8 +65,21 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 async function addWord(word) {
-  const PREVIEW_OBJECT = await CorePuzzleEnglishDictionaryModule.checkWords(word);
-  await CorePuzzleEnglishDictionaryModule.addWords(PREVIEW_OBJECT.previewWords);
-  browser.browserAction.setBadgeText({ text: '+1' });
-  setTimeout(() => browser.browserAction.setBadgeText({ text: '' }), 1000);
+  try {
+    const PREVIEW_OBJECT = await CorePuzzleEnglishDictionaryModule.checkWords(word);
+    await CorePuzzleEnglishDictionaryModule.addWords(PREVIEW_OBJECT.previewWords);
+    browser.browserAction.setBadgeText({ text: '+1' });
+  }
+  catch (err) {
+    if(err === 'Authentication required') {
+      let result = confirm('Вы не авторизованы на сайте Puzzle English. Перейти к авторизации?');
+      if(result) browser.tabs.create({ url: 'https://puzzle-english.com' });
+    }
+    chrome.browserAction.setBadgeBackgroundColor({ color: '#a60b00' }, () => {
+      browser.browserAction.setBadgeText({ text: '0' });
+    });
+  }
+  finally {
+    setTimeout(() => browser.browserAction.setBadgeText({ text: '' }), 1000);
+  }
 }
