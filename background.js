@@ -28,7 +28,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type == 'simpleAddWord' && request.options && request.options.word) {
     (async () => {
       await addWord(request.options.word);
-      browser.browserAction.setBadgeText({ text: '+1' });
       sendResponse({ message: 'ok' });
     })();
   }
@@ -40,10 +39,19 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
   if (request.type == 'addWord' && request.options) {
     (async () => {
-      const RESPONSE = await CorePuzzleEnglishDictionaryModule.addWordBaloon(request.options);
-      browser.browserAction.setBadgeText({ text: '+1' });
-      setTimeout(() => browser.browserAction.setBadgeText({ text: '' }), 1000);
-      sendResponse(RESPONSE);
+      try {
+        const RESPONSE = await CorePuzzleEnglishDictionaryModule.addWordBaloon(request.options);
+        browser.browserAction.setBadgeBackgroundColor({ color: '#0f6e00' });
+        browser.browserAction.setBadgeText({ text: '+1' });
+        sendResponse(RESPONSE);
+      }
+      catch (err) {
+        browser.browserAction.setBadgeBackgroundColor({ color: '#a60b00' });
+        browser.browserAction.setBadgeText({ text: '0' });
+      }
+      finally {
+        setTimeout(() => browser.browserAction.setBadgeText({ text: '' }), 1000);
+      }
     })();
   }
   if (request.type == 'playWord' && request.options) {
@@ -68,16 +76,16 @@ async function addWord(word) {
   try {
     const PREVIEW_OBJECT = await CorePuzzleEnglishDictionaryModule.checkWords(word);
     await CorePuzzleEnglishDictionaryModule.addWords(PREVIEW_OBJECT.previewWords);
+    browser.browserAction.setBadgeBackgroundColor({ color: '#0f6e00' });
     browser.browserAction.setBadgeText({ text: '+1' });
   }
   catch (err) {
-    if(err === 'Authentication required') {
+    if (err === 'Authentication required') {
       let result = confirm('Вы не авторизованы на сайте Puzzle English. Перейти к авторизации?');
-      if(result) browser.tabs.create({ url: 'https://puzzle-english.com' });
+      if (result) browser.tabs.create({ url: 'https://puzzle-english.com' });
     }
-    chrome.browserAction.setBadgeBackgroundColor({ color: '#a60b00' }, () => {
-      browser.browserAction.setBadgeText({ text: '0' });
-    });
+    browser.browserAction.setBadgeBackgroundColor({ color: '#a60b00' });
+    browser.browserAction.setBadgeText({ text: '0' });
   }
   finally {
     setTimeout(() => browser.browserAction.setBadgeText({ text: '' }), 1000);
