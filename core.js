@@ -106,7 +106,7 @@ const CorePuzzleEnglishDictionaryModule = (() => {
         external: 1
       };
       const RAW_RESPONSE = await fetch(`${this.url}?${new URLSearchParams(PARAMS).toString()}`);
-      return await RAW_RESPONSE.json();
+      return await RAW_RESPONSE.text();
     },
     getSpeakerInfo: function (name) {
       switch (name) {
