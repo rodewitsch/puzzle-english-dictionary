@@ -108,6 +108,24 @@ const CorePuzzleEnglishDictionaryModule = (() => {
       const RAW_RESPONSE = await fetch(`${this.url}?${new URLSearchParams(PARAMS).toString()}`);
       return await RAW_RESPONSE.text();
     },
+    deleteWord: async function (id, translation) {
+      const PARAMS = {
+        ajax_action: 'ajax_cards_check_for_deleteUserWord',
+        id: id,
+        translation: translation,
+      };
+      const RAW_RESPONSE = await fetch(`${this.url}?${new URLSearchParams(PARAMS).toString()}`);
+      const CHECK_RESPONSE =  await RAW_RESPONSE.json();
+      if(CHECK_RESPONSE.id){
+        const PARAMS = {
+          ajax_action: 'ajax_cards_deleteUserWord',
+          id: CHECK_RESPONSE.id,
+          translation: translation,
+        };
+        const RAW_RESPONSE = await fetch(`${this.url}?${new URLSearchParams(PARAMS).toString()}`);
+        return await RAW_RESPONSE.text();
+      }
+    },
     getSpeakerInfo: function (name) {
       switch (name) {
         case 'vocabulary_US':

@@ -69,6 +69,16 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     })();
   }
+  if(request.type == 'deleteWord') {
+    (async () => {
+      try {
+        await CorePuzzleEnglishDictionaryModule.deleteWord(request.options.id, request.options.translation);
+        sendResponse({ success: true });
+      } catch (err) {
+        sendResponse({ success: false });
+      }
+    })();
+  }
   return true;
 });
 
