@@ -20,6 +20,10 @@ class CurrentMeaning extends HTMLElement {
                 width: 100%;
                 height: 30px;
               }
+              ::selection {
+                background-color: #FF5E6B;
+                color: white;
+              }
               p {
                 margin: 0;
               }

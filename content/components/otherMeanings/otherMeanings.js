@@ -24,6 +24,10 @@ class OtherMeanings extends HTMLElement {
                   line-height: 1.5em;
                   border-radius: 5px;
                 }
+                ::selection {
+                  background-color: #FF5E6B;
+                  color: white;
+                }
                 .back {
                   cursor: pointer;
                   display: block;

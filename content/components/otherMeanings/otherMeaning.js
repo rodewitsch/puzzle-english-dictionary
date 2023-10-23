@@ -10,6 +10,10 @@ class OtherMeaning extends HTMLElement {
               :host{
                 font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
               }
+              ::selection {
+                background-color: #FF5E6B;
+                color: white;
+              }
             </style>
             <span>${this.getAttribute('translation')}</span>
         `;

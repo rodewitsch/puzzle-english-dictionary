@@ -12,6 +12,10 @@ class BaseWord extends HTMLElement {
                 font-size: 18px;
                 font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
               }
+              ::selection {
+                background-color: #FF5E6B;
+                color: white;
+              }
               p {
                 margin: 0;
               }

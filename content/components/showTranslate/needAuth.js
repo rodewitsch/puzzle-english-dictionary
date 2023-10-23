@@ -13,6 +13,10 @@ class NeedAuth extends HTMLElement {
                   margin-top: 20px;
                   text-align: center;
                 }
+                ::selection {
+                  background-color: #FF5E6B;
+                  color: white;
+                }
               </style>
               <div>Для добавления слов в словарь необходимо 
               <a href="https://puzzle-english.com/" target="blank">авторизоваться</a></div>

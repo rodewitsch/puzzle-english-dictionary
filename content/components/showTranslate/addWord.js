@@ -12,6 +12,10 @@ class AddWord extends HTMLElement {
                   display: block;
                   margin-top: 5px;
                 }
+                ::selection {
+                  background-color: transparent;
+                  color: white;
+                }
                 .button {
                   cursor: pointer;
                   padding: 0 20px;

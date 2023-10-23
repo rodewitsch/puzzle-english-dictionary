@@ -33,6 +33,10 @@ class PronunciationActor extends HTMLElement {
                   cursor: pointer;
                   justify-content: space-between;
                 }
+                ::selection {
+                  background-color: #FF5E6B;
+                  color: white;
+                }
                 .face {
                   width: 25px;
                   display: flex;

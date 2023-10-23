@@ -15,6 +15,10 @@ class DictionaryInfo extends HTMLElement {
                   font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
                   color: #777;
                 }
+                ::selection {
+                  background-color: #FF5E6B;
+                  color: white;
+                }
               </style>
               <p>В вашем словаре слов: ${ExtStore.translation.dictionaryWordsCount}</p>
           `;

@@ -16,6 +16,10 @@ class TranslatePanel extends HTMLElement {
                 padding: 15px 10px;
                 min-height: 230px;
               }
+              ::selection {
+                background-color: #FF5E6B;
+                color: white;
+              }
               .base-word-row {
                 display: flex;
                 justify-content: space-between;
