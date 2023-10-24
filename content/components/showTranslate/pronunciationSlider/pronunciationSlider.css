@@ -1,0 +1,12 @@
+:host {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+pronunciation-actor {
+  opacity: 0.5;
+}
+pronunciation-actor:hover,
+pronunciation-actor.active {
+  opacity: 1;
+}

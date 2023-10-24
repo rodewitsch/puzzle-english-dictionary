@@ -17,50 +17,23 @@ class PronunciationActor extends HTMLElement {
       });
     }
 
-    this.render = () => {
+    this.render = async () => {
       while (this.shadowRoot.lastChild) this.shadowRoot.removeChild(this.shadowRoot.lastChild);
       const TEMPLATE = document.createElement('template');
-      TEMPLATE.innerHTML = `
-            <style>
-                :host{
-                  height: 80px;
-                  width: 30px;
-                  margin: 5px 10px 5px 5px;
-                  opacity: 0.5;
-                  display: flex;
-                  flex-direction: column;
-                  align-items: center;
-                  cursor: pointer;
-                  justify-content: space-between;
-                }
-                ::selection {
-                  background-color: #FF5E6B;
-                  color: white;
-                }
-                .face {
-                  width: 25px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                }
-                .name {
-                  text-align: center;
-                  font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
-                  font-size: 13px;
-                  color: #777;
-                }
-            </style>
-        `;
-      Promise.all([
+      const [STYLE, FLAG_SVG, FACE_SVG] = await Promise.all([
+        CorePuzzleEnglishDictionaryModule.getTextAsset('/content/components/showTranslate/pronunciationActor/pronunciationActor.css'),
         CorePuzzleEnglishDictionaryModule.getTextAsset(`/assets/flags/${this.speakerInfo.flag}`),
         CorePuzzleEnglishDictionaryModule.getTextAsset(`/assets/faces/${this.speakerInfo.face}`)
-      ]).then(([FLAG_SVG, FACE_SVG]) => {
-        TEMPLATE.innerHTML += `<div class="flag">${FLAG_SVG}</div><div class="face">${FACE_SVG}</div><div class="name">${this.speakerInfo.name}</div>`;
-        this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
-      });
+      ]);
+      TEMPLATE.innerHTML = `
+        <style>${STYLE}</style>
+        <div class="flag">${FLAG_SVG}</div>
+        <div class="face">${FACE_SVG}</div>
+        <div class="name">${this.speakerInfo.name}</div>
+      `;
+      this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
       return true;
     }
-
   }
 
   connectedCallback() {

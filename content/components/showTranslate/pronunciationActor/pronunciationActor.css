@@ -1,0 +1,27 @@
+:host {
+  height: 80px;
+  width: 30px;
+  margin: 5px 10px 5px 5px;
+  opacity: 0.5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  justify-content: space-between;
+}
+::selection {
+  background-color: #ff5e6b;
+  color: white;
+}
+.face {
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.name {
+  text-align: center;
+  font-family: 'Open Sans', Arial, 'Lucida Grande', sans-serif;
+  font-size: 13px;
+  color: #777;
+}

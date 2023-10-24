@@ -3,20 +3,13 @@ class OtherMeaning extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
 
-    this.render = () => {
+    this.render = async () => {
       const TEMPLATE = document.createElement('template');
+      const STYLE = await CorePuzzleEnglishDictionaryModule.getTextAsset('/content/components/otherMeanings/otherMeaning/otherMeaning.css');
       TEMPLATE.innerHTML = `
-            <style>
-              :host{
-                font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
-              }
-              ::selection {
-                background-color: #FF5E6B;
-                color: white;
-              }
-            </style>
-            <span>${this.getAttribute('translation')}</span>
-        `;
+        <style>${STYLE}</style>
+        <span>${this.getAttribute('translation')}</span>
+      `;
       this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
       return true;
     }

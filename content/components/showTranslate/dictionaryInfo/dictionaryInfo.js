@@ -6,28 +6,17 @@ class DictionaryInfo extends HTMLElement {
       +(ExtStore.translation.dictionaryWordsCount ||
         (ExtStore.translation.html.match(/<span>В вашем словаре.*?(\d+).*?<\/span>/) || [])[1]);
 
-    this.render = () => {
+    this.render = async () => {
       const TEMPLATE = document.createElement('template');
+      const STYLE = await CorePuzzleEnglishDictionaryModule.getTextAsset('/content/components/showTranslate/dictionaryInfo/dictionaryInfo.css');
       TEMPLATE.innerHTML = `
-              <style>
-                :host{
-                  font-size: 15px;
-                  font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
-                  color: #777;
-                }
-                ::selection {
-                  background-color: #FF5E6B;
-                  color: white;
-                }
-              </style>
-              <p>В вашем словаре слов: ${ExtStore.translation.dictionaryWordsCount}</p>
-          `;
+        <style>${STYLE}</style>
+        <p>В вашем словаре слов: ${ExtStore.translation.dictionaryWordsCount}</p>
+      `;
       this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
       return true;
     }
   }
-
-
 
   connectedCallback() {
     if (!this.rendered) this.rendered = this.render();

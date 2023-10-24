@@ -8,29 +8,12 @@ class CurrentMeaning extends HTMLElement {
       ...ExtStore.translation.Word.parts_of_speech
     }[ExtStore.translation.Word.part_of_speech].description;
 
-    this.render = () => {
+    this.render = async () => {
       const TEMPLATE = document.createElement('template');
+      const STYLE = await CorePuzzleEnglishDictionaryModule.getTextAsset('/content/components/showTranslate/currentMeaning/currentMeaning.css');
       TEMPLATE.innerHTML = `
-            <style>
-              :host {
-                font-size: 13px;
-                font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
-                color: #777;
-                display: block;
-                width: 100%;
-                height: 30px;
-              }
-              ::selection {
-                background-color: #FF5E6B;
-                color: white;
-              }
-              p {
-                margin: 0;
-              }
-            </style>
-            <p>
-              <b>${this.currentMeaning}</b> <span>${this.partOfSpeech || ''}</span>
-            </p>
+            <style>${STYLE}</style>
+            <p><b>${this.currentMeaning}</b> <span>${this.partOfSpeech || ''}</span></p>
         `;
       this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
       return true;

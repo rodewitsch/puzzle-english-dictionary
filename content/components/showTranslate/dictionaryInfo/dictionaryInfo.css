@@ -1,0 +1,9 @@
+:host {
+  font-size: 15px;
+  font-family: 'Open Sans', Arial, 'Lucida Grande', sans-serif;
+  color: #777;
+}
+::selection {
+  background-color: #ff5e6b;
+  color: white;
+}

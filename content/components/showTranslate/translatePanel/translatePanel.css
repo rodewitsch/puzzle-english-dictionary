@@ -1,0 +1,55 @@
+:host {
+  display: block;
+  width: 360px;
+  padding: 15px 10px;
+  min-height: 230px;
+}
+::selection {
+  background-color: #ff5e6b;
+  color: white;
+}
+.base-word-row {
+  display: flex;
+  justify-content: space-between;
+  min-height: 50px;
+}
+.disabled {
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}
+.already-exists {
+  font-size: 15px;
+  font-family: 'Open Sans', Arial, 'Lucida Grande', sans-serif;
+  display: flex;
+  margin-top: 10px;
+  color: #74b071;
+  margin-right: 10px;
+  align-items: center;
+}
+.already-exists svg {
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
+}
+.button {
+  color: #818181;
+  font-size: 14px;
+  border-bottom: 1px dotted #818181;
+  cursor: pointer;
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+}
+.link {
+  color: #4594d1;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+}
+.link:hover {
+  text-decoration: none;
+}
+.additional-buttons {
+  margin-top: 10px;
+}
+.additional-buttons span {
+  margin-right: 10px;
+}

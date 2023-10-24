@@ -37,18 +37,18 @@
         "/content/components/puzzleEnglishDictionaryHost.js",
         "/content/components/initial/initialButton.js",
         "/content/components/initial/initialButtons.js",
-        "/content/components/showTranslate/translatePanel.js",
-        "/content/components/showTranslate/currentMeaning.js",
-        "/content/components/showTranslate/pronunciationButton.js",
-        "/content/components/showTranslate/pronunciationSlider.js",
-        "/content/components/showTranslate/pronunciationActor.js",
-        "/content/components/showTranslate/addWord.js",
-        "/content/components/showTranslate/needAuth.js",
-        "/content/components/showTranslate/baseWord.js",
-        "/content/components/showTranslate/noTranslation.js",
-        "/content/components/showTranslate/dictionaryInfo.js",
+        "/content/components/showTranslate/translatePanel/translatePanel.js",
+        "/content/components/showTranslate/currentMeaning/currentMeaning.js",
+        "/content/components/showTranslate/pronunciationButton/pronunciationButton.js",
+        "/content/components/showTranslate/pronunciationSlider/pronunciationSlider.js",
+        "/content/components/showTranslate/pronunciationActor/pronunciationActor.js",
+        "/content/components/showTranslate/addWord/addWord.js",
+        "/content/components/showTranslate/needAuth/needAuth.js",
+        "/content/components/showTranslate/baseWord/baseWord.js",
+        "/content/components/showTranslate/noTranslation/noTranslation.js",
+        "/content/components/showTranslate/dictionaryInfo/dictionaryInfo.js",
         "/content/components/otherMeanings/otherMeanings.js",
-        "/content/components/otherMeanings/otherMeaning.js"
+        "/content/components/otherMeanings/otherMeaning/otherMeaning.js"
       ]
     }
   ],
@@ -56,6 +56,6 @@
     "page": "/options/options.html",
     "open_in_tab": true
   },
-  "web_accessible_resources": ["/content/content.css", "/assets/*"],
+  "web_accessible_resources": ["/content/*", "/assets/*"],
   "permissions": ["contextMenus", "storage", "https://puzzle-english.com/*"]
 }
