@@ -1,8 +1,19 @@
+/**
+ * Custom element for adding a word to the dictionary.
+ * @element add-word
+ */
 class AddWord extends HTMLElement {
+  /**
+   * Creates an instance of AddWord.
+   */
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
 
+    /**
+     * Renders the add word button.
+     * @returns {Promise<boolean>} A promise that resolves to true when the add word button is rendered.
+     */
     this.render = async () => {
       const TEMPLATE = document.createElement('template');
       const STYLE = await CorePuzzleEnglishDictionaryModule.getTextAsset('/content/components/showTranslate/addWord/addWord.css');
@@ -18,8 +29,9 @@ class AddWord extends HTMLElement {
     }
   }
 
-
-
+  /**
+   * Called when the element is added to the document.
+   */
   connectedCallback() {
     this.addEventListener('click', async () => {
       await browser.runtime.sendMessage(

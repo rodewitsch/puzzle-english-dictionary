@@ -1,5 +1,5 @@
-:host{
-  font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
+:host {
+  font-family: 'Open Sans', Arial, 'Lucida Grande', sans-serif;
   display: block;
   padding: 15px 10px;
   width: 360px;
@@ -9,16 +9,19 @@
   line-height: 1.5em;
   border-radius: 5px;
 }
+
 ::selection {
-  background-color: #FF5E6B;
+  background-color: #ff5e6b;
   color: white;
 }
+
 .back {
   cursor: pointer;
   display: block;
   margin-bottom: 10px;
   font-weight: bold;
 }
+
 .meaning-phrase-header {
   background-color: white;
   padding: 15px 10px;
@@ -26,25 +29,30 @@
   margin-left: -10px;
   margin-right: -10px;
 }
+
 .meaning-header {
-font-size: 15px;
+  font-size: 15px;
 }
-ul{
+ul {
   list-style: none;
   padding-left: 20px;
 }
-li::before{
-  content: "–";
+
+li::before {
+  content: '–';
   position: absolute;
   left: 20px;
   line-height: 1.5;
 }
-.meanings-part{
+
+.meanings-part {
   text-transform: capitalize;
 }
-other-meaning{
+
+other-meaning {
   cursor: pointer;
 }
-other-meaning:hover{
+
+other-meaning:hover {
   color: #309cca;
 }

@@ -35,8 +35,8 @@
         "/content/store.js",
         "/content/content.js",
         "/content/components/puzzleEnglishDictionaryHost.js",
-        "/content/components/initial/initialButton.js",
-        "/content/components/initial/initialButtons.js",
+        "/content/components/initial/initialButton/initialButton.js",
+        "/content/components/initial/initialButtons/initialButtons.js",
         "/content/components/showTranslate/translatePanel/translatePanel.js",
         "/content/components/showTranslate/currentMeaning/currentMeaning.js",
         "/content/components/showTranslate/pronunciationButton/pronunciationButton.js",
@@ -56,6 +56,6 @@
     "page": "/options/options.html",
     "open_in_tab": true
   },
-  "web_accessible_resources": ["/content/*", "/assets/*"],
+  "web_accessible_resources": ["/content/**/*.css", "/assets/*"],
   "permissions": ["contextMenus", "storage", "https://puzzle-english.com/*"]
 }

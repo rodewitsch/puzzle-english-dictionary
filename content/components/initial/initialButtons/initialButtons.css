@@ -1,0 +1,10 @@
+:host{
+  display: flex;
+  padding-right: 5px;
+  padding-left: 3px;
+}
+
+.disabled {
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}

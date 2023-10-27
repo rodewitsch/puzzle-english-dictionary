@@ -1,9 +1,25 @@
+/**
+ * Custom element for displaying the translation panel.
+ * @element translate-panel
+ */
 class TranslatePanel extends HTMLElement {
+  /**
+   * Creates an instance of TranslatePanel.
+   */
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
+
+    /**
+     * The subscriptions to external events.
+     * @type {Array}
+     */
     this.subscriptions = [ExtStore.subscribe('translation', () => this.render())];
 
+    /**
+     * Renders the translation panel.
+     * @returns {Promise<boolean>} A promise that resolves to true when the translation panel is rendered.
+     */
     this.render = async () => {
       while (this.shadowRoot.lastChild) this.shadowRoot.removeChild(this.shadowRoot.lastChild);
       const TEMPLATE = document.createElement('template');
@@ -74,8 +90,8 @@ class TranslatePanel extends HTMLElement {
     }
 
     /**
-     * Check the existence of the selected word in the user's dictionary
-     * @returns {Boolean}
+     * Checks if the word exists in the user's vocabulary.
+     * @returns {boolean} True if the word exists in the user's vocabulary, false otherwise.
      */
     this.checkWordVocabularyExisting = () => {
       return !!ExtStore.translation.allAddedTranslations.find(
@@ -86,10 +102,16 @@ class TranslatePanel extends HTMLElement {
     }
   }
 
+  /**
+   * Called when the element is added to the document.
+   */
   connectedCallback() {
     if (!this.rendered) this.rendered = this.render();
   }
 
+  /**
+   * Called when the element is removed from the document.
+   */
   disconnectedCallback() {
     if (this.subscriptions && this.subscriptions.length) {
       this.subscriptions.forEach((subscription) => ExtStore.unsubscribe(subscription));

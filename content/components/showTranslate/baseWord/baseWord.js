@@ -1,8 +1,19 @@
+/**
+ * Custom element for displaying the base word and translation.
+ * @element base-word
+ */
 class BaseWord extends HTMLElement {
+  /**
+   * Creates an instance of BaseWord.
+   */
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
 
+    /**
+     * Renders the base word and translation.
+     * @returns {Promise<boolean>} A promise that resolves to true when the base word and translation are rendered.
+     */
     this.render = async () => {
       const TEMPLATE = document.createElement('template');
       const STYLE = await CorePuzzleEnglishDictionaryModule.getTextAsset('/content/components/showTranslate/baseWord/baseWord.css');
@@ -21,6 +32,9 @@ class BaseWord extends HTMLElement {
     }
   }
 
+  /**
+   * Called when the element is added to the document.
+   */
   connectedCallback() {
     if (!this.rendered) this.rendered = this.render();
   }

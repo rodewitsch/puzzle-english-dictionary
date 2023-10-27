@@ -1,10 +1,18 @@
+/**
+ * Custom element for the Puzzle English Dictionary host.
+ * @element puzzle-english-dictionary-host
+ */
 class PuzzleEnglishDictionaryHost extends HTMLElement {
+  /**
+   * Creates an instance of PuzzleEnglishDictionaryHost.
+   */
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
 
     /**
-     * Dispatch the event to check authorization
+     * Checks the authorization status.
+     * @returns {Promise<void>} A promise that resolves when the authorization status is checked.
      */
     this.checkAuth = async () => {
       const { auth } = await browser.runtime.sendMessage(
@@ -19,6 +27,10 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
       ExtStore.authorization = auth;
     }
 
+    /**
+     * Renders the host element.
+     * @returns {Promise<boolean>} A promise that resolves to true when the host element is rendered.
+     */
     this.render = async () => {
       const TEMPLATE = document.createElement('template');
       TEMPLATE.innerHTML += `
@@ -91,9 +103,9 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
      * Get selected word translations and change the view type
      */
     this.showTranslationsListener = async () => {
-     const response = await browser.runtime.sendMessage({ type: 'checkWord', options: { word: ExtStore.selectedWord } });
+      const response = await browser.runtime.sendMessage({ type: 'checkWord', options: { word: ExtStore.selectedWord } });
       ExtStore.translation = !response.Word.id ? null : response;
-        this.setAttribute('type', 'show-translation');
+      this.setAttribute('type', 'show-translation');
     }
 
     /**
@@ -114,6 +126,9 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
     if (!ExtStore.authorization) this.checkAuth();
   }
 
+  /**
+   * Called when the element is added to the document.
+   */
   connectedCallback() {
     if (!this.rendered) {
       this.render();
@@ -121,6 +136,9 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
     }
   }
 
+  /**
+   * Called when the element is removed from the document.
+   */
   disconnectedCallback() {
     ExtStore.cleanStore();
   }
