@@ -19,6 +19,9 @@ class PronunciationActor extends HTMLElement {
      * @property {string} name - The name of the speaker.
      */
     this.speakerInfo = CorePuzzleEnglishDictionaryModule.getSpeakerInfo(this.getAttribute('speaker'));
+    if (!this.speakerInfo) {
+      console.error('speaker not found', this.getAttribute('speaker'));
+    }
 
     /**
      * The actor number.
@@ -53,7 +56,6 @@ class PronunciationActor extends HTMLElement {
     this.render = async () => {
       while (this.shadowRoot.lastChild) this.shadowRoot.removeChild(this.shadowRoot.lastChild);
       const TEMPLATE = document.createElement('template');
-      if(!this.speakerInfo) return false;
       const [STYLE, FLAG_SVG, FACE_SVG] = await Promise.all([
         CorePuzzleEnglishDictionaryModule.getTextAsset('/content/components/showTranslate/pronunciationActor/pronunciationActor.css'),
         CorePuzzleEnglishDictionaryModule.getTextAsset(`/assets/flags/${this.speakerInfo.flag}`),

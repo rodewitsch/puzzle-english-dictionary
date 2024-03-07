@@ -248,6 +248,41 @@ const CorePuzzleEnglishDictionaryModule = (() => {
             face: 'steve.svg',
             audio: 'HughMcEnaney_UK'
           };
+        case 'vocalware_Paul_US':
+          return {
+            name: 'Paul',
+            flag: 'us.svg',
+            face: 'paul.svg',
+            audio: 'vocalware_Paul_US'
+          };
+        case 'vocalware_Charlotte_AU': 
+          return {
+            name: 'Charlotte',
+            flag: 'au.svg',
+            face: 'charlotte.svg',
+            audio: 'vocalware_Charlotte_AU'
+          }
+        case 'vocalware_Oliver_AU':
+          return {
+            name: 'Oliver',
+            flag: 'au.svg',
+            face: 'oliver.svg',
+            audio: 'vocalware_Oliver_AU'
+          }
+        case 'vocalware_Bridget_UK':
+          return {
+            name: 'Bridget',
+            flag: 'uk.svg',
+            face: 'bridget.svg',
+            audio: 'vocalware_Bridget_UK'
+          }
+        case 'vocalware_Kate_US':
+          return {
+            name: 'Kate',
+            flag: 'us.svg',
+            face: 'kate.svg',
+            audio: 'vocalware_Kate_US'
+          }
       }
     },
     delay: function (ms) {
