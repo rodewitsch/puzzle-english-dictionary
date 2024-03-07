@@ -4,6 +4,7 @@ const CorePuzzleEnglishDictionaryModule = (() => {
     domain: 'puzzle-english.com',
     partner_id: 2676311,
     time: new Date().getTime(),
+    assetsCache: {},
     /**
      * Check words and return object for addWords function
      * @param {string} cookies - auth cookies
@@ -106,7 +107,25 @@ const CorePuzzleEnglishDictionaryModule = (() => {
         external: 1
       };
       const RAW_RESPONSE = await fetch(`${this.url}?${new URLSearchParams(PARAMS).toString()}`);
-      return await RAW_RESPONSE.json();
+      return await RAW_RESPONSE.text();
+    },
+    deleteWord: async function (id, translation) {
+      const PARAMS = {
+        ajax_action: 'ajax_cards_check_for_deleteUserWord',
+        id: id,
+        translation: translation,
+      };
+      const RAW_RESPONSE = await fetch(`${this.url}?${new URLSearchParams(PARAMS).toString()}`);
+      const CHECK_RESPONSE = await RAW_RESPONSE.json();
+      if (CHECK_RESPONSE.id) {
+        const PARAMS = {
+          ajax_action: 'ajax_cards_deleteUserWord',
+          id: CHECK_RESPONSE.id,
+          translation: translation,
+        };
+        const RAW_RESPONSE = await fetch(`${this.url}?${new URLSearchParams(PARAMS).toString()}`);
+        return await RAW_RESPONSE.text();
+      }
     },
     getSpeakerInfo: function (name) {
       switch (name) {
@@ -232,21 +251,22 @@ const CorePuzzleEnglishDictionaryModule = (() => {
       }
     },
     playAudio: function (speaker, word) {
-      const iframe = document.createElement('iframe');
-      iframe.allow = 'autoplay';
-      iframe.src = `https://static.puzzle-english.com/words/${speaker}/${word}.mp3?${this.time}`;
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-      iframe.onload = () => {
-        setInterval(() => {
-          iframe.remove();
-        }, 1000);
-      };
+      new Audio(`https://static.puzzle-english.com/words/${speaker}/${word}.mp3?${this.time}`).play();
+    },
+    delay: function (ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
     },
     getTextAsset: async function (path) {
+      if (this.assetsCache[path]) {
+        while(this.assetsCache[path].status === 'loading') await this.delay(5);
+        return this.assetsCache[path].value;
+      }
+      this.assetsCache[path] = { value: null, status: 'loading' };
       const URL = browser.runtime.getURL(path);
       const RAW = await fetch(URL);
-      return await RAW.text();
+      const RESPONSE = await RAW.text();
+      this.assetsCache[path] = { value: RESPONSE, status: 'loaded' };
+      return RESPONSE;
     },
     globalSearch: async function (value) {
       const formData = new FormData();

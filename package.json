@@ -1,6 +1,6 @@
 {
   "name": "puzzleenglishdictionary",
-  "version": "6.0",
+  "version": "6.6",
   "description": "Chromium/Firefox extension that allows you to add words to the Puzzle English dictionary.",
   "main": "background.js",
   "scripts": {

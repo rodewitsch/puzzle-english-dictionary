@@ -1,0 +1,27 @@
+:host{
+  font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
+  display: block;
+  margin-top: 5px;
+}
+::selection {
+  background-color: transparent;
+  color: white;
+}
+.button {
+  cursor: pointer;
+  padding: 0 20px;
+  width: 100px;
+  height: 40px;
+  border-radius: 3px;
+  color: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 15px;
+}
+.button .plus {
+  font-size: 30px;
+}
+.success{
+  background-color: #85d360;
+}

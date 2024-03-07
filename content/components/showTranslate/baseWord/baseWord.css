@@ -1,0 +1,20 @@
+:host {
+  color: #777;
+  font-size: 18px;
+  font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
+}
+::selection {
+  background-color: #FF5E6B;
+  color: white;
+}
+p {
+  margin: 0;
+}
+.other-meanings {
+  margin: 0;
+  color: #45a7dd;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  font-size: 13px;
+  cursor: pointer;
+}

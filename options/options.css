@@ -6,6 +6,11 @@ body {
   font-family: arial, sans-serif;
 }
 
+::selection {
+  background-color: #FF5E6B;
+  color: white;
+}
+
 header {
   position: relative;
   display: flex;

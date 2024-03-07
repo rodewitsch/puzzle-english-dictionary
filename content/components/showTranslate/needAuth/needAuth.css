@@ -1,0 +1,10 @@
+:host{
+  font-family: "Open Sans",Arial,"Lucida Grande",sans-serif;
+  display: block;
+  margin-top: 20px;
+  text-align: center;
+}
+::selection {
+  background-color: #FF5E6B;
+  color: white;
+}

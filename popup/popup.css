@@ -15,6 +15,12 @@
     background: #cdcccc;
 }
 
+::selection {
+  background-color: #FF5E6B;
+  color: white;
+}
+
+
 body {
     width: 360px;
     background: #ffffff;

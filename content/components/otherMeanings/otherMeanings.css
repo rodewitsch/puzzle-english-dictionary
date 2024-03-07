@@ -1,0 +1,58 @@
+:host {
+  font-family: 'Open Sans', Arial, 'Lucida Grande', sans-serif;
+  display: block;
+  padding: 15px 10px;
+  width: 360px;
+  background-color: #f7f8f8;
+  color: #777;
+  font-size: 13px;
+  line-height: 1.5em;
+  border-radius: 5px;
+}
+
+::selection {
+  background-color: #ff5e6b;
+  color: white;
+}
+
+.back {
+  cursor: pointer;
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.meaning-phrase-header {
+  background-color: white;
+  padding: 15px 10px;
+  font-size: 15px;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.meaning-header {
+  font-size: 15px;
+}
+ul {
+  list-style: none;
+  padding-left: 20px;
+}
+
+li::before {
+  content: '–';
+  position: absolute;
+  left: 20px;
+  line-height: 1.5;
+}
+
+.meanings-part {
+  text-transform: capitalize;
+}
+
+other-meaning {
+  cursor: pointer;
+}
+
+other-meaning:hover {
+  color: #309cca;
+}

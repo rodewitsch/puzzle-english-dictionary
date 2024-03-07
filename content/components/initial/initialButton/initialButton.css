@@ -1,0 +1,11 @@
+:host{
+  padding: 1px;
+  width: 17px;
+  display: block;
+}
+
+img {
+  height: 25px;
+  cursor: pointer;
+  margin-bottom: -4px;
+}
