@@ -20,7 +20,7 @@ class InitialButton extends HTMLElement {
       const STYLE = await CorePuzzleEnglishDictionaryModule.getTextAsset('content/components/initial/initialButton/initialButton.css');
       TEMPLATE.innerHTML = `
         <style>${STYLE}</style>
-        <img src="${browser.extension.getURL(`/assets/images/icons/${this.type}.png`)}"></img>
+        <img src="${chrome.runtime.getURL(`/assets/images/icons/${this.type}.png`)}"></img>
       `;
       this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
       return true;

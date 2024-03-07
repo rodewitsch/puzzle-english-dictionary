@@ -40,7 +40,7 @@ class PronunciationActor extends HTMLElement {
      * Plays the word using the speaker's audio file.
      */
     this.playWord = () => {
-      browser.runtime.sendMessage({
+      chrome.runtime.sendMessage({
         type: 'playWord',
         options: { speaker: this.speakerInfo.audio, word: ExtStore.translation.Word.base_word }
       });
@@ -53,6 +53,7 @@ class PronunciationActor extends HTMLElement {
     this.render = async () => {
       while (this.shadowRoot.lastChild) this.shadowRoot.removeChild(this.shadowRoot.lastChild);
       const TEMPLATE = document.createElement('template');
+      if(!this.speakerInfo) return false;
       const [STYLE, FLAG_SVG, FACE_SVG] = await Promise.all([
         CorePuzzleEnglishDictionaryModule.getTextAsset('/content/components/showTranslate/pronunciationActor/pronunciationActor.css'),
         CorePuzzleEnglishDictionaryModule.getTextAsset(`/assets/flags/${this.speakerInfo.flag}`),

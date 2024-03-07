@@ -15,7 +15,7 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
      * @returns {Promise<void>} A promise that resolves when the authorization status is checked.
      */
     this.checkAuth = async () => {
-      const { auth } = await browser.runtime.sendMessage(
+      const { auth } = await chrome.runtime.sendMessage(
         {
           type: 'checkAuth',
           options: {
@@ -95,7 +95,7 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
      * Simple adding a selected word to a dictionary
      */
     this.addWordListener = async () => {
-      await browser.runtime.sendMessage({ type: 'simpleAddWord', options: { word: ExtStore.selectedWord } });
+      await chrome.runtime.sendMessage({ type: 'simpleAddWord', options: { word: ExtStore.selectedWord } });
       this.remove()
     }
 
@@ -103,7 +103,7 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
      * Get selected word translations and change the view type
      */
     this.showTranslationsListener = async () => {
-      const response = await browser.runtime.sendMessage({ type: 'checkWord', options: { word: ExtStore.selectedWord } });
+      const response = await chrome.runtime.sendMessage({ type: 'checkWord', options: { word: ExtStore.selectedWord } });
       ExtStore.translation = !response.Word.id ? null : response;
       this.setAttribute('type', 'show-translation');
     }

@@ -16,15 +16,9 @@
     "url": "https://github.com/rodewitsch/PuzzleEnglishDictionary/issues"
   },
   "homepage": "https://github.com/rodewitsch/PuzzleEnglishDictionary#readme",
-  "dependencies": {
-    "@webcomponents/webcomponentsjs": "^2.5.0",
-    "webextension-polyfill": "^0.8.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "eslint": "^7.27.0"
   },
-  "bundledDependencies": [
-    "@webcomponents/webcomponentsjs",
-    "webextension-polyfill"
-  ]
+  "bundledDependencies": []
 }

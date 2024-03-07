@@ -250,9 +250,6 @@ const CorePuzzleEnglishDictionaryModule = (() => {
           };
       }
     },
-    playAudio: function (speaker, word) {
-      new Audio(`https://static.puzzle-english.com/words/${speaker}/${word}.mp3?${this.time}`).play();
-    },
     delay: function (ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
@@ -262,7 +259,7 @@ const CorePuzzleEnglishDictionaryModule = (() => {
         return this.assetsCache[path].value;
       }
       this.assetsCache[path] = { value: null, status: 'loading' };
-      const URL = browser.runtime.getURL(path);
+      const URL = chrome.runtime.getURL(path);
       const RAW = await fetch(URL);
       const RESPONSE = await RAW.text();
       this.assetsCache[path] = { value: RESPONSE, status: 'loaded' };

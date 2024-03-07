@@ -1,19 +1,18 @@
 // eslint-disable-next-line no-undef
 importScripts("node_modules/webextension-polyfill/dist/browser-polyfill.js", "core.js");
 
-browser.contextMenus.removeAll().then(() => {
-  browser.contextMenus.create({
-    title: "Добавить '%s' в словарь",
-    id: 'puzzlecontextmenu',
-    contexts: ['selection'],
-    onclick: async (info) => addWord(info.selectionText),
-    visible: true
-  });
+chrome.contextMenus.removeAll()
+chrome.contextMenus.create({
+  title: "Добавить '%s' в словарь",
+  id: 'puzzlecontextmenu',
+  contexts: ['selection'],
+  visible: true
 });
+chrome.contextMenus.onClicked.addListener((info) => addWord(info.selectionText));
 
 async function syncConfig() {
-  const items = (await browser.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu']) || {})
-  await browser.storage.sync.set(
+  const items = (await chrome.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu']) || {})
+  await chrome.storage.sync.set(
     {
       bubble: items.bubble === undefined ? true : items.bubble,
       fastAdd: items.fastAdd === undefined ? true : items.fastAdd,
@@ -22,13 +21,33 @@ async function syncConfig() {
       contextMenu: items.contextMenu === undefined ? true : items.contextMenu
     }
   );
-  const { contextMenu } = await browser.storage.sync.get(['contextMenu']);
-  browser.contextMenus.update('puzzlecontextmenu', { visible: !!contextMenu });
+  const { contextMenu } = await chrome.storage.sync.get(['contextMenu']);
+  chrome.contextMenus.update('puzzlecontextmenu', { visible: !!contextMenu });
+}
+
+/**
+ * Plays audio files from extension service workers
+ * @param {string} source - path of the audio file
+ * @param {number} volume - volume of the playback
+ */
+async function playSound(source = 'default.wav', volume = 1) {
+  await createOffscreen();
+  await chrome.runtime.sendMessage({ type: 'play', play: { source, volume }, offscreen: true });
+}
+
+// Create the offscreen document if it doesn't already exist
+async function createOffscreen() {
+  if (await chrome.offscreen.hasDocument()) return;
+  await chrome.offscreen.createDocument({
+    url: 'offscreen/offscreen.html',
+    reasons: ['AUDIO_PLAYBACK'],
+    justification: 'testing' // details for using the API
+  });
 }
 
 syncConfig();
 
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type == 'changeOptions') syncConfig();
   if (request.type == 'simpleAddWord' && request.options && request.options.word) {
     (async () => {
@@ -46,22 +65,22 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     (async () => {
       try {
         const RESPONSE = await CorePuzzleEnglishDictionaryModule.addWordBaloon(request.options);
-        browser.browserAction.setBadgeBackgroundColor({ color: '#0f6e00' });
-        browser.browserAction.setBadgeText({ text: '+1' });
+        chrome.action.setBadgeBackgroundColor({ color: '#0f6e00' });
+        chrome.action.setBadgeText({ text: '+1' });
         sendResponse(RESPONSE);
       }
       catch (err) {
-        browser.browserAction.setBadgeBackgroundColor({ color: '#a60b00' });
-        browser.browserAction.setBadgeText({ text: '0' });
+        chrome.action.setBadgeBackgroundColor({ color: '#a60b00' });
+        chrome.action.setBadgeText({ text: '0' });
       }
       finally {
-        setTimeout(() => browser.browserAction.setBadgeText({ text: '' }), 1000);
+        setTimeout(() => chrome.action.setBadgeText({ text: '' }), 1000);
       }
     })();
   }
   if (request.type == 'playWord' && request.options) {
     (async () => {
-      CorePuzzleEnglishDictionaryModule.playAudio(request.options.speaker, request.options.word);
+      playSound(`https://static.puzzle-english.com/words/${request.options.speaker}/${request.options.word}.mp3?${this.time}`)
     })();
   }
   if (request.type == 'checkAuth') {
@@ -74,7 +93,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     })();
   }
-  if(request.type == 'deleteWord') {
+  if (request.type == 'deleteWord') {
     (async () => {
       try {
         await CorePuzzleEnglishDictionaryModule.deleteWord(request.options.id, request.options.translation);
@@ -91,18 +110,18 @@ async function addWord(word) {
   try {
     const PREVIEW_OBJECT = await CorePuzzleEnglishDictionaryModule.checkWords(word);
     await CorePuzzleEnglishDictionaryModule.addWords(PREVIEW_OBJECT.previewWords);
-    browser.browserAction.setBadgeBackgroundColor({ color: '#0f6e00' });
-    browser.browserAction.setBadgeText({ text: '+1' });
+    chrome.action.setBadgeBackgroundColor({ color: '#0f6e00' });
+    chrome.action.setBadgeText({ text: '+1' });
   }
   catch (err) {
     if (err === 'Authentication required') {
       let result = confirm('Вы не авторизованы на сайте Puzzle English. Перейти к авторизации?');
-      if (result) browser.tabs.create({ url: 'https://puzzle-english.com' });
+      if (result) chrome.tabs.create({ url: 'https://puzzle-english.com' });
     }
-    browser.browserAction.setBadgeBackgroundColor({ color: '#a60b00' });
-    browser.browserAction.setBadgeText({ text: '0' });
+    chrome.action.setBadgeBackgroundColor({ color: '#a60b00' });
+    chrome.action.setBadgeText({ text: '0' });
   }
   finally {
-    setTimeout(() => browser.browserAction.setBadgeText({ text: '' }), 1000);
+    setTimeout(() => chrome.action.setBadgeText({ text: '' }), 1000);
   }
 }

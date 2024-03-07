@@ -11,10 +11,10 @@ document.onmousedown = (downEvent) => {
     const SELECTION = CorePuzzleEnglishDictionaryModule.getSelected().toString();
     document.querySelectorAll('puzzle-english-dictionary-host').forEach((popup) => popup.remove());
     if (!SELECTION) return;
-    const items = await browser.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu']);
+    const items = await chrome.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu']);
     if (items.bubble === undefined) {
       items.bubble = true;
-      await browser.storage.sync.set(
+      await chrome.storage.sync.set(
         {
           bubble: true,
           fastAdd: items.fastAdd === undefined ? true : items.fastAdd,

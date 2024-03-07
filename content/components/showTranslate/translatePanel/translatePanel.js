@@ -67,7 +67,7 @@ class TranslatePanel extends HTMLElement {
       const CANCEL_BUTTON = this.shadowRoot.querySelector('.additional-buttons .button');
       if (!CANCEL_BUTTON) return true;
       CANCEL_BUTTON.addEventListener('click', async () => {
-        await browser.runtime.sendMessage(
+        await chrome.runtime.sendMessage(
           {
             type: 'deleteWord',
             options: {

@@ -3,15 +3,9 @@
   "name": "Puzzle English Dictionary (Unofficial)",
   "description": "Неофициальное расширение для добавления слов в словарь Puzzle English",
   "version": "6.6",
-  "browser_action": {
-    "default_icon": "/assets/images/icons/icon128.png",
-    "default_popup": "/popup/popup.html"
-  },
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "{9279b9ec-4e5b-4b32-bdd5-c1d7e6da0a1f}",
-      "strict_min_version": "59.0"
-    }
+  "action": {
+    "default_popup": "/popup/popup.html",
+    "default_icon": "/assets/images/icons/icon128.png"
   },
   "icons": {
     "16": "/assets/images/icons/icon16.png",
@@ -28,7 +22,6 @@
       ],
       "js": [
         "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
-        "node_modules/webextension-polyfill/dist/browser-polyfill.js",
         "core.js",
         "/content/store.js",
         "/content/content.js",
@@ -53,7 +46,10 @@
   "options_page": "/options/options.html",
   "web_accessible_resources": [
     {
-      "resources": ["/content/**/*.css", "/assets/*"],
+      "resources": [
+        "/content/**/*.css",
+        "/assets/*"
+      ],
       "matches": [
         "<all_urls>"
       ]
@@ -61,6 +57,7 @@
   ],
   "permissions": [
     "contextMenus",
-    "storage"
+    "storage",
+    "offscreen"
   ]
 }

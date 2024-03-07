@@ -16,7 +16,7 @@ class InitialButtons extends HTMLElement {
      * @returns {Promise<boolean>} A promise that resolves to true when the buttons are rendered.
      */
     this.render = async () => {
-      const { fastAdd, showTranslate, closeButton } = await browser.storage.sync.get(['fastAdd', 'showTranslate', 'closeButton']);
+      const { fastAdd, showTranslate, closeButton } = await chrome.storage.sync.get(['fastAdd', 'showTranslate', 'closeButton']);
       const TEMPLATE = document.createElement('template');
       const STYLE = await CorePuzzleEnglishDictionaryModule.getTextAsset('content/components/initial/initialButtons/initialButtons.css');
       TEMPLATE.innerHTML = `<style>${STYLE}</style>`;
