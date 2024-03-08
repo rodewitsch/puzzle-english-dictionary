@@ -1,24 +1,25 @@
 {
   "name": "puzzleenglishdictionary",
-  "version": "6.6",
+  "version": "7.0",
   "description": "Chromium/Firefox extension that allows you to add words to the Puzzle English dictionary.",
   "main": "background.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rodewitsch/PuzzleEnglishDictionary.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Rodevich Dmitry",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/rodewitsch/PuzzleEnglishDictionary/issues"
   },
   "homepage": "https://github.com/rodewitsch/PuzzleEnglishDictionary#readme",
-  "dependencies": {},
-  "devDependencies": {
-    "eslint": "^7.27.0"
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^2.8.0"
   },
-  "bundledDependencies": []
+  "devDependencies": {
+    "eslint": "^8.57.0"
+  },
+  "bundledDependencies": [
+    "@webcomponents/webcomponentsjs"
+  ]
 }
