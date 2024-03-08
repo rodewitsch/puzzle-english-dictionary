@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-undef
-importScripts("node_modules/webextension-polyfill/dist/browser-polyfill.js", "core.js");
+importScripts("core.js");
 
 chrome.contextMenus.removeAll()
 chrome.contextMenus.create({
@@ -28,11 +28,16 @@ async function syncConfig() {
 /**
  * Plays audio files from extension service workers
  * @param {string} source - path of the audio file
- * @param {number} volume - volume of the playback
+ * @param {object} options - playback options
+ * @param {number} options.volume - volume level
+ * @param {number} options.speed - playback speed
  */
-async function playSound(source = 'default.wav', volume = 1) {
+async function playSound(source = 'default.wav', options) {
   await createOffscreen();
-  await chrome.runtime.sendMessage({ type: 'play', play: { source, volume }, offscreen: true });
+  if (!options) options = {};
+  if (options.volume === undefined) options.volume = 1;
+  if (options.speed === undefined) options.speed = 1;
+  await chrome.runtime.sendMessage({ type: 'play', play: { source, volume: options.volume, speed: options.speed }, offscreen: true });
 }
 
 // Create the offscreen document if it doesn't already exist
@@ -80,7 +85,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
   if (request.type == 'playWord' && request.options) {
     (async () => {
-      playSound(`https://static.puzzle-english.com/words/${request.options.speaker}/${request.options.word}.mp3?${this.time}`)
+      playSound(`https://static.puzzle-english.com/words/${request.options.speaker}/${request.options.word}.mp3?${this.time}`, { speed: request.options.speed })
     })();
   }
   if (request.type == 'checkAuth') {

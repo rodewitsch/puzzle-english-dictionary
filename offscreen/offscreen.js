@@ -18,14 +18,16 @@ function playAudio(play) {
   const currSource = audio?.src?.split("/") || [];
   const currentSource = currSource.pop();
 
-  const { source, volume } = play;
+  const { source, volume, speed } = play;
   const file = source || "sound.mp3";
 
   if (audio.paused && currentSource === file) {
     audio.play();
   } else {
+    console.log("playing", source, volume, speed);
     audio.src = file;
     audio.volume = volume;
+    audio.playbackRate = speed;
 
     audio.play();
   }

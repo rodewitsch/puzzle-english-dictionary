@@ -34,7 +34,10 @@ class TranslatePanel extends HTMLElement {
       TEMPLATE.innerHTML += `
         <div class="base-word-row">
           <base-word></base-word>
-          <pronunciation-button></pronunciation-button>
+          <div style="width: 100px">
+            <pronunciation-button type="slow"></pronunciation-button>
+            <pronunciation-button></pronunciation-button>
+          </div>
         </div>
         <pronunciation-slider></pronunciation-slider>
       `;

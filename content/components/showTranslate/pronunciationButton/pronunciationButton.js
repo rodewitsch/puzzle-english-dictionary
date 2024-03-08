@@ -10,6 +10,7 @@ class PronunciationButton extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
 
+
     /**
      * Renders the pronunciation button.
      * @returns {Promise<boolean>} A promise that resolves to true when the pronunciation button is rendered.
@@ -19,7 +20,9 @@ class PronunciationButton extends HTMLElement {
 
       const [STYLE, SVG] = await Promise.all([
         CorePuzzleEnglishDictionaryModule.getTextAsset(`/content/components/showTranslate/pronunciationButton/pronunciationButton.css`),
-        CorePuzzleEnglishDictionaryModule.getTextAsset(`/assets/audio-button.svg`),
+        this.getAttribute('type') === 'slow'
+          ? CorePuzzleEnglishDictionaryModule.getTextAsset(`/assets/slow-audio-button.svg`)
+          : CorePuzzleEnglishDictionaryModule.getTextAsset(`/assets/audio-button.svg`),
       ]);
 
       TEMPLATE.innerHTML = `
@@ -41,7 +44,13 @@ class PronunciationButton extends HTMLElement {
      */
     this.addEventListener('click', () => {
       const speakers = ExtStore.translation.word_speakers.slice(0, 8);
-      ExtStore.currentSpeaker = ExtStore.currentSpeaker === speakers.length - 1 ? 0 : ExtStore.currentSpeaker + 1;
+      ExtStore.currentSpeakerIndex = ExtStore.currentSpeakerIndex === speakers.length - 1 ? 0 : ExtStore.currentSpeakerIndex + 1;
+      const currentSpeaker = ExtStore.speakers[ExtStore.currentSpeakerIndex];
+      this.speakerInfo = CorePuzzleEnglishDictionaryModule.getSpeakerInfo(currentSpeaker);
+      chrome.runtime.sendMessage({
+        type: 'playWord',
+        options: { speaker: this.speakerInfo.audio, word: ExtStore.translation.Word.base_word, speed: this.getAttribute('type') === 'slow' ? 0.5 : 1 }
+      });
     });
     if (!this.rendered) this.rendered = this.render();
   }

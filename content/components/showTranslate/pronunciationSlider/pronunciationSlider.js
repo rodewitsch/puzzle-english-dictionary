@@ -15,13 +15,14 @@ class PronunciationSlider extends HTMLElement {
      * @type {Array}
      */
     this.speakers = ExtStore.translation.word_speakers.slice(0, 8);
+    ExtStore.speakers = this.speakers;
 
     /**
      * The subscriptions to external events.
      * @type {Array}
      */
     this.subscriptions = [
-      ExtStore.subscribe('currentSpeaker', (number) => {
+      ExtStore.subscribe('currentSpeakerIndex', (number) => {
         const ACTORS = this.shadowRoot.querySelectorAll('pronunciation-actor');
         ACTORS.forEach((actor) => actor.classList.remove('active'));
         ACTORS[number].classList.add('active');

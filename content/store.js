@@ -14,8 +14,12 @@ class Store {
         value: null,
         subscriptions: new Map()
       },
-      currentSpeaker: {
+      currentSpeakerIndex: {
         value: -1,
+        subscriptions: new Map()
+      },
+      speakers: {
+        value: [],
         subscriptions: new Map()
       }
     };
@@ -48,13 +52,22 @@ class Store {
     this._executeSubscriptions('translation', value);
   }
 
-  get currentSpeaker() {
-    return this._store.currentSpeaker.value;
+  set speakers(value) {
+    this._store.speakers.value = value;
+    this._executeSubscriptions('speakers', value);
   }
 
-  set currentSpeaker(value) {
-    this._store.currentSpeaker.value = value;
-    this._executeSubscriptions('currentSpeaker', value);
+  get speakers() {
+    return this._store.speakers.value;
+  }
+
+  get currentSpeakerIndex() {
+    return this._store.currentSpeakerIndex.value;
+  }
+
+  set currentSpeakerIndex(value) {
+    this._store.currentSpeakerIndex.value = value;
+    this._executeSubscriptions('currentSpeakerIndex', value);
   }
 
   _executeSubscriptions(key, value) {
@@ -77,8 +90,12 @@ class Store {
         value: null,
         subscriptions: new Map()
       },
-      currentSpeaker: {
+      currentSpeakerIndex: {
         value: -1,
+        subscriptions: new Map()
+      },
+      speakers: {
+        value: [],
         subscriptions: new Map()
       }
     };
@@ -88,10 +105,10 @@ class Store {
     if (!this._store[key]) throw new Error(`Cannot subscribe. Key "${key}" is not registered`);
     const listenerIdentifier = Symbol();
     this._store[key].subscriptions.set(listenerIdentifier, listener);
-    return {key, listenerIdentifier};
+    return { key, listenerIdentifier };
   }
 
-  unsubscribe({key, listenerIdentifier}) {
+  unsubscribe({ key, listenerIdentifier }) {
     if (!this._store[key]) throw new Error(`Cannot subscribe. Key "${key}" is not registered`);
     this._store[key].subscriptions.delete(listenerIdentifier);
   }

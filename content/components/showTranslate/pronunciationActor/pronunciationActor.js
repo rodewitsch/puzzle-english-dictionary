@@ -30,22 +30,12 @@ class PronunciationActor extends HTMLElement {
     this.actorNumber = this.getAttribute('actorNumber');
 
     /**
-     * The subscriptions to external events.
-     * @type {Array}
-     */
-    this.subscriptions = [
-      ExtStore.subscribe('currentSpeaker', (number) => {
-        if (number === +this.actorNumber) this.playWord();
-      })
-    ];
-
-    /**
      * Plays the word using the speaker's audio file.
      */
     this.playWord = () => {
       chrome.runtime.sendMessage({
         type: 'playWord',
-        options: { speaker: this.speakerInfo.audio, word: ExtStore.translation.Word.base_word }
+        options: { speaker: this.speakerInfo.audio, word: ExtStore.translation.Word.base_word, speed: 1 }
       });
     }
 
@@ -76,17 +66,11 @@ class PronunciationActor extends HTMLElement {
    * Called when the element is added to the document.
    */
   connectedCallback() {
-    this.addEventListener('click', () => (ExtStore.currentSpeaker = +this.actorNumber));
+    this.addEventListener('click', () => {
+      ExtStore.currentSpeakerIndex = +this.actorNumber;
+      this.playWord();
+    });
     if (!this.rendered) this.rendered = this.render();
-  }
-
-  /**
-   * Called when the element is removed from the document.
-   */
-  disconnectedCallback() {
-    if (this.subscriptions && this.subscriptions.length) {
-      this.subscriptions.forEach((subscription) => ExtStore.unsubscribe(subscription));
-    }
   }
 }
 
