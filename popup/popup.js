@@ -65,10 +65,10 @@ document.addEventListener(
     }, 300);
 
     OPTIONS_BUTTON.onclick = () => {
-      if (browser.runtime.openOptionsPage) {
-        browser.runtime.openOptionsPage();
+      if (chrome.runtime.openOptionsPage) {
+        chrome.runtime.openOptionsPage();
       } else {
-        window.open(browser.runtime.getURL("options.html"));
+        window.open(chrome.runtime.getURL("options.html"));
       }
     };
 
@@ -90,7 +90,7 @@ document.addEventListener(
 
     // go to site handler
     GO_TO_SITE_BUTTON.onclick = () =>
-      browser.tabs.create({ url: "https://puzzle-english.com" });
+      chrome.tabs.create({ url: "https://puzzle-english.com" });
 
     // send words
     SUBMIT_BUTTON.onclick = async (event) => {
