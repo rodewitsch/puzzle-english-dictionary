@@ -37,6 +37,7 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
         <style>
           :host {
             all: initial;
+            visibility: visible !important;
             position: absolute;
             left: ${this.calculatePositionX()}px; 
             top: ${this.getAttribute('position-y')}px; 
