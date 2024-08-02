@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * Saves options to browser.storage
    */
   async function save_options() {
-    await browser.storage.sync.set(
+    await chrome.storage.sync.set(
       {
         bubble: bubbleGlobalOption.checked,
         fastAdd: fastAddOption.checked,
@@ -27,14 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
         contextMenu: contextMenuOption.checked
       }
     );
-    browser.runtime.sendMessage({ type: 'changeOptions' });
+    chrome.runtime.sendMessage({ type: 'changeOptions' });
   }
 
   /**
-   * Restores select box and checkbox state using the preferences stored in browser.storage.
+   * Restores select box and checkbox state using the preferences stored in chrome.storage.
    */
   async function restore_options() {
-    const items = await browser.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu']);
+    const items = await chrome.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu']);
     bubbleGlobalOption.checked = items.bubble;
     fastAddOption.checked = items.fastAdd;
     showTranslateOption.checked = items.showTranslate;
