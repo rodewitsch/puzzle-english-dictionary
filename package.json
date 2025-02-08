@@ -8,6 +8,14 @@
     "url": "git+https://github.com/rodewitsch/PuzzleEnglishDictionary.git"
   },
   "author": "Rodevich Dmitry",
+  "keywords": [
+    "puzzle",
+    "english",
+    "dictionary",
+    "extension",
+    "chrome",
+    "puzzle-english"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/rodewitsch/PuzzleEnglishDictionary/issues"
@@ -17,7 +25,10 @@
     "@webcomponents/webcomponentsjs": "^2.8.0"
   },
   "devDependencies": {
-    "eslint": "^8.57.0"
+    "@eslint/js": "^9.19.0",
+    "globals": "^15.14.0",
+    "eslint": "^8.57.0",
+    "standard-version": "^9.5.0"
   },
   "bundledDependencies": [
     "@webcomponents/webcomponentsjs"
