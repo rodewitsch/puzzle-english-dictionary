@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-redeclare, no-unused-vars
 const CorePuzzleEnglishDictionaryModule = (() => {
   return {
     url: 'https://puzzle-english.com',
