@@ -1,6 +1,14 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [7.6.0](https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/v7.5.0...v7.6.0) (2025-02-22)
+
+* reduce extension size
+
 # [7.5.0](https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/v7.4.0...v7.5.0) (2025-01-19)
 
-
+* update docs
 
 # [7.4.0](https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/v7.3.0...v7.4.0) (2024-08-02)
 
@@ -140,6 +148,3 @@
 
 
 # 1.1.0 (2020-08-31)
-
-
-
