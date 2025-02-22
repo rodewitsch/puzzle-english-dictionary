@@ -21,7 +21,7 @@
         "<all_urls>"
       ],
       "js": [
-        "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
+        "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
         "core.js",
         "/content/store.js",
         "/content/content.js",

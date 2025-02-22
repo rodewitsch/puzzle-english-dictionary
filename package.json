@@ -22,15 +22,15 @@
   },
   "homepage": "https://github.com/rodewitsch/PuzzleEnglishDictionary#readme",
   "dependencies": {
-    "@webcomponents/webcomponentsjs": "^2.8.0"
+    "@webcomponents/custom-elements": "^1.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
-    "globals": "^15.14.0",
     "eslint": "^8.57.0",
+    "globals": "^15.14.0",
     "standard-version": "^9.5.0"
   },
   "bundledDependencies": [
-    "@webcomponents/webcomponentsjs"
+    "@webcomponents/custom-elements"
   ]
 }
