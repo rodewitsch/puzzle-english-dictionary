@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.6.1](https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/v7.6.0...v7.6.1) (2025-04-28)
+
+
+### Bug Fixes
+
+* is word already added condition ([9737db2](https://github.com/rodewitsch/PuzzleEnglishDictionary/commit/9737db29def8ead6e486904c112712cc5d327828))
+
 ## [7.6.0](https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/v7.5.0...v7.6.0) (2025-02-22)
 
 * reduce extension size
