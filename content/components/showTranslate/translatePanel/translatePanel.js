@@ -84,7 +84,7 @@ class TranslatePanel extends HTMLElement {
           ...ExtStore.translation,
           allAddedTranslations: ExtStore.translation.allAddedTranslations.filter(
             (addedTranslations) =>
-              `${addedTranslations.word}.${addedTranslations.translate} ` !==
+              `${addedTranslations.word}.${addedTranslations.translation} ` !==
               `${ExtStore.translation.Word.word}.${ExtStore.translation.Word.translation} `
           )
         };
@@ -99,8 +99,8 @@ class TranslatePanel extends HTMLElement {
     this.checkWordVocabularyExisting = () => {
       return !!ExtStore.translation.allAddedTranslations.find(
         (addedTranslations) =>
-          `${addedTranslations.word}.${addedTranslations.translate} ` ===
-          `${ExtStore.translation.Word.word}.${ExtStore.translation.Word.translation} `
+          `${addedTranslations.word}.${addedTranslations.translation}` ===
+          `${ExtStore.translation.Word.word}.${ExtStore.translation.Word.translation}`
       );
     }
   }

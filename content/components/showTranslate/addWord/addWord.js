@@ -51,7 +51,7 @@ class AddWord extends HTMLElement {
           ...ExtStore.translation.allAddedTranslations,
           {
             word: ExtStore.translation.Word.word,
-            translate: ExtStore.translation.Word.translation
+            translation: ExtStore.translation.Word.translation
           }
         ]
       };
