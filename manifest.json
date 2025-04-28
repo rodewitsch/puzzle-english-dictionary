@@ -4,13 +4,13 @@
   "description": "Неофициальное расширение для добавления слов в словарь Puzzle English",
   "version": "7.6.1",
   "action": {
-    "default_popup": "/popup/popup.html",
-    "default_icon": "/assets/images/icons/icon128.png"
+    "default_popup": "popup/popup.html",
+    "default_icon": "assets/images/icons/icon128.png"
   },
   "icons": {
-    "16": "/assets/images/icons/icon16.png",
-    "48": "/assets/images/icons/icon48.png",
-    "128": "/assets/images/icons/icon128.png"
+    "16": "assets/images/icons/icon16.png",
+    "48": "assets/images/icons/icon48.png",
+    "128": "assets/images/icons/icon128.png"
   },
   "background": {
     "service_worker": "background.js"
@@ -23,32 +23,32 @@
       "js": [
         "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
         "core.js",
-        "/content/store.js",
-        "/content/content.js",
-        "/content/components/puzzleEnglishDictionaryHost.js",
-        "/content/components/initial/initialButton/initialButton.js",
-        "/content/components/initial/initialButtons/initialButtons.js",
-        "/content/components/showTranslate/translatePanel/translatePanel.js",
-        "/content/components/showTranslate/currentMeaning/currentMeaning.js",
-        "/content/components/showTranslate/pronunciationButton/pronunciationButton.js",
-        "/content/components/showTranslate/pronunciationSlider/pronunciationSlider.js",
-        "/content/components/showTranslate/pronunciationActor/pronunciationActor.js",
-        "/content/components/showTranslate/addWord/addWord.js",
-        "/content/components/showTranslate/needAuth/needAuth.js",
-        "/content/components/showTranslate/baseWord/baseWord.js",
-        "/content/components/showTranslate/noTranslation/noTranslation.js",
-        "/content/components/showTranslate/dictionaryInfo/dictionaryInfo.js",
-        "/content/components/otherMeanings/otherMeanings.js",
-        "/content/components/otherMeanings/otherMeaning/otherMeaning.js"
+        "content/store.js",
+        "content/content.js",
+        "content/components/puzzleEnglishDictionaryHost.js",
+        "content/components/initial/initialButton/initialButton.js",
+        "content/components/initial/initialButtons/initialButtons.js",
+        "content/components/showTranslate/translatePanel/translatePanel.js",
+        "content/components/showTranslate/currentMeaning/currentMeaning.js",
+        "content/components/showTranslate/pronunciationButton/pronunciationButton.js",
+        "content/components/showTranslate/pronunciationSlider/pronunciationSlider.js",
+        "content/components/showTranslate/pronunciationActor/pronunciationActor.js",
+        "content/components/showTranslate/addWord/addWord.js",
+        "content/components/showTranslate/needAuth/needAuth.js",
+        "content/components/showTranslate/baseWord/baseWord.js",
+        "content/components/showTranslate/noTranslation/noTranslation.js",
+        "content/components/showTranslate/dictionaryInfo/dictionaryInfo.js",
+        "content/components/otherMeanings/otherMeanings.js",
+        "content/components/otherMeanings/otherMeaning/otherMeaning.js"
       ]
     }
   ],
-  "options_page": "/options/options.html",
+  "options_page": "options/options.html",
   "web_accessible_resources": [
     {
       "resources": [
-        "/content/**/*.css",
-        "/assets/*"
+        "content/**/*.css",
+        "assets/*"
       ],
       "matches": [
         "<all_urls>"
