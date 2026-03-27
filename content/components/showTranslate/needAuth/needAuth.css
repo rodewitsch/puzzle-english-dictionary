@@ -8,3 +8,15 @@
   background-color: #FF5E6B;
   color: white;
 }
+
+a {
+  color: #45a7dd;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+}
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    color: #e0e0e0;
+  }
+}

@@ -5,3 +5,9 @@
   margin: 15px;
   display: block;
 }
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    color: #aaa;
+  }
+}

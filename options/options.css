@@ -171,3 +171,46 @@ a {
   font-size: 140%;
   width: 60px;
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+  }
+
+  .wrapper {
+    background-color: #2a2a2a;
+    border-color: #444;
+  }
+
+  .header-text {
+    color: #ccc;
+  }
+
+  .option label {
+    color: #e0e0e0;
+  }
+
+  .checkbox {
+    border-color: #4a8a30;
+  }
+
+  .option input:checked + div,
+  .checkbox.checked {
+    background-color: #4a8a30;
+    border-color: #4a8a30;
+  }
+
+  .btn-green {
+    background-color: #4a8a30;
+    color: #ddd !important;
+  }
+
+  .btn:hover {
+    background: #555;
+  }
+
+  .btn:active {
+    background: #4a8a30;
+  }
+}

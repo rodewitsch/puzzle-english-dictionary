@@ -271,3 +271,71 @@ header {
     color: #fff !important;
     background-color: #1caaec;
 }
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background: #2a2a2a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #555;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #666;
+  }
+
+  body {
+    background: #1e1e1e;
+    color: #e0e0e0;
+  }
+
+  .logo-text {
+    color: #ccc;
+  }
+
+  .import__input,
+  .import__textarea {
+    border-color: #444;
+    color: #e0e0e0;
+    background-color: #2a2a2a;
+  }
+
+  .import__textarea:focus,
+  .import__input:focus {
+    border-color: #4a8a30;
+  }
+
+  .tab {
+    border-bottom-color: #444;
+  }
+
+  .tab button {
+    color: #e0e0e0;
+  }
+
+  .button_bg-green,
+  .button_bg_green {
+    background-color: #4a8a30;
+    color: #ddd !important;
+  }
+
+  .button_bg-disabled,
+  .button_type_disabled {
+    background-color: #3a5a3a !important;
+    color: #888 !important;
+  }
+
+  #search-list > div {
+    border-bottom-color: #333;
+  }
+
+  #search-list > div:hover {
+    background: #2a2a2a;
+  }
+
+  .need-auth-area {
+    background: #1e1e1e;
+    color: #e0e0e0;
+  }
+}

@@ -18,3 +18,9 @@ p {
   font-size: 13px;
   cursor: pointer;
 }
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    color: #aaa;
+  }
+}

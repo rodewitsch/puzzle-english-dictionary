@@ -25,3 +25,9 @@
   font-size: 13px;
   color: #777;
 }
+
+@media (prefers-color-scheme: dark) {
+  .name {
+    color: #aaa;
+  }
+}

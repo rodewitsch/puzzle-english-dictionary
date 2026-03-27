@@ -56,3 +56,18 @@ other-meaning {
 other-meaning:hover {
   color: #309cca;
 }
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    background-color: #2a2a2a;
+    color: #aaa;
+  }
+
+  .meaning-phrase-header {
+    background-color: #1e1e1e;
+  }
+
+  other-meaning:hover {
+    color: #5bbfe0;
+  }
+}

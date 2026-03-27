@@ -25,3 +25,10 @@
 .success{
   background-color: #85d360;
 }
+
+@media (prefers-color-scheme: dark) {
+  .success {
+    background-color: #4a8a30;
+    color: #ddd;
+  }
+}

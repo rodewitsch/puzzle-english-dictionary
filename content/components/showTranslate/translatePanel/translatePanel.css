@@ -54,3 +54,10 @@
 .additional-buttons span {
   margin-right: 10px;
 }
+
+@media (prefers-color-scheme: dark) {
+  .button {
+    color: #aaa;
+    border-bottom-color: #aaa;
+  }
+}

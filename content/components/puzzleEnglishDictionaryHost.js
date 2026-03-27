@@ -46,6 +46,12 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
             border-radius: 5px;
             box-shadow: 0 5px 20px 0 rgb(0 0 0 / 30%);
           }
+          @media (prefers-color-scheme: dark) {
+            :host {
+              background-color: #1e1e1e;
+              box-shadow: 0 5px 20px 0 rgb(0 0 0 / 60%);
+            }
+          }
         </style>
       `;
 

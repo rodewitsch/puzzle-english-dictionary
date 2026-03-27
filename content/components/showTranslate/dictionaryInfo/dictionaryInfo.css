@@ -7,3 +7,9 @@
   background-color: #ff5e6b;
   color: white;
 }
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    color: #aaa;
+  }
+}
