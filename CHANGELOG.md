@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.7.0](https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/v7.6.1...v7.7.0) (2026-03-27)
+
+
+### Features
+
+* add dark mode support to UI styles ([eedaea2](https://github.com/rodewitsch/PuzzleEnglishDictionary/commit/eedaea2a14f1d5d40a5e5721c4ee01eedeb61fa6))
+
+
+### Bug Fixes
+
+* paths in manifest.json ([08230fe](https://github.com/rodewitsch/PuzzleEnglishDictionary/commit/08230feeb7bea9dbf014a5cabb249a12493856dc))
+
 ### [7.6.1](https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/v7.6.0...v7.6.1) (2025-04-28)
 
 
