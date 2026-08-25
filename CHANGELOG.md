@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.8.0](https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/v7.7.0...v7.8.0) (2026-08-25)
+
+
+### Features
+
+* add opt-in automatic translation display on text selection
+* add opt-in automatic word pronunciation when the translation panel is shown
+
+
 ## [7.7.0](https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/v7.6.1...v7.7.0) (2026-03-27)
 
 

@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const showTranslateOption = document.getElementById('show-translate');
   const closeButtonOption = document.getElementById('close-button');
   const contextMenuOption = document.getElementById('context-menu');
+  const autoShowTranslateOption = document.getElementById('auto-show-translate');
+  const autoPronunciationOption = document.getElementById('auto-pronunciation');
   const saveButton = document.getElementById('save');
   const resetButton = document.getElementById('reset');
   restore_options();
@@ -24,7 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
         fastAdd: fastAddOption.checked,
         showTranslate: showTranslateOption.checked,
         closeButton: closeButtonOption.checked,
-        contextMenu: contextMenuOption.checked
+        contextMenu: contextMenuOption.checked,
+        autoShowTranslation: autoShowTranslateOption.checked,
+        autoPronunciation: autoPronunciationOption.checked
       }
     );
     chrome.runtime.sendMessage({ type: 'changeOptions' });
@@ -34,12 +38,14 @@ document.addEventListener('DOMContentLoaded', () => {
    * Restores select box and checkbox state using the preferences stored in chrome.storage.
    */
   async function restore_options() {
-    const items = await chrome.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu']);
+    const items = await chrome.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu', 'autoShowTranslation', 'autoPronunciation']);
     bubbleGlobalOption.checked = items.bubble;
     fastAddOption.checked = items.fastAdd;
     showTranslateOption.checked = items.showTranslate;
     closeButtonOption.checked = items.closeButton;
     contextMenuOption.checked = items.contextMenu;
+    autoShowTranslateOption.checked = !!items.autoShowTranslation;
+    autoPronunciationOption.checked = !!items.autoPronunciation;
   }
 
   /**

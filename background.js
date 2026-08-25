@@ -11,14 +11,16 @@ chrome.contextMenus.create({
 chrome.contextMenus.onClicked.addListener((info) => addWord(info.selectionText));
 
 async function syncConfig() {
-  const items = (await chrome.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu']) || {})
+  const items = (await chrome.storage.sync.get(['bubble', 'fastAdd', 'showTranslate', 'closeButton', 'contextMenu', 'autoShowTranslation', 'autoPronunciation']) || {})
   await chrome.storage.sync.set(
     {
       bubble: items.bubble === undefined ? true : items.bubble,
       fastAdd: items.fastAdd === undefined ? true : items.fastAdd,
       showTranslate: items.showTranslate === undefined ? true : items.showTranslate,
       closeButton: items.closeButton === undefined ? true : items.closeButton,
-      contextMenu: items.contextMenu === undefined ? true : items.contextMenu
+      contextMenu: items.contextMenu === undefined ? true : items.contextMenu,
+      autoShowTranslation: items.autoShowTranslation === undefined ? false : items.autoShowTranslation,
+      autoPronunciation: items.autoPronunciation === undefined ? false : items.autoPronunciation
     }
   );
   const { contextMenu } = await chrome.storage.sync.get(['contextMenu']);

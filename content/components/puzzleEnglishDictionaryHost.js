@@ -57,6 +57,12 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
 
       while (this.shadowRoot.lastChild) this.shadowRoot.removeChild(this.shadowRoot.lastChild);
       switch (this.getAttribute('type')) {
+        case 'loading': {
+          // Keep the host invisible while the translation is being loaded
+          TEMPLATE.innerHTML += '<style>:host { visibility: hidden !important; }</style>';
+          this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+          break;
+        }
         case 'initial': {
           TEMPLATE.innerHTML += '<initial-buttons></initial-buttons>';
           this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
@@ -113,6 +119,19 @@ class PuzzleEnglishDictionaryHost extends HTMLElement {
       const response = await chrome.runtime.sendMessage({ type: 'checkWord', options: { word: ExtStore.selectedWord } });
       ExtStore.translation = !response.Word.id ? null : response;
       this.setAttribute('type', 'show-translation');
+      if (ExtStore.translation) {
+        const { autoPronunciation } = await chrome.storage.sync.get(['autoPronunciation']);
+        const FIRST_SPEAKER = ExtStore.translation.word_speakers && ExtStore.translation.word_speakers[0];
+        if (autoPronunciation && FIRST_SPEAKER) {
+          const SPEAKER_INFO = CorePuzzleEnglishDictionaryModule.getSpeakerInfo(FIRST_SPEAKER);
+          if (SPEAKER_INFO) {
+            chrome.runtime.sendMessage({
+              type: 'playWord',
+              options: { speaker: SPEAKER_INFO.audio, word: ExtStore.translation.Word.base_word, speed: 1 }
+            });
+          }
+        }
+      }
     }
 
     /**
