@@ -9,7 +9,12 @@
   },
   "author": "Rodevich Dmitry",
   "scripts": {
-    "release": "standard-version"
+    "build": "node scripts/build.js",
+    "release": "standard-version",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test --config=tests/e2e/playwright.config.mjs",
+    "test:e2e:headed": "playwright test --config=tests/e2e/playwright.config.mjs --headed"
   },
   "keywords": [
     "puzzle",
@@ -29,9 +34,16 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
+    "@playwright/test": "^1.61.1",
+    "archiver": "^7.0.1",
+    "csso": "^5.0.5",
     "eslint": "^8.57.0",
     "globals": "^15.14.0",
-    "standard-version": "^9.5.0"
+    "html-minifier-terser": "^7.2.0",
+    "jsdom": "^29.1.1",
+    "standard-version": "^9.5.0",
+    "terser": "^5.49.0",
+    "vitest": "^4.1.10"
   },
   "bundledDependencies": [
     "@webcomponents/custom-elements"

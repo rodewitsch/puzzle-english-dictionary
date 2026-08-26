@@ -1,1 +1,7 @@
 node_modules/
+dist/
+*.zip
+.playwright*
+.last-run.json
+test-results/
+playwright-report/

@@ -1,0 +1,4 @@
+{
+  "commitUrlFormat": "https://github.com/rodewitsch/PuzzleEnglishDictionary/commits/{{hash}}",
+  "compareUrlFormat": "https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/{{previousTag}}...{{currentTag}}"
+}
