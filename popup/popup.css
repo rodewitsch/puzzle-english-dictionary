@@ -42,6 +42,29 @@ header {
     cursor: pointer;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#donate {
+    width: 23px;
+    height: 23px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    margin-right: 4px;
+}
+
+#donate svg {
+    display: block;
+    width: 23px;
+    height: 23px;
+}
+
 .logo-text {
     position: absolute;
     bottom: 0;
