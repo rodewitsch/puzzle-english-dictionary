@@ -13,52 +13,12 @@ Chromium/Firefox extension that allows you to add words to the Puzzle English di
 | ![3 1](https://user-images.githubusercontent.com/16050840/95647210-431a2c80-0ad6-11eb-89c0-0dac474259ad.jpg)  | ![4 1](https://user-images.githubusercontent.com/16050840/95647212-46adb380-0ad6-11eb-8992-54249674cddd.jpg)  |
 | ![6 1](https://user-images.githubusercontent.com/16050840/95647216-4d3c2b00-0ad6-11eb-8f7c-c3463c380aaf.jpg) | ![7 1](https://user-images.githubusercontent.com/16050840/95647217-50cfb200-0ad6-11eb-88df-b70759a7fa04.jpg)  |
 
-## Development
-
-### Install
-
-```bash
-npm install
-```
-
-### Build a store bundle
-
-Creates a production build in `dist/` (minified JS/CSS/HTML/JSON + copied
-dependencies) and packs everything into a single zip you can upload to the
-Chrome Web Store:
-
-```bash
-npm run build
-# -> puzzleenglishdictionary-v<version>.zip
-```
-
-To inspect the bundle before uploading:
-
-1. `npm run build`
-2. Open `chrome://extensions`, enable **Developer mode**
-3. Click **Load unpacked** and select the `dist/` folder (or unzip the produced archive).
-
-### Run tests
-
-Unit tests (Vitest + jsdom) cover `core.js` and `content/store.js`:
-
-```bash
-npm test          # run once
-npm run test:watch
-```
-
-End-to-end tests (Playwright) validate the popup and options pages (first run
-requires a browser download):
-
-```bash
-npx playwright install chromium
-npm run test:e2e          # headless
-npm run test:e2e:headed   # with a visible browser window
-```
-
-### Lint
-
-```bash
-npx eslint .
-```
+<p align="center">
+I’ll be glad to have your support. Every donation goes towards developing the project and maintaining the infrastructure 💙
+</p>
+<p align="center">
+  <a href="https://boosty.to/rodevich/donate">
+    <img src="https://github.com/user-attachments/assets/a15bd2c0-ed6b-4140-9480-dfb70a0b5f1a" alt="Donate">
+  </a>
+</p>
 
