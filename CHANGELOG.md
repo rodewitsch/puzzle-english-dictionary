@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.9.0](https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/v7.7.0...v7.9.0) (2026-09-01)
+
+
+### Features
+
+* add donate button to popup header ([c06ff14](https://github.com/rodewitsch/PuzzleEnglishDictionary/commits/c06ff14a475418d26319e2280d1a4d31dc8a7213))
+
 ## [7.8.0](https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/v7.7.0...v7.8.0) (2026-08-25)
 
 
