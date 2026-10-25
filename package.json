@@ -43,7 +43,7 @@
     "jsdom": "^29.1.1",
     "standard-version": "^9.5.0",
     "terser": "^5.49.0",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.12"
   },
   "bundledDependencies": [
     "@webcomponents/custom-elements"
