@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.10.0](https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/v7.9.0...v7.10.0) (2026-11-04)
+
 ## [7.9.0](https://github.com/rodewitsch/PuzzleEnglishDictionary/compare/v7.7.0...v7.9.0) (2026-09-01)
 
 
